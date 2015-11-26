@@ -1,0 +1,103 @@
+﻿/*用户左侧*/
+.uleft{width:220px;overflow:hidden;float:left;display:inline;}
+.uleft .face{padding:20px 10px 10px 10px;overflow:hidden;text-align:center;}
+.uleft .face img{width:150px;height:150px;}
+.uleft .face h3{font-size:18px;line-height:25px;clear:both;overflow:hidden;padding:0;margin:0;}
+.uleft .face p{width:140px;background:url(../images/p_i.gif) no-repeat left center;font-size:14px;padding:0;line-height:25px;margin:0 auto;font-weight:bold;}
+
+.uleft ul{margin:0;padding:0;list-style:none;}
+.uleft ul li{height:40px;line-height:40px;width:160px;padding-left:60px;background:#eee;border-bottom:1px solid #dcdcdc;font-size:14px;}
+.uleft ul .hover{background:#f43c5e;font-size:14px;}
+.uleft ul .hover a{color:#fff;}
+.uleft ul .ico01{background:#eee url(../images/user_left_icon.gif) no-repeat 24px -306px;}
+.uleft ul .ico01_{background:#f43c5e url(../images/user_left_icon.gif) no-repeat 24px -0px;}
+
+.uleft ul .ico02{background:#eee url(../images/user_left_icon.gif) no-repeat 24px -345px;}
+.uleft ul .ico02_{background:#f43c5e url(../images/user_left_icon.gif) no-repeat 24px -38px;}
+
+.uleft ul .ico03{background:#eee url(../images/user_left_icon.gif) no-repeat 24px -384px;}
+.uleft ul .ico03_{background:#f43c5e url(../images/user_left_icon.gif) no-repeat 24px -77px;}
+
+.uleft ul .ico04{background:#eee url(../images/user_left_icon.gif) no-repeat 24px -426px;}
+.uleft ul .ico04_{background:#f43c5e url(../images/user_left_icon.gif) no-repeat 24px -119px;}
+
+.uleft ul .ico05{background:#eee url(../images/user_left_icon.gif) no-repeat 24px -466px;}
+.uleft ul .ico05_{background:#f43c5e url(../images/user_left_icon.gif) no-repeat 24px -159px;}
+
+.uleft ul .ico06{background:#eee url(../images/user_left_icon.gif) no-repeat 24px -506px;}
+.uleft ul .ico06_{background:#f43c5e url(../images/user_left_icon.gif) no-repeat 24px -199px;}
+
+.uleft ul .ico07{background:#eee url(../images/user_left_icon.gif) no-repeat 24px -544px;}
+.uleft ul .ico07_{background:#fff url(../images/user_left_icon.gif) no-repeat 24px -38px;}
+
+.uleft ul .ico08{background:#eee url(../images/user_left_icon.gif) no-repeat 24px -580px;}
+.uleft ul .ico08_{background:#f43c5e url(../images/user_left_icon.gif) no-repeat 24px -267px;}
+
+.uleft ul .ico09{background:#eee url(../images/user_left_icon.gif) no-repeat 24px -345px;}
+.uleft ul .ico09_{background:#f43c5e url(../images/user_left_icon.gif) no-repeat 24px -38px;}
+
+.uleft ul .ico10{background:#eee url(../images/user_left_icon.gif) no-repeat 24px -345px;}
+.uleft ul .ico10_{background:#f43c5e url(../images/user_left_icon.gif) no-repeat 24px -38px;}
+
+/*用户右侧*/
+.uright{width:708px;overflow:hidden;float:left;display:inline;padding:20px;}
+.uright h3{border-bottom:1px solid #dcdcdc;font:18px/30px Microsoft yahei;padding-bottom:10px;color:#999;}
+.uright h3 span{background:#f43c5e;padding:0 20px;font:14px/30px Microsoft yahie;float:right;color:#fff;}
+
+/*个人信息*/
+.page_title{font-size:14px;font-weight:bold;height:40px;line-height:30px;border-bottom:1px dotted #e3e3e3;}
+.page_content{overflow:hidden;line-height:25px;min-height:250px;}
+.page_content p{margin:10px 0;}
+
+#user{margin:30px auto;padding:0;list-style:none;}
+#user li{clear:both;padding:4px 0;margin:0;line-height:35px;font-size:14px;}
+#user li span{float:left;width:120px;text-align:right;padding:0 10px 0 0;color:#666;line-height:35px;}
+#user .cline{border-bottom:1px solid #dcdcdc;margin:10px 0;}
+
+/*纠错集*/
+.jcj{padding:10px;overflow:hidden;clear:both;}
+.jcj .sel{border:1px solid #d2d2d2;height:35px;font-size:14px;width:200px;line-height:35px;}
+.jcj .span1{width:149px;border-right:1px solid #d2d2d2;height:500px;margin-right:10px;}
+.jcj .span2{width:515px;height:500px;}
+.jcj .jc_ul{padding:0;margin:0;list-style:none;text-align:center;}
+.jcj .jc_ul .jc_tit{background:#eee;height:40px;line-height:40px;font-size:16px;line-height:40px;}
+.jcj .jc_ul li{font-size:14px;line-height:40px;clear:both; text-align:center;}
+.jcj .jc_ul li a{color:#1887e3;}
+
+.jc_list{padding:0;margin:0;list-style:none;}
+.jc_list li{border:1px solid #dcdcdc;margin-top:10px;clear:both;overflow:hidden;line-height:30px;position:relative;padding:0 20px;}
+.jc_list li .jcbtn{color:#fff;line-height:30px; position:absolute;top:10px;right:10px;background:#16d957;width:50px;text-align:center;height:30px;display:block;}
+.jc_list li .jcbtn1{color:#fff;line-height:30px; position:absolute;top:10px;right:70px;background:#16d957;width:50px;text-align:center;height:30px;display:block;}
+.jc_list li .jc_btn{float:left;width:70px;line-height:30px;text-align:center;color:#fff;background:#1887e3;margin-right:10px;}
+.jc_list li .score{margin-top:3px;}
+.jc_list li .jc_list_b{clear:both;overflow:hidden;line-height:30px;padding-bottom:10px;}
+
+
+/*个人主页*/
+.zy_tit{font:18px/30px Microsoft yahei;padding-bottom:10px;color:#999;}
+.zy_ul{padding:0;list-style:none;margin:0;overflow:hidden;width:700px;}
+.zy_ul li{float:left;width:165px;height:150px;margin-right:10px;}
+.zy_ul li img{width:165px;height:150px;}
+.zy_con{line-height:30px;clear:both;overflow:hidden;padding-bottom:20px;}
+.zy_con p{padding:0;margin:0;list-style:none;}
+.zy_con p span{width:50%;float:left;display:block;}
+
+/*我的试卷*/
+.my_st{padding:0;margin:0;list-style:none;border:1px solid #ccc;border-bottom:0;}
+.my_st li{border-bottom:1px solid #ccc;line-height:30px;overflow:hidden;clear:both;text-align:center;}
+.my_st .my_st_tit{background:#1887e3;color:#fff;line-height:35px;}
+.my_st li .w1{float:left;width:99px;border-right:1px solid #ccc;}
+.my_st li .w2{float:left;width:100px;}
+.my_st li .w3{float:left;width:140px;border-right:1px solid #ccc;}
+
+/*学习情况*/
+.qj_tit{border:1px #ccc solid;height:35px;line-height:35px;overflow:hidden;clear:both;}
+.qj_tit span{background:#eee;width:300px;height:35px;line-height:35px;font-weight:bold;text-align:center;display:block;}
+.zt_one{padding:10px 0;border:1px #ccc solid;overflow:hidden;clear:both;border-top:0;border-bottom:0;}
+.zt_one .wenzi{width:150px;float:left;height:60px;line-height:60px;font-weight:bold; text-align:center;}
+
+.qj_xxjd{padding:10px;margin:0;list-style:none;border:1px solid #ccc;border-top:0;overflow:hidden;clear:both;}
+.qj_xxjd li{float:left;width:80px;height:40px;line-height:40px;background:#eee;text-align:center;font-weight:bold;}
+.qj_xxjd .li_line{background:url(../images/li_line.gif) no-repeat center;width:66px;float:left;}
+.qj_xxjd .li_nobg{float:left;width:80px;height:40px;line-height:40px;text-align:center;font-weight:normal;background:none;}
+.qj_xxjd .li_noline{width:66px;float:left;background:none;}
