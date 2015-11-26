@@ -1,0 +1,229 @@
+<include file="common:header" />
+<script>
+	/* 选择题型   **/
+	function select_grade(c,id){
+	    var href = window.location.href;
+	    var reg = /jingpin\/(\w*)g(\d+)(\w*)(\/)/g;
+		
+		if(href.search(/\?p=\d+/)!=-1){
+			href = href.replace(/\?p=\d+/,'');
+		}
+	    if(href.search(reg)!=-1){
+	    	if(id==0){
+	    		var loc = href.replace(/g\d+/g,'');
+	    	}else{
+	        	var loc = href.replace(/g\d+/g,c+id);
+	       }
+	    }else{
+	        var loc = href.replace(/jingpin\/(\w*)(\/)/g,'jingpin/$1'+c+id+'/');
+	    }
+	    window.location.href = loc;
+	}
+
+	/* 选择题目特点 **/
+	function select_feature(c,id){
+	    var href = window.location.href;
+	    var reg = /jingpin\/(\w*)f(\d+)(\w*)(\/)/g;
+		
+		if(href.search(/\?p=\d+/)!=-1){
+			href = href.replace(/\?p=\d+/,'');
+		}
+		if(href.search(/r\d{1}/)!=-1){
+			href = href.replace(/r\d{1}/,'');
+		}
+		if(id==0){
+			href = href.replace(/a\d{1}/,'');
+			href = href.replace(/w\d{1}/,'');
+			href = href.replace(/y\d{4}/,'');
+		}
+	    if(href.search(reg)!=-1){
+	    	if(id==0){
+	    		var loc = href.replace(/f\d+/g,'');
+	    	}else{
+	        	var loc = href.replace(/f\d+/g,c+id);
+	       }
+	    }else{
+	        var loc = href.replace(/jingpin\/(\w*)(\/)/g,'jingpin/$1'+c+id+'/');
+	    }
+	    window.location.href = loc;
+	}
+
+	/* 选择试卷类型 **/
+	function select_year(c,id){
+	    var href = window.location.href;
+	    var reg = /jingpin\/(\w*)y(\d+)(\w*)(\/)/g;
+		
+		if(href.search(/\?p=\d+/)!=-1){
+			href = href.replace(/\?p=\d+/,'');
+		}
+	    if(href.search(reg)!=-1){
+	    	if(id==0){
+	    		var loc = href.replace(/y\d+/g,'');
+	    	}else{
+	        	var loc = href.replace(/y\d+/g,c+id);
+	       }
+	    }else{
+	        var loc = href.replace(/jingpin\/(\w*)(\/)/g,'jingpin/$1'+c+id+'/');
+	    }
+	    window.location.href = loc;
+	}
+	/* 选择地区 **/
+	function select_province(c,id){
+	    var href = window.location.href;
+	    var reg = /jingpin\/(\w*)a(\d+)(\w*)(\/)/g;
+		
+		if(href.search(/\?p=\d+/)!=-1){
+			href = href.replace(/\?p=\d+/,'');
+		}
+	    if(href.search(reg)!=-1){
+	    	if(id==0){
+	    		var loc = href.replace(/a\d+/g,'');
+	    	}else{
+	        	var loc = href.replace(/a\d+/g,c+id);
+	       }
+	    }else{
+	        var loc = href.replace(/jingpin\/(\w*)(\/)/g,'jingpin/$1'+c+id+'/');
+	    }
+	    window.location.href = loc;
+	}
+	
+</script>
+<!--main-->
+<div class="width">
+	<div class="tk_bg">
+		<!--标题-->
+        <div class="tit"><span> <a href="">题库</a> 〉<a href="">精品试卷</a></span>精品试卷</div>
+        
+        <!--小标-->
+        <ul class="sj_ul">
+        	<li style="width:194px;">&nbsp;&nbsp;&nbsp;&nbsp;科目：高中语文<div class="clear"></div>
+                <dl class="sub_ul">
+                      <dt><a href="">高中数学</a></dt>
+                      <dt><a href="">高中数学</a></dt>
+                </dl>
+            </li>
+            <li><a href="/tiku/c{$course_id}/">知识点选题</a></li>
+            <li><a href="">章节选题</a></li>
+            <li class="hover"><a href="/jingpin/c{$course_id}/">精品试卷</a></li>
+            <li><a href="">我的题库</a></li>
+        </ul>
+        
+        <div class="clear"></div>
+        
+        <div class="ss"><form><input type="button" class="btn"  value="搜索"/><input type="text" class="text" /></form></div>
+        
+        <!--快速搜索-->
+        <div id="quick_goods" class="mt20">
+            <ul>
+                <li class="fixed"><strong>年级：</strong></li>
+                <li>
+                    <dl>
+                       <dt <eq name="grade" value="">class="hover"</eq>><a href="javascript:select_grade('g',0)">全部</a></dt>
+                        <volist name='grade_data' id='vo'>
+                        <dt <eq name="grade" value="$vo.id">class="hover"</eq>><a href="javascript:select_grade('g',{$vo.id})">{$vo.name}</a></dt>
+                        </volist>
+               		 </dl>
+                </li>
+            </ul>
+            <div class="clear"></div>
+
+            <ul>
+                <li class="fixed"><strong>类型：</strong></li>
+                <li>
+                    <dl>
+                        <dt <eq name="feature_id" value="">class="hover"</eq>><a href="javascript:select_feature('f',0)">全部</a></dt>
+                        <volist name='source_type' id='vo'>
+                        <dt <eq name="feature_id" value="$vo.id">class="hover"</eq>><a href="javascript:select_feature('f',{$vo.id})">{$vo.type_name}</a></dt>
+                        </volist>
+                    </dl>
+                </li>
+            </ul>
+            <div class="clear"></div>
+            
+            <ul>
+                <li class="fixed"><strong>年份：</strong></li>
+                <li>
+                    <dl>
+                       <dt <eq name="year" value="">class="hover"</eq>><a href="javascript:select_year('y',0)">全部</a></dt>
+                        <volist name='year_data' id='vo'>
+                        <dt <eq name="year" value="$vo.year">class="hover"</eq>><a href="javascript:select_year('y',{$vo.year})">{$vo.year}</a></dt>
+                        </volist>
+               		 </dl>
+                </li>
+            </ul>
+            <div class="clear"></div>
+                                                                                         
+            <ul>
+                <li class="fixed"><strong>地区：</strong></li>
+                <li>
+                    <dl>
+                        <dt <eq name="province_id" value="">class="hover"</eq>><a href="javascript:select_province('a',0)">全部</a></dt>
+                        <volist name='province_data' id='vo'>
+                        <dt <eq name="province_id" value="$vo.id">class="hover"</eq>><a href="javascript:select_province('a',{$vo.id})">{$vo.province_name}</a></dt>
+                        </volist>
+                    </dl>
+                </li>
+            </ul>
+            <div class="clear"></div>
+        </div>
+        
+        <div id="quick_order">
+            <ul>
+                <li><a href="">排序：</a></li>
+                <li><a href="">最新<img src="__PUBLIC__/images/ico_down.gif" width="7" height="8"></a></li>
+                <li><a href="">难度<img src="__PUBLIC__/images/ico_down.gif" width="7" height="8"></a></li>
+                <li><a href="">使用频率<img src="__PUBLIC__/images/ico_down.gif" width="7" height="8"></a></li>
+                <li><a href="">好评<img src="__PUBLIC__/images/ico_down.gif" width="7" height="8"></a></li>
+            </ul>
+            <div class="clear"></div>
+        </div>
+        
+        <!--题库列表-->
+        <div class="clear"></div>
+        <ul class="tk_ul">
+        <notempty name="source_data">
+           <volist name="source_data" id="vo">
+           <li>
+            	<div class="pic"><a href="/jingpin/detail/{$vo.id}.html" target="_blank"><img src="__PUBLIC__/images/tk.gif" /></a></div>
+        		<div class="text">
+                	<p><a href="/jingpin/detail/{$vo.id}.html" target="_blank" class="t_d">{$vo.source_name}</a></p>
+					<p></p>
+                    <p class="f14 c9 mt10">贡献者：109138518&nbsp;&nbsp;
+                    上传时间：{$vo.update_time|date='Y-m-d',###}&nbsp;&nbsp;14：22：55&nbsp;&nbsp;浏览{$vo.clicks}次</p>
+               </div>
+               <div class="pf">
+               		<div class="left mr10">评分：</div>
+                    <div class="left score5 dis mr10"></div>
+                    <div class="left">4.6分</div>
+               </div>
+           </li>
+           </volist>
+        <else />
+        	<li style="background:#fff;">
+                    <div style="padding:30px 0px;">
+						<div class="jc_null">	
+						</div>
+					    <div class="jc_n_text">
+							<p>抱歉，暂时没有符合条件的试卷，我们将会尽快补充内容。请更换筛选条件。</p>
+						</div>
+					</div>					
+				</li>
+        </notempty>
+        </ul>
+        <style>
+       	.current{
+       		background: #f43c5e none repeat scroll 0 0;
+		    border: 1px solid #f28700;
+		    color: #fff;
+		    font-weight: bold;
+		    padding: 6px 10px;
+       	}
+       </style>
+        <div class="page">
+			{$page_show}
+		</div>     
+    </div>
+</div>
+<include file="common:right" />
+<!--footer-->
+<include file="common:footer" />

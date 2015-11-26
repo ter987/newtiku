@@ -1,0 +1,62 @@
+<include file="common:_header" />
+
+<!--main-->
+<div class="width">
+	<div class="reg_w">
+    	<div class="reg_xs_check" id="student"><a href="##">我是学生</a></div>
+    	<div class="reg_teacher" id="teacher"><a href="##">我是老师</a></div>
+    </div>
+    
+    <div class="reg_line"></div>
+	
+	<div class="reg_form">
+		{$error_msg}
+		<form class="demo" method="post" action="/member/register">
+			<input type="hidden" id="type" name="type" value="1" />
+			<div class="reg_br">
+				<div class="reg_l">邮箱：</div>
+				<div class="reg_r">
+					<input id="email" type="text" name="email" datatype="e" ajaxurl="/member/ajaxcheckemail" nullmsg="邮箱不能为空！" errormsg="请输入合法的邮箱地址！" class="required email"/>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="reg_br">
+				<div class="reg_l">昵称：</div>
+				<div class="reg_r"><input id="nick_name" datatype="*2-20" ajaxurl="/member/ajaxchecknickname" nullmsg="昵称不能为空！" errormsg="2-20个英文或汉字" type="text" name="nick_name" /></div>
+				<div class="clear"></div>
+			</div>
+			<div class="reg_br">
+				<div class="reg_l">密码：</div>
+				<div class="reg_r"><input id="password"  datatype="*6-20" nullmsg="密码不能为空！" errormsg="密码请输入6-16个字符" type="password" name="password" /></div>
+				<div class="clear"></div>
+			</div>
+			<div class="reg_br" style="margin-top:20px;">
+				<div class="reg_l">&nbsp;</div>
+				<div style="float:left;"><button id="button" class="button_reg">注册</button></div>
+				<div class="text_reg"><a href="">使用手机注册？</a></div>
+			</div>
+		</form>
+	</div>	
+   
+</div>
+<script type="text/javascript" src="__PUBLIC__/lib/Validform/5.3.2/Validform.js"></script>
+<script>
+	$(
+		function(){
+   		$("form").Validform(
+   			{tiptype:2}
+   		);
+    });
+    $('#student').click(
+    	function(){
+    		$('#type').val(1);
+    	}
+    );
+     $('#teacher').click(
+    	function(){
+    		$('#type').val(2);
+    	}
+    );
+</script>
+
+<include file="common:footer" />

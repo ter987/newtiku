@@ -1,0 +1,153 @@
+<include file="common:header" />
+
+<!--main-->
+<div class="width">
+	<div class="tk_bg">
+		<!--标题-->
+        <div class="tit"><a href="">题库</a> 〉<a href="">精品试卷</a></div>
+        
+        <!--小标-->
+        <ul class="sj_ul">
+        	<li style="width:194px;">&nbsp;&nbsp;&nbsp;&nbsp;科目：高中语文<div class="clear"></div>
+                <dl class="sub_ul">
+                      <dt><a href="">高中数学</a></dt>
+                      <dt><a href="">高中数学</a></dt>
+                </dl>
+            </li>
+            <li><a href="">知识点选题</a></li>
+            <li><a href="">章节选题</a></li>
+            <li class="hover"><a href="">精品试卷</a></li>
+            <li><a href="">我的题库</a></li>
+        </ul>
+        
+        <div class="clear"></div>
+        <div class="mt20">
+        	<div class="b_4">
+            	<div class="jpjs_tit">{$source_data.source_name}</div>
+                <div class="jpjs_info">
+                	<span>类型：{$source_data.type_name}</span>
+                    <span>省份：{$source_data.province_name}</span>
+                    <span>年级：<if condition="$source_data.grade eq 1">高一<elseif condition="$source_data.grade eq 2" />高二<elseif condition="$source_data.grade eq 3" />高三<elseif condition="$source_data.grade eq 4" />初一<elseif condition="$source_data.grade eq 5" />初二<elseif condition="$source_data.grade eq 6" />初三</if></span>
+                    <span>年份：{$source_data.year}</span>
+                    <span>浏览次数：{$source_data.clicks}</span>
+                </div>
+            </div>
+        </div>
+        <notempty name="first_juan">
+        <div class="tibiao"><div class="lft"><h2>{$first_juan.t_title}</h2></div></div>
+        <volist name="first_juan.shiti" id="vo">
+        <h2>{$vo.order_char}、{$vo.t_title}</h2>
+        <!--题库列表-->
+        <div class="clear"></div>
+        <ul class="jc_list">
+        				<volist name="vo.childs" id="v">
+                    	<li>
+                        	<p>{$v.order_char}.
+                        		{$v.content|htmlspecialchars_decode}
+								<php>
+		                    		if($v['options']){
+		                    			$options = json_decode($v['options']);
+		                    			$options_index = array(0=>'A',1=>'B',2=>'C',3=>'D',4=>'E');
+		                    	</php>
+		                    	<p>
+		                    		<php>
+		                    			$k = 0;
+		                    			foreach($options as $k=>$val){
+		                    		</php>
+		                    			<span style="float:left;line-height:18px;font-size:14px;padding-right:30px;" class="em2"><php>echo $options_index[$k]</php>.<php>echo $val</php></span>
+		                    		<php>
+		                    			}
+		                    		</php>
+		                    	</p>
+		                    	<php>
+		                    	}
+		                    	</php>	
+                        	</p>
+                            <div class="jcbtn3">纠错</div>
+                            <div class="jc_list_b">
+                                <div class="left mr10">
+                                    <span class="jc_btn" id="{$v.id}" onclick="add_tiku({$v.id},$(this))" style="cursor: pointer;">加入试卷</span>
+                                    <a target="_blank" href="/tiku/detail/{$v.id}.html"><span class="jc_btn">查看解析</span></a>
+                                    <span class="jc_btn">下载试题</span>
+                                    <span class="jc_btn">收藏</span>
+                                    <span class="jc_btn2">点赞</span>
+                                    <span class="jc_btn2">分享</span>
+                                    
+                                    
+                                </div>
+                                
+                                <div class="right mr10">
+                                	<div class="left mr10">
+                                        <span style="line-height:30px;">
+                                            难度:<font class="c_z">0.76-0.85</font>
+                                        </span>
+                                    </div>
+                                    
+                                	<div class="left">评分:</div>
+                                    <div class="left"><i class="dis score score3"></i></div>
+                               </div>
+                           </div>
+                        </li>
+                       </volist>
+                	</ul>
+               </volist>
+                </notempty>
+                
+                	<notempty name="second_juan">
+                	<div class="tibiao"><div class="lft"><h2>{$second_juan.t_title}</h2></div></div>
+                	<volist name="second_juan.shiti" id="vo">
+			        <h2>{$vo.order_char}、{$vo.t_title}</h2>
+			        <!--题库列表-->
+			        <div class="clear"></div>
+			        <ul class="jc_list">
+			        	<volist name="vo.childs" id="v">
+                    	<li>
+                        	<p>{$v.order_char}.{$v.content|htmlspecialchars_decode}</p>
+                            <div class="jcbtn3">纠错</div>
+                            <div class="jc_list_b">
+                                <div class="left mr10">
+                                    <span class="jc_btn" onclick="add_tiku({$v.id},$(this))" id="{$v.id}" style="cursor: pointer;">加入试卷</span>
+                                    <a target="_blank" href="/tiku/detail/{$v.id}.html"><span class="jc_btn">查看解析</span></a>
+                                    <span class="jc_btn">下载试题</span>
+                                    <span class="jc_btn">收藏</span>
+                                    <span class="jc_btn2">点赞</span>
+                                    <span class="jc_btn2">分享</span>
+                                    
+                                    
+                                </div>
+                                
+                                <div class="right mr10">
+                                	<div class="left mr10">
+                                        <span style="line-height:30px;">
+                                            难度:<font class="c_z">0.76-0.85</font>
+                                        </span>
+                                    </div>
+                                    
+                                	<div class="left">评分:</div>
+                                    <div class="left"><i class="dis score score3"></i></div>
+                               </div>
+                           </div>
+                        </li>
+                       </volist>
+                       
+                        
+                	</ul>
+                	</volist>
+					</notempty>
+    </div>
+</div>
+<script>
+		$(
+		function(){
+			//alert({$tikus_in_cart});
+			$.each({$tikus_in_cart},function(index,dom){
+				//alert(dom.id);
+				$(".tk_bg").find("span[id="+dom.id+"]").html('移出试卷');
+			});
+		}
+	);
+</script>
+<!-- 右侧 试卷选项-->
+<include file="common:right" />
+<!--footer-->
+<include file="common:footer" />

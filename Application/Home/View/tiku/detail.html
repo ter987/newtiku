@@ -1,0 +1,103 @@
+<include file="common:header" />
+
+<!--main-->
+<div class="width">
+	<div class="tk_bg">
+		<!--标题-->
+		<div class="tit">
+			<div class="left" style="color:#6159b1;font-size:30px;font-family:宋体;margin-left:20px;">试题详情</div>
+		    <div class="right"><a href="/">题库</a> >><a href="/tiku/c{$tiku_data.course_id}/">高中{$tiku_data.course_name}</a> >> <a href="">试题详情</a></div>
+		</div>
+        <div class="clear"></div>
+    </div>
+</div>
+<div class="width">
+	<div style="background:#ddf1fe;border:1px solid #e1e1e1;height:40px;line-height:40px;padding:0px 10px;">
+		<div class="left">计算题</div>
+		<div class="right"><a href="##">报错</a></div>
+	</div>
+	<div style="background:#fff;">
+		<div style="padding:20px;">
+			<p class="c_z"><b>来源：{$tiku_data.source_name|htmlspecialchars_decode}</b></p>
+			<p>{$tiku_data.content|htmlspecialchars_decode}</p>
+			
+		</div>	
+	</div>
+	<div class="detail">	
+		<div class="jc_list_b">
+			<div class="left mr10">
+				<span class="jc_btn">加入试卷</span>
+				<span class="jc_btn">查看解析</span>
+				<span class="jc_btn">下载试题</span>
+			</div>
+			<div class="right mr10" style="font-size:12px;">
+				<div class="left mr10">
+					<span style="line-height:30px;">
+						难度系数:<font class="c_z">{$tiku_data.section}</font>
+					</span>
+				</div>
+				<div class="left">浏览:</div>
+				<div class="left mr10"><font class="c_z">{$tiku_data.clicks}</font>次</div>
+				<div class="left">评分:</div>
+				<div class="left"><i class="dis score score3"></i></div>
+		    </div>
+		</div>
+	</div>
+</div>
+<div class="width">
+	<div style="background:#ddf1fe;border:1px solid #e1e1e1;height:40px;line-height:40px;padding:0px 10px;">
+		<div class="left">解答</div>
+	</div>
+	<div style="background:#fff;padding:10px 20px;">
+<!-- 		<div style="border-bottom:1px dashed #e1e1e1;padding:20px 0;">	
+			<div class="left jc_hui mr10">考点</div>
+			<div class="left" style="line-height:30px;">
+				<span>共点力的平衡 滑动摩擦力、动摩擦因数、静摩擦力</span>
+			</div>
+			 <div class="clear"></div>
+		</div> -->
+		<div style="border-bottom:1px dashed #e1e1e1;padding:20px 0px;">	
+			<div class="left jc_hui mr10">试题解析</div>
+			<div class="left" style="line-height:30px;width:800px;">
+				<p> {$tiku_data.analysis|htmlspecialchars_decode}</p>
+			</div>
+			 <div class="clear"></div>
+		</div>
+		<div style="padding:20px 0;">	
+			<div class="left jc_hui mr10">答案</div>
+			<div class="left" style="line-height:30px;">
+				<span>{$tiku_data.answer|htmlspecialchars_decode}</span>
+			</div>
+			 <div class="clear"></div>
+		</div>
+	</div>
+</div>
+<div class="width">
+	<div style="background:#ddf1fe;border:1px solid #e1e1e1;height:40px;line-height:40px;padding:0px 10px;">
+		<div class="left">试题推荐</div>
+		<!-- <div class="right">
+			<span>
+				<font class="c_z">1</font>/5
+			</span>
+			<span>
+				<a href="##">上一题</a>
+			</span>
+			<span>
+				<a href="##">下一题</a>
+			</span>
+		</div> -->
+	</div>
+	<div style="background:#fff;">
+		<div class="left" style="padding:20px;width:900px;">
+			<p>{$recommend.content|htmlspecialchars_decode}</p>
+			
+		</div>	
+		<div class="left" style="margin-top:20px;font-size:12px;">
+			<a target="_blank" href="/tiku/detail/{$recommend.id}.html">[详情]</a>
+		</div>
+		 <div class="clear"></div>
+	</div>
+</div>
+<include file="common:right" />
+<!--footer-->
+<include file="common:footer" />

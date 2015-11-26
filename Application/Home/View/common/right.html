@@ -1,0 +1,61 @@
+<div class="rightNav">
+	<div class="Nav_title">
+		<a href="" class="add1">再加点题</a><a href="" class="add2">再加点题</a>
+	</div>
+	<div class="txt">
+		<div class="fl" style="height:265px">
+			<div>
+				<a href="javascript:;" id="lock" rel="nofollow">点击收起</a>
+			</div>
+			<p>
+				我的试卷
+			</p>
+			<div style="color:#1887E3;cursor:pointer;position:absolute;left:7px;bottom:46px" class="sdfr2">
+				清空
+			</div>
+			<a style="" href="javascript:;" id="backTop">回顶</a>
+		</div>
+		<div class="fr" style="padding:15px 15px 46px">
+			<div style="min-height:215px;margin-bottom:20px;margin-left:3px">
+				<ul id="wo_de_shi_juan">
+					<volist name="tiku_cart" id="vo">
+					<li>{$vo.type_name}(<span>{$vo.num}</span>/{$vo.num})</li>
+					</volist>
+				</ul>
+				<div>
+					<a href="/shijuan/" class="btn btn3" id="mbsaveQues" rel="nofollow">生成试卷</a>
+					<div style="clear:both">
+					</div>
+				</div>
+			</div>
+			<div style="color:#333;font-size:12px;margin:0 auto;text-align:center;width:96px">
+				暂不支持迅雷下载
+			</div>
+			<div class="suggestion">
+				<a href="" target="_blank">问题反馈</a>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+		function add_tiku(id,obj){
+		$.getJSON(
+			'/tiku/ajaxAddTiku',
+			{id:id},
+			function(data){
+				if(data.status=='success'){
+					var tips = '';
+					$.each(data.type_data,function(index,dom){
+						//alert(dom.id);
+						tips += '<li>'+dom.type_name+'(<span>'+dom.num+'</span>/'+dom.num+')</li>';
+					}
+						
+					);
+					
+				}
+				obj.html('移出试卷');
+				$('#wo_de_shi_juan').html(tips);
+			}
+		);
+	}
+</script>
