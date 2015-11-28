@@ -17,12 +17,15 @@ class TikuController extends GlobalController {
 	}
 	
     public function index(){
+    	$course_id = $_SESSION['course_id'];
+		if(!$course_id){//错误跳转
+			
+		}
     	$params = I('get.param');
 		$result1 = preg_split("/[0-9]/", $params,0,PREG_SPLIT_NO_EMPTY);
 		$result2 = preg_split("/[a-z]/", $params,0,PREG_SPLIT_NO_EMPTY );
 		$new_params = array_combine($result1, $result2);
 		
-    	$course_id = $new_params['c'];
 		$feature_id = $new_params['f'];//试卷类型ID
 		$difficulty_id = $new_params['d'];
 		$type_id = $new_params['t'];//题型id
@@ -39,13 +42,10 @@ class TikuController extends GlobalController {
 		$this->assign('year',$year);
 		$this->assign('point_id',$point_id);
 		$this->assign('province_id',$province_id);
-		//var_dump($feature_id);exit;
-
-		if(!$course_id){//错误跳转
-			
-		}
+		//var_dump($_SESSION['course_id']);exit;
+		
     	//获取题库类型
-    	$_SESSION['course_id'] = $course_id;
+    	
 		$this->assign('course_id',$course_id);
     	$tiku_type = $this->getTikuType($course_id);
 		$this->assign('tiku_type',$tiku_type);
@@ -134,10 +134,15 @@ class TikuController extends GlobalController {
 		$Page->setConfig('last','末页');
 		$page_show = $Page->_show($params);
 		$this->assign('page_show',$page_show);
-		$tiku_data = $Model->field("tiku.`id`,tiku.options,tiku.`content`,tiku.`clicks`,tiku_source.`source_name`,tiku.difficulty_id")
-		->join($join)
-		->join($join2)
-		->where($where)->limit($Page->firstRow.','.$Page->listRows)->select();
+		S(array('type'=>'Memcache','host'=>C('MEMCACHED_HOST'),'port'=>C('MEMCACHED_POST'),'expire'=>C('MEMCACHED_EXPIRE')));
+		$tiku_data = S(md5($where."limit $Page->firstRow,$Page->listRows"));
+		if(!$tiku_data){
+			$tiku_data = $Model->field("tiku.`id`,tiku.options,tiku.`content`,tiku.`clicks`,tiku_source.`source_name`,tiku.difficulty_id")
+			->join($join)
+			->join($join2)
+			->where($where)->limit($Page->firstRow.','.$Page->listRows)->select();
+			S(md5($where."limit $Page->firstRow,$Page->listRows"),$tiku_data);
+		}
 		//var_dump($tiku_data);
 		//echo $Model->getLastSql();
 		$this->assign('tiku_data',$tiku_data);
@@ -157,6 +162,7 @@ class TikuController extends GlobalController {
 		->join("tiku_difficulty ON tiku_difficulty.id=tiku.difficulty_id")
 		->join("tiku_course ON tiku_course.id=tiku_source.course_id")
 		->where("tiku.id=$id")->find();
+		//echo $Modle->getLastSql();
 		if(!$data){//错误提示页面
 			
 		}
@@ -166,6 +172,11 @@ class TikuController extends GlobalController {
 		$this->assign('recommend',$recommend);
 		$this->assign('tiku_data',$data);
 		$this->display();
+	}
+	public function ajaxSelectCourse(){
+		$course_id = I('get.id');
+		$_SESSION['course_id'] = $course_id;
+		$this->ajaxReturn(array('id'=>$_SESSION['course_id']));
 	}
 	public function _getTikuCart(){
 		if($_SESSION['cart']){
@@ -237,7 +248,8 @@ class TikuController extends GlobalController {
 	 */
 	protected function _getRecommendTiku($course_id){
 		$Model = M('tiku');
-		$result = $Model->field("tiku.id,tiku.content")->where("tiku_source.course_id=$course_id")->join("tiku_source ON tiku_source.id=tiku.source_id")->order("RAND()")->find();
+		$result = $Model->field("tiku.id,tiku.content")->where("tiku_source.course_id=$course_id")->join("tiku_source ON tiku_source.id=tiku.source_id")->find();
+		//echo $Model->getLastSql();
 		return $result;
 	}
 	/**

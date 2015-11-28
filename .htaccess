@@ -4,7 +4,7 @@
 
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^tiku/(\w*)\/$ index.php/home/tiku/index/param/$1/
+  RewriteRule ^tiku/(\w+)\/$ index.php/home/tiku/index/param/$1/
   RewriteRule ^tiku/(\w*)$ index.php/home/tiku/$1/
   RewriteRule ^tiku/detail/(\d+).html$ index.php/home/tiku/detail/id/$1/
   RewriteRule ^member/(\w*)$ index.php/home/member/$1/
@@ -12,5 +12,6 @@
   RewriteRule ^hand/(\w*)$ index.php/home/hand/$1/
   RewriteRule ^smart/(\w*)$ index.php/home/smart/$1/
   RewriteRule ^jingpin/(\w+)\/$ index.php/home/jingpin/index/param/$1/
+  RewriteRule ^jingpin/$ index.php/home/jingpin/
   RewriteRule ^jingpin/detail/(\d+).html$ index.php/home/jingpin/detail/id/$1/
 </IfModule>

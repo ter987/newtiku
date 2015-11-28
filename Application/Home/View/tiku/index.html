@@ -15,7 +15,7 @@
 	        	var loc = href.replace(/t\d+/g,c+id);
 	       }
 	    }else{
-	        var loc = href.replace(/tiku\/(\w*)(\/)/g,'tiku/$1'+c+id+'/');
+	        var loc = href.replace(/tiku\//g,'tiku/'+c+id);
 	    }
 	    window.location.href = loc;
 	}
@@ -34,8 +34,13 @@
 	        	var loc = href.replace(/d\d+/g,c+id);
 	       }
 	    }else{
-	        var loc = href.replace(/tiku\/(\w*)(\/)/g,'tiku/$1'+c+id+'/');
+	    	var str = '';
+	    	if(href.search(/tiku\/\w+/g)==-1){
+	    		str = '/';
+	    	}
+	        var loc = href.replace(/tiku\//g,'tiku/'+c+id+str);
 	    }
+	    //alert(loc);
 	    window.location.href = loc;
 	}
 	/* 选择题目特点 **/
@@ -61,7 +66,11 @@
 	        	var loc = href.replace(/f\d+/g,c+id);
 	       }
 	    }else{
-	        var loc = href.replace(/tiku\/(\w*)(\/)/g,'tiku/$1'+c+id+'/');
+	    	var str = '';
+	    	if(href.search(/tiku\/\w+/g)==-1){
+	    		str = '/';
+	    	}
+	        var loc = href.replace(/tiku\//g,'tiku/'+c+id+str);
 	    }
 	    window.location.href = loc;
 	}
@@ -80,7 +89,11 @@
 	        	var loc = href.replace(/w\d+/g,c+id);
 	       }
 	    }else{
-	        var loc = href.replace(/tiku\/(\w*)(\/)/g,'tiku/$1'+c+id+'/');
+	    	var str = '';
+	    	if(href.search(/tiku\/\w+/g)==-1){
+	    		str = '/';
+	    	}
+	        var loc = href.replace(/tiku\//g,'tiku/'+c+id+str);
 	    }
 	    window.location.href = loc;
 	}
@@ -99,7 +112,11 @@
 	        	var loc = href.replace(/y\d+/g,c+id);
 	       }
 	    }else{
-	        var loc = href.replace(/tiku\/(\w*)(\/)/g,'tiku/$1'+c+id+'/');
+	    	var str = '';
+	    	if(href.search(/tiku\/\w+/g)==-1){
+	    		str = '/';
+	    	}
+	        var loc = href.replace(/tiku\//g,'tiku/'+c+id+str);
 	    }
 	    window.location.href = loc;
 	}
@@ -118,7 +135,11 @@
 	        	var loc = href.replace(/a\d+/g,c+id);
 	       }
 	    }else{
-	        var loc = href.replace(/tiku\/(\w*)(\/)/g,'tiku/$1'+c+id+'/');
+	    	var str = '';
+	    	if(href.search(/tiku\/\w+/g)==-1){
+	    		str = '/';
+	    	}
+	        var loc = href.replace(/tiku\//g,'tiku/'+c+id+str);
 	    }
 	    window.location.href = loc;
 	}
@@ -141,7 +162,7 @@
             </li>
             <li  class="hover"><a href="/tiku/c{$course_id}/">知识点选题</a></li>
             <li><a href="">章节选题</a></li>
-            <li><a href="/jingpin/c{$course_id}/">精品试卷</a></li>
+            <li><a href="/jingpin/">精品试卷</a></li>
             <li><a href="">我的题库</a></li>
         </ul>
         

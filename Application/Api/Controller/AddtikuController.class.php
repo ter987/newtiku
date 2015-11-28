@@ -14,7 +14,7 @@ class AddtikuController extends Controller {
 		$this->dir_path = 'Public/tikupics/';
 		$this->date = date('Ymd');
 		$this->course_id = 3;//数学
-		$this->cookies = 'jsessionid=D8417EE71530843588DE56FB17CC0FDF';
+		$this->cookies = 'jsessionid=008DAFFEE06EC6B5256FAFE09FC1F37D';
 	}
 	function flash(){
 		ob_start();
@@ -304,13 +304,13 @@ style='font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:宋体;color:black
 	public function spider_tiku(){
 		$pointModel = M('tiku_point');
 		$tikuModel = M('tiku');
-		$point_data = $pointModel->field("knowledgeId")->where("course_id=$this->course_id AND level=3")->select();
+		$point_data = $pointModel->field("knowledgeId,id")->where("course_id=$this->course_id AND level=3")->select();
 		//var_dump($point_data);exit;
 		foreach($point_data as $pv){
-			$queTypeIds = 13646;//采集源题型ID
+			$queTypeIds = 13647;//采集源题型ID
 			$point_id = $pv['knowledgeid'];
-			$type_id = 1;//本地题型ID
-			$is_xuanzheti = true;//如果是选择题，设置为true
+			$type_id = 2;//本地题型ID
+			$is_xuanzheti = false;//如果是选择题，设置为true
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie:$this->cookies"));
 			curl_setopt($ch, CURLOPT_URL, "http://www.jtyhjy.com/sts/question_findQuestionPage.action");
@@ -526,7 +526,7 @@ style='font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:宋体;color:black
 
 					$tiku_id = $tikuModel->add($tiku);
 					$_Model = M('tiku_to_point');
-					$_Model->data(array('tiku_id'=>$tiku_id,'point_id'=>$point_id))->add();
+					$_Model->data(array('tiku_id'=>$tiku_id,'point_id'=>$pv['id']))->add();
 					unset($tiku);
 				}
 				unset($tikus);

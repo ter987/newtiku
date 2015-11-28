@@ -28,4 +28,8 @@ return array(
 	'MAIL_PORT'						=>	'25',
 	'MAIL_AUTH'				=>true,//邮箱认证
 	'MAIL_HTML'				=>true,//true HTML格式 false TXT格式
+	//Memcached 配置
+	'MEMCACHED_HOST'		=> '127.0.0.1',
+	'MEMCACHED_POST'		=> '11211',
+	'MEMCACHED_EXPIRE'		=> '0',
 );

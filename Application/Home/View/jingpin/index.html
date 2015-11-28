@@ -15,7 +15,11 @@
 	        	var loc = href.replace(/g\d+/g,c+id);
 	       }
 	    }else{
-	        var loc = href.replace(/jingpin\/(\w*)(\/)/g,'jingpin/$1'+c+id+'/');
+	    	var str = '';
+	    	if(href.search(/jingpin\/\w+/g)==-1){
+	    		str = '/';
+	    	}
+	        var loc = href.replace(/jingpin\//g,'jingpin/'+c+id+str);
 	    }
 	    window.location.href = loc;
 	}
@@ -43,7 +47,11 @@
 	        	var loc = href.replace(/f\d+/g,c+id);
 	       }
 	    }else{
-	        var loc = href.replace(/jingpin\/(\w*)(\/)/g,'jingpin/$1'+c+id+'/');
+	    	var str = '';
+	    	if(href.search(/jingpin\/\w+/g)==-1){
+	    		str = '/';
+	    	}
+	        var loc = href.replace(/jingpin\//g,'jingpin/'+c+id+str);
 	    }
 	    window.location.href = loc;
 	}
@@ -63,7 +71,11 @@
 	        	var loc = href.replace(/y\d+/g,c+id);
 	       }
 	    }else{
-	        var loc = href.replace(/jingpin\/(\w*)(\/)/g,'jingpin/$1'+c+id+'/');
+	    	var str = '';
+	    	if(href.search(/tiku\/\w+/g)==-1){
+	    		str = '/';
+	    	}
+	        var loc = href.replace(/jingpin\//g,'jingpin/'+c+id+str);
 	    }
 	    window.location.href = loc;
 	}
@@ -82,7 +94,11 @@
 	        	var loc = href.replace(/a\d+/g,c+id);
 	       }
 	    }else{
-	        var loc = href.replace(/jingpin\/(\w*)(\/)/g,'jingpin/$1'+c+id+'/');
+	    	var str = '';
+	    	if(href.search(/jingpin\/\w+/g)==-1){
+	    		str = '/';
+	    	}
+	        var loc = href.replace(/jingpin\//g,'jingpin/'+c+id+str);
 	    }
 	    window.location.href = loc;
 	}
@@ -104,7 +120,7 @@
             </li>
             <li><a href="/tiku/c{$course_id}/">知识点选题</a></li>
             <li><a href="">章节选题</a></li>
-            <li class="hover"><a href="/jingpin/c{$course_id}/">精品试卷</a></li>
+            <li class="hover"><a href="/jingpin/">精品试卷</a></li>
             <li><a href="">我的题库</a></li>
         </ul>
         

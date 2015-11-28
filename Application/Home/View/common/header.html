@@ -63,7 +63,7 @@ function select_course(id){
                 <li><a href="">题库</a>
                 <div class="subnav">
                 	<volist name='course_data' id='vo'>
-                	<a href="/tiku/c{$vo.id}/" >{$vo.course_name}</a> 
+                	<a onclick="select_course({$vo.id});" style="cursor:pointer;">{$vo.course_name}</a> 
                 	</volist>
                 </div>
                 </li>
@@ -85,3 +85,18 @@ function select_course(id){
          </ul>
     </div>
 </div>
+<script>
+function select_course(id){
+	$.getJSON(
+		'/index.php/home/tiku/ajaxSelectCourse',
+		{id:id},
+		function(data){
+			//alert(data.id);
+			if(data.id){
+				window.location.href = '/tiku/';
+			}
+		}
+		
+	);
+}
+</script>

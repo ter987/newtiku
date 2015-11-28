@@ -22,7 +22,10 @@ class JingpinController extends GlobalController {
 		$result2 = preg_split("/[a-z]/", $params,0,PREG_SPLIT_NO_EMPTY );
 		$new_params = array_combine($result1, $result2);
 		
-    	$course_id = $new_params['c'];
+		$course_id = $_SESSION['course_id'];
+		if(!$course_id){//错误跳转
+			
+		}
 		$feature_id = $new_params['f'];//试卷类型ID
 		$year = $new_params['y'];//年份
 		$province_id = $new_params['a'];//省份
@@ -35,9 +38,7 @@ class JingpinController extends GlobalController {
 		$this->assign('grade',$grade);
 		//var_dump($feature_id);exit;
 
-		if(!$course_id){//错误跳转
-			
-		}
+		
     	//获取题库类型
 		$this->assign('course_id',$course_id);
 		//获取科目类型，高中或初中
