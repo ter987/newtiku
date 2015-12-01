@@ -15,7 +15,11 @@
 	        	var loc = href.replace(/t\d+/g,c+id);
 	       }
 	    }else{
-	        var loc = href.replace(/tiku\//g,'tiku/'+c+id);
+	    	var str = '';
+	    	if(href.search(/tiku\/\w+/g)==-1){
+	    		str = '/';
+	    	}
+	        var loc = href.replace(/tiku\//g,'tiku/'+c+id+str);
 	    }
 	    window.location.href = loc;
 	}
@@ -160,7 +164,7 @@
                       <dt><a href="">高中数学</a></dt>
                 </dl>
             </li>
-            <li  class="hover"><a href="/tiku/c{$course_id}/">知识点选题</a></li>
+            <li  class="hover"><a href="/tiku/">知识点选题</a></li>
             <li><a href="">章节选题</a></li>
             <li><a href="/jingpin/">精品试卷</a></li>
             <li><a href="">我的题库</a></li>
@@ -375,7 +379,7 @@
                                 <div class="right mr10">
                                 	<div class="left mr10">
                                         <span style="line-height:30px;">
-                                            难度系数:<font class="c_z"><if condition="$vo.difficulty_id eq 1">1.00-0.86<elseif condition="$vo.difficulty_id eq 2"/>0.85-0.71<elseif condition="$vo.difficulty_id eq 3"/> 0.7-0.56 <elseif condition="$vo.difficulty_id eq 4"/>0.55-0.41<elseif condition="$vo.difficulty_id eq 5"/>0.40-0.26<else />sdf</if></font>
+                                            难度系数:<font class="c_z"><if condition="$vo.difficulty_id eq 1">1.00-0.86<elseif condition="$vo.difficulty_id eq 2"/>0.85-0.71<elseif condition="$vo.difficulty_id eq 3"/> 0.7-0.56 <elseif condition="$vo.difficulty_id eq 4"/>0.55-0.41<elseif condition="$vo.difficulty_id eq 5"/>0.40-0.26</if></font>
                                         </span>
                                     </div>
                                 	<div class="left">评分:</div>
@@ -432,7 +436,11 @@
 		        var loc = href.replace(/p\d+/g,'p'+id);
 
 		    }else{
-		        var loc = href.replace(/tiku\/(\w*)(\/)/g,'tiku/$1'+'p'+id+'/');
+		    	var str = '';
+		    	if(href.search(/tiku\/\w+/g)==-1){
+		    		str = '/';
+		    	}
+		        var loc = href.replace(/tiku\//g,'tiku/'+'p'+id+str);
 		    }
 		    window.location.href = loc;
 		}

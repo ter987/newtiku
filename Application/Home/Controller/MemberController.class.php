@@ -12,23 +12,58 @@ class MemberController extends GlobalController {
     public function index(){
         $this->display();
 	}
+	public function info(){
+		$Modle = M('user');
+		$data = $Modle->where("id=".$_SESSION['user_id'])->find();
+		$this->assign('user_info',$data);
+		$this->display();
+	}
 	public function register(){
 		if($_POST){
+			$is_mail = I('post.is_mail');
+			
 			$type = I('post.type');
 			$user = I('post.email');
 			$nick_name = I('post.nick_name');
 			$password = I('post.password');
-
-			if(preg_match('/1\d{10}/',$user)){
-				$tel = $user;
-			}elseif(preg_match('/\S+@\w+\.\w+/i',$user)){
-				$email = $user;
+			$Model = M('User');
+			$this->assign('is_mail',$is_mail);
+			if($is_mail){
+				$email = I('post.email');
+				if(!preg_match('/\S{1,30}@\w+\.\w{1,10}/i',$email)){
+					$error_msg = "非法邮箱!";
+					$this->assign('error_msg',$error_msg);
+					$this->display();
+					return false;
+				}
+				if($Model->where("email='".$email."'")->find()){
+					$error_msg = "该邮箱已注册!";
+					$this->assign('error_msg',$error_msg);
+					$this->display();
+					return false;
+				}
+				$data['email'] = $email;
 			}else{
-				$error_msg = "非法邮箱或手机号码!";
-				$this->assign('error_msg',$error_msg);
-				$this->display();
-				return false;
+				$telphone = I('post.telphone');
+				if(!preg_match('/1\d{10}/',$telphone)){
+					$error_msg = "非法手机号码!";
+					$this->assign('error_msg',$error_msg);
+					$this->display();
+					return false;
+				}
+				//校验短信验证码
+				if(I('post.code')!=$_SESSION['code']){
+					
+				}
+				if($Model->where("telphone=$telphone")->find()){
+					$error_msg = "该手机号码已注册!";
+					$this->assign('error_msg',$error_msg);
+					$this->display();
+					return false;
+				}
+				$data['telphone'] = $telphone;
 			}
+			
 			if(!preg_match('/\w{6,16}/',$password)){
 				$error_msg = "密码由6-16位字母、数字或下划线组成！";
 				$this->assign('error_msg',$error_msg);
@@ -40,38 +75,60 @@ class MemberController extends GlobalController {
 			$data['login_ip'] = get_client_ip();
 			$data['type'] = $type;
 			$data['nick_name'] = $nick_name;
-			if(isset($tel)){
-				$data['telphone'] = $tel;
-			}elseif(isset($email)){
-				$data['email'] = $email;
-			}
+
 			$data['salt'] = substr(uniqid(),2,6);
 			$data['password'] = md5(md5($password.$data['salt']));;
 			//var_dump($_POST);exit;
-			$Model = M('User');
+			
 			if($user_id = $Model->add($data)){
-				$_SESSION['nick_name'] = $nick_name;
-				$_SESSION['user_id'] = $user_id;
-				if(isset($email)){
+				if($is_mail){
 					$Mail = A('Mail');
 					$hash = $this->register_hash('encode', $user_id);
 					$Mail->sendMail('active_email',$email,$_SERVER['HTTP_HOST'].'/member/activemail?hash='.$hash);
+					redirect("/member/toactivity?id=$user_id");
+				}else{
+					$_SESSION['nick_name'] = $nick_name;
+					$_SESSION['user_id'] = $user_id;
+					$_SESSION['user_type'] = $type;
+					redirect("/member/");
 				}
-				redirect("/member/");
+				
 			}
 		}else{
 			$this->display();
 		}
 		
 	}
+	public function sendMailAgain(){
+		$user_id = I('get.id');
+		$Model = M('user');
+		$data = $Model->field('email')->where("id=$user_id")->find();
+		$Mail = A('Mail');
+		$hash = $this->register_hash('encode', $user_id);
+		$Mail->sendMail('active_email',$data['email'],$_SERVER['HTTP_HOST'].'/member/activemail?hash='.$hash);
+		$this->display('toactivity');
+	}
+	public function toActivity(){
+		$user_id = I('get.id');
+		$this->assign('user_id',$user_id);
+		$this->display();
+	}
 	public function activeMail(){
 		$hash = I('get.hash');
 		$user_id = $this->register_hash('decode', $hash);
+		$Model = M('user');
+		$data = $Model->field('id,nick_name,email_verified,type')->where("id=$user_id")->find();
+		if($data['email_verified']==1){
+			redirect('/');
+		}
 		if($user_id){
-			$Model = M('user');
 			$Model->data(array('email_verified'=>1))->where("id=$user_id")->save();
+			$_SESSION['nick_name'] = $data['nick_name'];
+			$_SESSION['user_id'] = $data['id'];
+			$_SESSION['user_type'] = $data['type'];
+			redirect("/member/");
 		}else{
-			
+			redirect('/');
 		}
 	}
 	private function register_hash($operation,$key){
@@ -136,6 +193,11 @@ class MemberController extends GlobalController {
 			if($error_msg==''){
 				$_SESSION['nick_name'] = $result['nick_name'];
 				$_SESSION['user_id'] = $result['id'];
+				$_SESSION['user_type'] = $result['type'];
+				if(I('post.auto_login')){
+					setcookie('user_name',$user,time()+C('COOKIE_EXPIRE'),'/');
+					setcookie('password',$password,time()+C('COOKIE_EXPIRE'),'/');
+				}
 				redirect("/member/");
 			}
 			
@@ -144,8 +206,11 @@ class MemberController extends GlobalController {
 		}
 		
 	}
+	
 	public function logout(){
 		session_destroy();
+		setcookie('user_name','',time()-3600,'/');
+		setcookie('password','',time()-3600,'/');
 		redirect('/');
 	}
 	public function ajaxCheckUser(){

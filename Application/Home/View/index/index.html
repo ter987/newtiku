@@ -1,38 +1,66 @@
 <include file="common:header" />
-
+<script type="text/javascript" src="__PUBLIC__/js/jquery.SuperSlide.2.1.1.js"></script>
 
 <!--main-->
-	<div class="index_banner">
-		<div class="bd">
-			<ul>
-				<li style="background:url(__PUBLIC__/images/index_bg.gif) #CCE1F3 center 0 no-repeat;"><a target="_blank" href="#"></a></li>
-				<li style="background:url(__PUBLIC__/images/index_bg.gif) #BCE0FF center 0 no-repeat;"><a target="_blank" href="#"></a></li>
-				<li style="background:url(__PUBLIC__/images/3.jpg) #C4CFEB center 0 no-repeat;"><a target="_blank" href="#"></a></li>
-				<li style="background:url(__PUBLIC__/images/4.jpg) #C5EDFD center 0 no-repeat;"><a target="_blank" href="#"></a></li>
-			</ul>
+<div class="index_banner">
+  <div class="bd">
+    <ul>
+      <li style="background: transparent url(__PUBLIC__/images/index_bg.gif) no-repeat scroll center 0px; display: none;"><a href="#" target="_blank"></a></li>
+      <li style="background: transparent url(__PUBLIC__/images/index_bg.gif) no-repeat scroll center 0px; display: none;"><a href="#" target="_blank"></a></li>
+      <li style="background: rgb(196, 207, 235) url(__PUBLIC__/images/3.jpg) no-repeat scroll center 0px; display: list-item; opacity: 0.943356;"><a href="#" target="_blank"></a></li>
+      <li style="background: rgb(197, 237, 253) url(__PUBLIC__/images/4.jpg) no-repeat scroll center 0px; display: none;"><a href="#" target="_blank"></a></li>
+    </ul>
+  </div>
+  <div class="hd">
+    <ul><li class="">1</li><li class="">2</li><li class="on">3</li><li class="">4</li></ul>
+  </div>
+  <div class="width">
+    <!--第一屏-->
+    <div class="login">
+	<!-- 登录 -->
+	<empty name="user_id">
+      <div class="login_wz">
+        <form>
+          <input type="text" size="40" value="账号：" onblur="if(this.value=='')this.value=defaultValue" onfocus="if(this.value==defaultValue)this.value=''" class="ip" name="text">
+          <br>
+          <input type="text" size="40" value="密码：" onblur="if(this.value=='')this.value=defaultValue" onfocus="if(this.value==defaultValue)this.value=''" class="ip" name="text2">
+          <br>
+          <input type="checkbox" name="checkbox">
+          下次自动登录
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="">忘记密码</a><br>
+                    <input type="submit" size="40" value="登录" class="btn" name="submit">
+                    <br>
+                    <input type="submit" size="40" value="注册" class="btn" name="submit">
+                    <br>
+        </form>
+      </div>
+      <else />
+	  <!-- 登录结束 -->
+	  <!-- 登陆后状态 -->
+	  <div style="background:#c7dff6;margin-top:30px;padding:30px;">
+		<div style="border-bottom:1px solid #999;line-height:50px;height:50px;">
+			 欢迎您，<span style="color:#F43C5E;font-size:20px;">{$nick_name}</span><eq name="user_type" value="2">老师<else />学生</eq> <!-- 学生 -->
 		</div>
-		<div class="hd"><ul></ul></div>
-        
-        <div class="width">
-            <!--第一屏-->
-            <div class="login">
-                <div class="login_wz">
-                <form>
-                    <input type="text" class="ip" size="40" value="账号：" onfocus="if(this.value==defaultValue)this.value=''" onblur="if(this.value=='')this.value=defaultValue"/><br />
-                    <input type="text" class="ip" size="40" value="密码：" onfocus="if(this.value==defaultValue)this.value=''" onblur="if(this.value=='')this.value=defaultValue"/><br />
-                    <input type="checkbox" />下次自动登录
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="">忘记密码</a><br />
-                    <input type="submit" class="btn" value="登录" size="40"/><br />
-                    <input type="submit" class="btn" value="注册" size="40"/><br />
-                    
-                </form>
-                </div>
-            </div>
-         </div>
-        
-	</div>
+		<div onclick="window.location.href='/member/'" style="cursor:pointer;width:200px;height:30px;line-height:30px;background:#F43C5E;text-align:center;color:#fff;font-size:18px;padding:5px 20px;margin-top:20px;">
+			进入我的主页
+		</div>
+		<div>
+			<div style="height:30px;line-height:30px;">
+				<span style="float:left;"><a href="">修改密码</a></span>
+				<span style="float:right;"><a style="color:#5487E3;" href="">激活学习卡</a></span>
+				<div style="clear:both;"></div>
+			</div>
+			<div style="height:30px;line-height:30px;">
+				<a href="">使用帮助</a>
+			</div>
+		</div> 
+	  </div>
+	 </empty>
+	   <!-- 登陆后状态结束 -->
+    </div>
+  </div>
+</div>
 
 	<script type="text/javascript">
 		jQuery(".index_banner").slide({ titCell:".hd ul", mainCell:".bd ul", effect:"fade",  autoPlay:true, autoPage:true, trigger:"click" });
@@ -94,51 +122,7 @@
                         <li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
 					</ul>
 			</div>
-            
-
-			<div class="tab-pal">
-					<ul>
-						<li><span>2015-07-22</span><a href="#">·[真343题]2015年高考上海市语文（带分析）</a></li>
-						<li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-						<li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-						<li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-                        <li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-                        <li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-					</ul>
-			</div>
-
-			<div class="tab-pal">
-					<ul>
-						<li><span>2015-07-22</span><a href="#">·[真333题]2015年高考上海市语文（带分析）</a></li>
-						<li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-						<li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-						<li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-                        <li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-                        <li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-					</ul>
-			</div>
-            
-            <div class="tab-pal">
-					<ul>
-						<li><span>2015-07-22</span><a href="#">·[真111题]2015年高考上海市语文（带分析）</a></li>
-						<li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-						<li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-						<li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-                        <li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-                        <li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-					</ul>
-			</div>
-            
-            <div class="tab-pal">
-					<ul>
-						<li><span>2015-07-22</span><a href="#">·[真2222题]2015年高考上海市语文（带分析）</a></li>
-						<li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-						<li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-						<li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-                        <li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-                        <li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-					</ul>
-			</div>
+ 
 		</div>
 	</div>
           <script type="text/javascript">jQuery(".notice").slide({ titCell:".tab-hd li", mainCell:".tab-bd",delayTime:0 });</script>                  
@@ -198,49 +182,6 @@
 			</div>
             
 
-			<div class="tab-pal">
-					<ul>
-						<li><span>2015-07-22</span><a href="#">·[真343题]2015年高考上海市语文（带分析）</a></li>
-						<li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-						<li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-						<li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-                        <li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-                        <li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-					</ul>
-			</div>
-
-			<div class="tab-pal">
-					<ul>
-						<li><span>2015-07-22</span><a href="#">·[真333题]2015年高考上海市语文（带分析）</a></li>
-						<li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-						<li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-						<li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-                        <li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-                        <li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-					</ul>
-			</div>
-            
-            <div class="tab-pal">
-					<ul>
-						<li><span>2015-07-22</span><a href="#">·[真111题]2015年高考上海市语文（带分析）</a></li>
-						<li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-						<li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-						<li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-                        <li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-                        <li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-					</ul>
-			</div>
-            
-            <div class="tab-pal">
-					<ul>
-						<li><span>2015-07-22</span><a href="#">·[真2222题]2015年高考上海市语文（带分析）</a></li>
-						<li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-						<li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-						<li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-                        <li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-                        <li><span>2015-07-22</span><a href="#">·[真题]2015年高考上海市语文（带分析）</a></li>
-					</ul>
-			</div>
 		</div>
 	</div>
           <script type="text/javascript">jQuery(".notice").slide({ titCell:".tab-hd li", mainCell:".tab-bd",delayTime:0 });</script>

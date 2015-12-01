@@ -16,13 +16,13 @@
     <div class="width">
         <div class="right">
         	<a href="">设为首页</a> |
-            <eq name="is_login" value="n">
-            <a href="/member/login">登录</a> |
-            <a href="/member/register">注册</a>
-            <else />
+            <notempty name="user_id">
             <a href="/member/">个人中心</a> |
             <a href="/member/logout">退出</a>
-            </eq>
+            <else />
+            <a href="/member/login">登录</a> |
+            <a href="/member/register">注册</a>
+            </notempty>
          </div> 
      </div>
 </div>

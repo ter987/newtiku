@@ -13,11 +13,27 @@
 		{$error_msg}
 		<form class="demo" method="post" action="/member/register">
 			<input type="hidden" id="type" name="type" value="1" />
-			<div class="reg_br">
+			<input type="hidden" name="is_mail" id="is_mail" value="0"/>
+			<div class="reg_br" id="is_mail_type" style="display:none;">
 				<div class="reg_l">邮箱：</div>
 				<div class="reg_r">
-					<input id="email" type="text" name="email" datatype="e" ajaxurl="/member/ajaxcheckemail" nullmsg="邮箱不能为空！" errormsg="请输入合法的邮箱地址！" class="required email"/>
+					<input id="email"  type="text" name="email" datatype="e" ajaxurl="/member/ajaxcheckemail" nullmsg="邮箱不能为空！" errormsg="请输入合法的邮箱地址！" class="required email"/>
 				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="reg_br" id="is_tel_type">
+				<div class="reg_l">手机号：</div>
+				<div class="reg_r">
+					<input id="telphone" type="text" name="telphone" datatype="m" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="reg_br" id="verify_code" >
+				<div class="reg_l">短信验证码：</div>
+				<div class="reg_r" style="width:120px;">
+					<input id="code" type="text" name="code" datatype="n6-6" style="width:100px;" />
+				</div>
+				<button class="reg_rr">获取验证码</button>
 				<div class="clear"></div>
 			</div>
 			<div class="reg_br">
@@ -33,30 +49,56 @@
 			<div class="reg_br" style="margin-top:20px;">
 				<div class="reg_l">&nbsp;</div>
 				<div style="float:left;"><button id="button" class="button_reg">注册</button></div>
-				<div class="text_reg"><a href="">使用手机注册？</a></div>
+				<div class="text_reg"><a onclick="change_reigster_type($(this));" style="cursor: pointer;">使用邮箱注册？</a></div>
 			</div>
 		</form>
 	</div>	
    
 </div>
 <script type="text/javascript" src="__PUBLIC__/lib/Validform/5.3.2/Validform.js"></script>
+<link href="/Public/css/validform.css" rel="stylesheet" type="text/css" />
 <script>
 	$(
 		function(){
    		$("form").Validform(
-   			{tiptype:2}
+   			{tiptype:3}
    		);
     });
     $('#student').click(
     	function(){
+    		$('.reg_teacher_check').attr('class','reg_teacher');
+    		$(this).attr('class','reg_xs_check');
     		$('#type').val(1);
     	}
     );
      $('#teacher').click(
     	function(){
+    		$('.reg_xs_check').attr('class','reg_xs');
+    		$(this).attr('class','reg_teacher_check');
     		$('#type').val(2);
     	}
     );
+    function change_reigster_type(obj){
+    	if($('#is_mail').val()==0){
+    		$('#is_mail').val(1);
+    		$('#is_mail_type').show();
+    		$('#is_tel_type').hide();
+    		$('#verify_code').hide();
+    		$('#email').attr('datatype','e');
+    		$('#telphone').attr('datatype','');
+    		$('#code').attr('datatype','');
+    		obj.html('使用手机注册？');
+    	}else if($('#is_mail').val()==1){
+    		$('#is_mail').val(0);
+    		$('#is_mail_type').hide();
+    		$('#is_tel_type').show();
+    		$('#verify_code').show();
+    		$('#email').attr('datatype','');
+    		$('#telphone').attr('datatype','m');
+    		$('#code').attr('datatype','n6-6');
+    		obj.html('使用邮箱注册？');
+    	}
+    }
 </script>
 
 <include file="common:footer" />

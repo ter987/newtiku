@@ -14,8 +14,10 @@ h2{font-weight:100;}
 
 /*精品试卷*/
 .tk_bg{background:url(../images/tk_bg.png) no-repeat top center;min-height:80px;}
-.tk_bg .tit{padding:20px;font-size:16px;line-height:60px;}
-.tk_bg .tit span{float:right;font-size:14px;}
+.tk_bg_mm{background:url(../images/tk_bg_mm.png) no-repeat top center;min-height:80px;}
+.tk_bg_jh{background:url(../images/tk_bg_jh.png) no-repeat top center;min-height:80px;}
+.tit{padding:20px;font-size:16px;line-height:60px;}
+.tit span{float:right;font-size:14px;}
 
 .sj_ul{margin:0;list-style:none;padding:0;clear:both;overflow:hidden;}
 .sj_ul li{float:left;height:50px;line-height:50px;font-size:16px;background:#1887e3;color:#fff;overflow:hidden;}
@@ -158,7 +160,9 @@ h2{font-weight:100;}
 .tk_tm_ul li .jcbtn{color:#fff;line-height:30px; position:absolute;top:10px;right:0;background:#16d957;width:60px;text-align:center;height:30px;display:block;}
 .tk_tm_ul li .jcbtn1{color:#fff;line-height:30px; position:absolute;top:8px;right:11px;background:#16d957;width:60px;text-align:center;height:30px;display:block;}
 .tk_tm_ul li .jc_btn2{float:left;color:#fff;line-height:30px;background:#16d957;width:60px;text-align:center;height:30px;margin-right:10px;}
-.tk_tm_ul li .jc_btn{float:left;width:70px;line-height:30px;text-align:center;color:#fff;background:#1887e3;margin-right:10px;}
+.tk_tm_ul li .jc_btn{float:left;width:70px;line-height:30px;text-align:center;color:#fff;background:#1887e3;margin-right:10px;cursor:pointer;}
+.tk_tm_ul li .jc_btn:hover{float:left;width:70px;line-height:30px;text-align:center;color:#fff;background:#f43c5e;margin-right:10px;}
+.tk_tm_ul li .jc_btn_check{float:left;width:70px;line-height:30px;text-align:center;color:#fff;background:#999;margin-right:10px;}
 .tk_tm_ul li .score{margin-top:3px;}
 .tk_tm_ul li .jc_list_b{clear:both;overflow:hidden;line-height:30px;padding-bottom:10px;}
 
@@ -186,7 +190,7 @@ h2{font-weight:100;}
 
 /*选择*/
 .ch_ul{padding:0;margin:0;list-style:none;}
-.ch_ul li{float:left;width:15%;text-align:left;line-height:30px;height:30px;}
+.ch_ul li{float:left;width:15%;text-align:center;line-height:30px;height:30px;}
 
 /*在线考试*/
 .ks_ul{padding:0;margin:0;list-style:none;}
@@ -206,6 +210,8 @@ h2{font-weight:100;}
 .reg_teacher{float:left;width:160px;height:40px;line-height:40px;}
 .reg_teacher a{background:url(../images/reg_teacher.gif) no-repeat left center #ccc;width:160px;height:40px;line-height:40px;display:block; text-indent:60px;font-size:16px;color:#000;}
 .reg_teacher a:hover{background:url(../images/reg_teacher_hover.gif)  no-repeat left center #fe6600;width:160px;height:40px;line-height:40px;display:block; text-indent:60px;font-size:16px;color:#fff;}
+.reg_teacher_check{float:left;width:160px;height:40px;line-height:40px;}
+.reg_teacher_check a{background:url(../images/reg_teacher_hover.gif) no-repeat left center #fe6600;width:160px;height:40px;line-height:40px;display:block; text-indent:60px;font-size:16px;color:#000;}
 
 .reg_line{background:url(../images/reg_line.gif) no-repeat top center;width:990px;margin:0 auto;height:11px;display:block;}
 
@@ -422,6 +428,7 @@ h2{font-weight:100;}
 	text-align: right;
 }
 .mbquesTxt .btn2 {
+	cursor:pointer;
 	margin-left: 80px;
 }
 .wh2, .wh4, .wh02, .wh8 {
@@ -530,6 +537,7 @@ h2{font-weight:100;}
 }
 .mbstowTag li .btn2 {
 	font-weight: bold;
+	cursor:pointer;
 	margin: 20px 0px 0px 210px;
 }
 /*---生成试卷页面--*/
@@ -573,11 +581,11 @@ h2{font-weight:100;}
 }
 #pui_main {
 	width: 853px;
-	margin: 60px 0px 0px 105px;
+	margin: 60px 0px 0px 5px;
 	position: relative;
 	float: left;
-	
 }
+
 #pui_head {
 	position: relative;
 	margin-left: 5px;
@@ -585,7 +593,12 @@ h2{font-weight:100;}
 }
 #pui_title {
 	text-align: center;
-	position: relative;
+	/* position: relative; */
+	border:1px solid #fff;
+}
+#pui_title:hover{
+	background:#feeff2;
+	border:1px solid #f43c5e;
 }
 #pui_notice {
 	margin-top: 10px;
@@ -639,11 +652,10 @@ h2{font-weight:100;}
 	top: 0;
 	padding: 3px 2px 4px 2px;
 }
-#parthead2:hover{
-	background:#feeff2;
-	border:1px solid #f43c5e;
+#parthead2{
+	border:1px solid #fff;
 }
-#pui_title:hover{
+#parthead2:hover{
 	background:#feeff2;
 	border:1px solid #f43c5e;
 }
@@ -666,7 +678,12 @@ h2{font-weight:100;}
 	padding-left: 5px;
 	padding-top: 2px;
 	padding-bottom: 2px;
+	border:1px solid #fff;
 	cursor: default;
+}
+#pui_body div.questypehead:hover{
+	background:#feeff2;
+	border:1px solid #f43c5e;
 }
 #pui_body div.questypescore table td {
 	border: 1px solid #666;
@@ -715,7 +732,7 @@ div.quesopmenu {
 	cursor: pointer;
 	position: absolute;
 	z-index: 999;/*太大了在firefox下有点问题，firefox下的z-index机制与ie还是有差别的*/
-	top: -2px;
+	/* top: -2px; */
 	right: 0;
 }
 div.quesopmenu a {
@@ -761,6 +778,12 @@ div.quesopmenu .icon3, div.quesopmenu .overicon3 {
 	background:url('../images/questionBank.png') no-repeat #1887e3;
 	background-position: -178px -654px;
 }
+.succeed{
+	background:url('../images/succeed.gif') no-repeat;
+	float:left;
+	width:26px;
+	height:26px;
+}
 div.quesopmenu .overicon3 {
 	background-color: #999;
 }
@@ -773,6 +796,175 @@ div.quesdiv {
 div.quesdiv a {
 	color: #333;
 }
+.quesbox{
+	border:1px solid #fff;	
+}
 .quesbox:hover{
 	border:1px solid #1887e3;	
+}
+/*手动组卷 */
+.navIcon {
+	width: 1000px;
+	overflow: hidden;
+	padding: 30px 0px;
+	float: left;
+}
+.navIcon ul {
+	width: 1025px;
+	float: left;
+}
+.navIcon li {
+	width: 180px;
+	float: left;
+	margin-right: 25px;
+	text-align: center;
+	position: relative;
+}
+.navIcon li u {
+	text-decoration: none;
+	position: absolute;
+	right: 12px;
+	top: 0px;
+	line-height: 32px;
+	color: #444444;
+	font-size: 14px;
+}
+.navIcon .icon1 .this u, .navIcon .icon2 .this u, .navIcon .icon1:hover label u, .navIcon .icon2:hover label u {
+	color: #fff;
+}
+.navIcon li label, .navIcon li label span, .navIcon li label font {
+	display: block;
+	text-align: center;
+}
+.navIcon li label font {
+	padding: 12px 0px;
+}
+.navIcon li label span {
+	height: 46px;
+	line-height: 46px;
+	font-size: 18px;
+	padding: 106px 0px 28px 0px;
+	background-color: #e8e8e8;
+}
+.navIcon .icon1 label span {
+	background:url('../images/questionBank.png') no-repeat #e8e8e8;
+	background-position: -140px -200px;
+}
+.navIcon .icon1:hover label span, .navIcon .icon1 .this span, .navIcon .icon1:hover .this span {
+	background-position: 66px -200px;
+	background-color: #1887e3;
+	color: #fff;
+}
+.navIcon .icon2 label span {
+	background:url('../images/questionBank.png') no-repeat #e8e8e8;
+	background-position: -548px -200px;
+}
+.navIcon .icon2:hover label span, .navIcon .icon2 .this span, .navIcon .icon2:hover .this span {
+	background-position: -343px -200px;
+	background-color: #1887e3;
+	color: #fff;
+}
+.btn_default{
+	float:left;
+	border:1px solid #e1e1e1;
+	border-radius:5px;
+	width:100px;
+	height:35px;
+	line-height:35px;
+	text-align:center;
+	cursor: pointer;
+	margin:10px 20px 10px 0px;	
+}
+.btn_default:hover{
+	border:1px solid #1887e3;
+	background:#1887e3;
+	color:#fff;
+}
+.btn_check{
+	float:left;
+	border:1px solid #1887e3;
+	border-radius:5px;
+	width:100px;
+	height:35px;
+	line-height:35px;
+	text-align:center;
+	background:#1887e3;
+	margin:10px 20px 10px 0px;	
+	color:#fff;
+}
+.reg_right{
+	float:left;
+	width:400px;
+}
+/* 试卷抬头 */
+.sj_tt{
+	border:1px solid #999;
+	height:600px;
+	width:100px;
+	float:left;
+	margin-top:50px;
+}
+.sjtt_left{
+	float:left;
+	width:60px;
+}
+.sjtt_right{
+	border-left:1px solid #999;
+	float:left;
+	width:39px;
+	height:600px;
+}
+.sjtt_left_text{
+	width:500px;
+	height:450px;
+	-webkit-transform: rotate(-90deg); 
+    -moz-transform: rotate(-90deg);
+	-ms-transform: rotate(-90deg);
+    /* Internet Explorer */
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+.sjtt_right_text{
+	width:350px;
+	height:330px;
+	-webkit-transform: rotate(-90deg); 
+    -moz-transform: rotate(-90deg);
+	-ms-transform: rotate(-90deg);
+    /* Internet Explorer */
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+.quesTypes .minus1, .quesTypes .minus2, .quesTypes .add {
+	width: 22px;
+	height: 22px;
+	border: 0px;
+	cursor: pointer;
+}
+.quesTypes .minus1 {
+	background:url('../images/questionBank.png') no-repeat;
+	background-position: -757px -32px;
+}
+.quesTypes .minus2 {
+	background:url('../images/questionBank.png') no-repeat;
+	background-position: -757px 0px;
+}
+.quesTypes .add {
+	background:url('../images/questionBank.png') no-repeat;
+	background-position: -789px 0px;
+}
+.quesTypes .countInput {
+	width: 52px;
+	height: 30px;
+	line-height: 30px;
+	border: 0px;
+	margin: 0px 5px;
+	padding-left: 10px;
+	font-family: Arial;
+	overflow: hidden;
+	border: 0px;
+	background:url('../images/questionBank.png') no-repeat;
+	background-position: -628px -1214px;
+}
+.quesTypes u {
+	font-size: 14px;
+	line-height: 32px;
+	text-decoration: none;
 }

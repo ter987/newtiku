@@ -32,4 +32,6 @@ return array(
 	'MEMCACHED_HOST'		=> '127.0.0.1',
 	'MEMCACHED_POST'		=> '11211',
 	'MEMCACHED_EXPIRE'		=> '0',
+	//cookie配置
+	'COOKIE_EXPIRE'			=> 604800,//7天
 );

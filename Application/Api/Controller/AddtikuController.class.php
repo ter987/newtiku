@@ -14,7 +14,7 @@ class AddtikuController extends Controller {
 		$this->dir_path = 'Public/tikupics/';
 		$this->date = date('Ymd');
 		$this->course_id = 3;//数学
-		$this->cookies = 'jsessionid=008DAFFEE06EC6B5256FAFE09FC1F37D';
+		$this->cookies = 'jsessionid=9C2363E70DEE26A9B1D5AF249BFCED78';
 	}
 	function flash(){
 		ob_start();
@@ -307,9 +307,9 @@ style='font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:宋体;color:black
 		$point_data = $pointModel->field("knowledgeId,id")->where("course_id=$this->course_id AND level=3")->select();
 		//var_dump($point_data);exit;
 		foreach($point_data as $pv){
-			$queTypeIds = 13647;//采集源题型ID
+			$queTypeIds = 13648;//采集源题型ID
 			$point_id = $pv['knowledgeid'];
-			$type_id = 2;//本地题型ID
+			$type_id = 3;//本地题型ID
 			$is_xuanzheti = false;//如果是选择题，设置为true
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie:$this->cookies"));

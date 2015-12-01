@@ -17,10 +17,12 @@ a:hover{color:#f30;}
 .bgfff{background:#fff;}
 .f12{font-size:12px;}
 .f14{font-size:14px;}
+.fl{float:left;}
 .c9{color:#999;}
 .c_z{color:#f43c5e;}
 .c_l{color:#1887e3;}
 .dis{display:block;}
+.co_f43c5e{color:#f43c5e;}
 #imgcode{cursor:pointer;}
 #position{line-height:40px;height:30px;}
 #position a{color:#333;}
@@ -141,7 +143,7 @@ a:hover{color:#f30;}
 	width: 170px;
 	position: fixed;
 	right: 0px;
-	bottom: 206px;
+	bottom: 150px;
 	z-index: 2000;
 	_position: absolute;
 }
@@ -152,7 +154,7 @@ a:hover{color:#f30;}
 .rightNav .txt {
 	width: 168px;
 	float: left;
-	position: relative;
+	/* position: relative; */
 	border: 1px solid #e0e0e0;
 	background-color: #ddf1fe;
 }
@@ -174,6 +176,7 @@ a:hover{color:#f30;}
 	width: 40px;
 	padding: 0px;
 	text-indent: -9999px;
+	background:url('../images/questionBank.png') no-repeat;
 	background-position: -907px 5px;
 }
 .rightNav .Nav_title a:hover {
@@ -189,12 +192,15 @@ a:hover{color:#f30;}
 	border-right: 1px solid #e0e0e0;
 }
 .rightNav .fl div a {
-	width: 40px;
+	width:40px;
+	*width:auto;
 	height: 30px;
-	margin: 15px 5px;
+	margin:15px 5px;
+	*margin: 15px 4px;
 	display: block;
+	*display:;
 	/* text-indent: -9999px; */
-	background-position: -907px -45px;
+	/* background-position: -907px -45px; */
 }
 .rightNav .fl .lock {
 	background-position: -907px -83px;
@@ -235,7 +241,7 @@ a:hover{color:#f30;}
 	padding: 15px 15px 50px 15px;
 	min-height: 240px;
 	background-color: #fff;
-	float: left;
+	float: right;
 }
 .rightNav .fr li {
 	line-height: 18px;
@@ -252,9 +258,6 @@ a:hover{color:#f30;}
 .rightNav1 {
 	width: 40px;
 	overflow: hidden;
-}
-.rightNav .fr {
-	position: relative;
 }
 .rightNav .fr .suggestion {
 	width: 129px;
@@ -278,8 +281,8 @@ a:hover{color:#f30;}
 	text-align: center;
 	border-left: 1px solid #1887e3;
 	background-position: 24px 2px;
-	text-indent: -9999px;
-}
+	/* text-indent: -9999px;*/
+} 
 .rightNav .fr .suggestionline {
 	border-left: 1px solid #1e72b8;
 }
@@ -306,9 +309,205 @@ a:hover{color:#f30;}
 	border: 1px solid #da2c4d;
 	background-color: #f43c5e;
 }
-.Validform_error{background-color:#fbe2e2;border-color:#c66161;color:#c00}
-.Validform_wrong .Validform_right .Validform_warning{display:inline-block;height:20px;font-size:12px;vertical-align:middle;padding-left:25px}
-.Validform_wrong{background:url(../images/icon_error_s.png) no-repeat 0 center;color:#ef392b}
-.Validform_right{background:url(../images/icon_right_s.png) no-repeat 0 center}
-.Validform_warning{background:url(../images/icon_warning_s.png) no-repeat 0 center;color:#777}
+#head_photo, #head_photo .img, #head_photo .upload {
+  width: 590px;
+  float: left;
+}
+#head_photo .img span {
+  width: 60px;
+  text-align: center;
+  display: block;
+  float: left;
+  line-height: 106px;
+}
+#head_photo .img ul {
+  width: 530px;
+  float: left;
+}
+#head_photo .img li {
+  width: 86px;
+  height: 86px;
+  margin: 10px;
+  float: left;
+}
+#head_photo .img li a {
+  width: 80px;
+  height: 80px;
+  display: block;
+  float: left;
+  overflow: hidden;
+  border: 3px solid #fff;
+}
+#head_photo .img li a:hover {
+  border: 3px solid #e0e0e0;
+}
+#head_photo .img .this a, #head_photo .img .this a:hover {
+  border: 3px solid #f43c5e;
+}
+#head_photo .upload .myPhoto {
+  margin-left: 70px;
+  line-height: 20px;
+  display: block;
+  float: left;
+  margin-bottom: 15px;
+}
+#head_photo .upload u {
+  display: block;
+  float: left;
+  line-height: 24px;
+  text-decoration: none;
+  color: #999;
+}
+#head_photo .upload .replace {
+  display: block;
+  float: right;
+  color: #333;
+  margin-right: 10px;
+}
+#head_photo .upload .replace:hover {
+  color: #f43c5e;
+}
+#head_photo .btn2 {
+  margin-right: 10px;
+  float: right;
+  margin-top: 10px;
+}
+.resetpass {
+    width: 210px;
+    height: 62px;
+    background: #1887E3 none repeat scroll 0% 0%;
+    float: left;
+    margin-right: 60px;
+    color: #FFF;
+    text-align: center;
+    font-size: 14px;
+    font-family: 微软雅黑;
+    line-height: 62px;
+}
+.resetpass_a{
+	width:186px;
+	padding-right:14px;
+	height:68px;
+	background-image: url(../images/resetpass_bg.png);
+	float:left;
+	margin-right:30px;
+	color:#999;
+	text-align:center;
+	font-size:14px;
+	font-family:微软雅黑;
+	line-height:68px;
+	
+	
+}
+.resetpass_act{
+	background-image: url(../images/resetpass_act_bg.png);
+	float:left;
+	margin-right:30px;
+	color:#fff;
+	text-align:center;
+	font-size:14px;
+	font-family:微软雅黑;
+	line-height:68px;
+}
 
+.findPwd .txt2 .btn2{
+	margin-bottom:0px;
+	padding:0px 30px;
+}
+.findPwd .txt1 {
+    width: 690px;
+    padding-left: 310px;
+    float: left;
+}
+.userForm1 .agreement {
+	display: none;
+	margin-top: -30px;
+}
+.userForm1 .hover {
+	display: block;
+	background-color: #fff;
+}
+.userForm1, .userForm1 ul, .userForm1 li {
+	width: 100%;
+	float: left;
+}
+.userForm1 li {
+	margin: 15px 0px;
+}
+.userForm1 .select03 li {
+	margin: 0px;
+}
+.userForm1 .select03 ul, .userForm1 .select03 li {
+	width: 226px;
+}
+.userForm1 label, .userForm1 input, .userForm1 a, .userForm1 label span {
+	display: block;
+	float: left;
+	font-family: "微软雅黑";
+}
+.userForm1 label span {
+	cursor: pointer;
+	font-size: 14px;
+}
+.userForm1 label input {
+	margin-top: 14px;
+}
+.userForm1 label, .userForm1 a {
+	line-height: 40px;
+}
+.userForm1 label {
+	width: 90px;
+	text-align: right;
+	font-size: 14px;
+	padding-right: 10px;
+}
+.userForm1 u {
+	display: block;
+	float: left;
+	text-decoration: none;
+	line-height: 40px;
+	color: #717171;
+	font-family: "微软雅黑";
+}
+.userForm1 .wh5 {
+	width: 218px;
+	border: 0px;
+	font-size: 14px;
+	margin-right: 10px;
+	padding: 12px 5px;
+	height: 16px;
+	line-height: 16px;
+	border: 0px;
+	background:url('../images/questionBank.png') no-repeat;
+	background-position: -440px -784px;
+}
+.userForm1 .onFocus .onFocus_top {
+	line-height: 40px;
+	color: #717171;
+	font-family: "微软雅黑";
+}
+.userForm1 .btn6 {
+	font-family: "Microsoft YaHei";
+ *+border:0px;
+ *+padding-left:0px;
+ *+padding-right:0px;
+ *+width:228px;
+	overflow: hidden;
+}
+.userForm1 .confirm {
+    background: rgba(0, 0, 0, 0) url("../images/yzm.png") no-repeat scroll 0 -2px;
+    border: medium none;
+    box-shadow: 0 0 5px #e7e7e7;
+    font-size: 14px;
+    height: 16px;
+    margin-right: 7px;
+    padding: 10px 0 10px 10px;
+    vertical-align: middle;
+    width: 93px;
+}
+.send_phone_button {
+    border: 1px solid #CCC;
+    padding: 0px 22px;
+    margin: 0px;
+    height: 38px;
+    line-height: 30px;

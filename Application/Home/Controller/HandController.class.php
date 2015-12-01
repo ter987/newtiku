@@ -8,7 +8,6 @@ class HandController extends GlobalController {
 	function _initialize()
 	{
 		parent::_initialize();
-		$this->checkLogin();
 	}
 	public function index(){
 		$course_data = parent::getCourse();
@@ -20,9 +19,9 @@ class HandController extends GlobalController {
 	public function start(){
 		$course_id = I('post.course');
 		$banshi_id = I('post.banshi');
-		//if($banshi_id) $_SESSION['shijuan']['shijuan_banshi'] = $banshi_id;
-		$_SESSION['shijuan']['shijuan_banshi'] = 3;
-		redirect('/tiku/c'.$course_id.'/');
+		$_SESSION['shijuan']['shijuan_banshi'] = $banshi_id;
+		$_SESSION['course_id'] = $course_id;
+		redirect('/tiku/');
 	}
 }
 ?>

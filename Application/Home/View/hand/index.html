@@ -17,17 +17,31 @@
         
         <div class="p10"> <h2>选择试卷版式</h2><div class="line"></div></div>
         <div class="clear"></div>
-        <ul class="zj_ul">
-        	<li><div class="tit1">A4/B5竖版</div><div class="tit2"><a href="">随堂练习</a></div></li>
-            
-            <li><div class="tit1">A4/B5竖版</div><div class="tit2"><a href="">单元测试</a></div></li>
-            
-            <li><div class="tit1">A4/B5竖版</div><div class="tit2"><a href="">期中考试卷</a></div></li>
-            
-            <li><div class="tit1">A4/B5竖版</div><div class="tit2"><a href="">期末考试卷</a></div></li>
-            
-            <li><div class="tit1">A4/B5竖版</div><div class="tit2"><a href="">高考模拟卷</a></div></li>
-        </ul>
+        <div class="box1000 guideStep">
+			<div class="navIcon">
+				<ul>
+					<li class="icon1"><label class="js_aaa"><span>随堂练习</span><font><input name="banshi" value="1" id="随堂练习" checked="checked" type="radio"></font><u>A4/B5竖版</u></label></li>
+					<li class="icon1"><label class="js_aaa"><span>单元测试</span><font><input name="banshi" value="2" id="单元测试" type="radio"></font><u>A4/B5竖版</u></label></li>
+					<li class="icon2"><label class="js_aaa"><span>期中考试卷</span><font><input name="banshi" value="3" id="期中考试卷" type="radio"></font><u>B4/A3横版</u></label></li>
+					<li class="icon2"><label class="js_aaa"><span>期末考试卷</span><font><input name="banshi" value="4" id="期末考试卷" type="radio"></font><u>B4/A3横版</u></label></li>
+					<li class="icon2"><label class="js_aaa"><span>高考模拟卷</span><font><input name="banshi" value="5" id="高考模拟卷" type="radio"></font><u>B4/A3横版</u></label></li>
+				</ul>
+			</div>
+			<div class="guideBox" id="guideBox02">
+				<div id="tipbar2" class="tipbar">
+				</div>
+				<div id="step2" class="tipbox">
+					<ol class="progress">
+						<li class="on"></li>
+						<li></li>
+					</ol>
+					<div class="tipword">
+					</div>
+					<span onclick="hideTip0()" class="tipboxBtn" style="left:117px;"></span>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
         <div class="clear"></div>
         </form>
         <div class="zj_tit" onclick="$('#f1').submit()" style="cursor:pointer">选择试题</div>

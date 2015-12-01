@@ -8,17 +8,40 @@ class GlobalController extends Controller{
 	*/
 	function _initialize()
 	{
-		if(!empty($_SESSION['nick_name'])){
-			$this->assign('is_login','y');
-		}else{
-			$this->assign('is_login','n');
-		}
+		$this->checkLogin();
 		$this->getCourse();
 	}
 	public function checkLogin(){
-		if(empty($_SESSION['nick_name'])){
-			redirect('/member/login');
+		if(empty($_SESSION['user_id'])){
+			if(!empty($_COOKIE['user_name'])){
+				if(!$this->autoLogin($_COOKIE['user_name'], $_COOKIE['password'])){
+					$login_controller_arr = array('/member/index','/shijuan/index','/shijuan/createToWord');
+					if(in_array('/'.strtolower(CONTROLLER_NAME).'/'.strtolower(ACTION_NAME), $login_controller_arr)){
+						redirect('/member/login');
+					}
+				}
+			}
+			
 		}
+		if(isset($_SESSION['user_id'])){
+			$this->assign('user_id',$_SESSION['user_id']);
+			$this->assign('nick_name',$_SESSION['nick_name']);
+			$this->assign('user_type',$_SESSION['user_type']);
+		}
+	}
+	private function autoLogin($user_name,$password){
+			$Model = M('User');
+			$result = $Model->where("email='$user_name' OR telphone='$user_name'")->find();
+			if(!$result){
+				return false;
+			}
+			if(md5(md5($password.$result['salt']))!=$result['password']){
+				return false;
+			}
+			$_SESSION['nick_name'] = $result['nick_name'];
+			$_SESSION['user_id'] = $result['id'];
+			$_SESSION['user_type'] = $result['type'];
+			return true;
 	}
 	/**
 	 * 获取所有课程

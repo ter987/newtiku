@@ -9,7 +9,6 @@ class ShijuanController extends GlobalController {
 	function _initialize()
 	{
 		parent::_initialize();
-		$this->checkLogin();
 		$Tiku = A('Tiku');
 		$tiku_cart = $Tiku->_getTikuCart();
 		$this->assign('tiku_cart',$tiku_cart);
@@ -108,6 +107,37 @@ class ShijuanController extends GlobalController {
 		$this->assign('shijuan',$shijuan);
         $this->display();
 	}
+	public function test(){
+		Vendor('PhpWord.src.PhpWord.Autoloader');
+		\PhpOffice\PhpWord\Autoloader::register();
+		
+		// Creating the new document...
+		$phpWord = new \PhpOffice\PhpWord\PhpWord();
+		$section = $phpWord->addSection();
+		// Every element you want to append to the word document is placed in a section. So you need a section:
+		
+		$imageStyle = array(
+		   'positioning' => 'absolute',
+		    'posHorizontalRel' => 'inner-margin-area',
+		    'posVerticalRel' => 'inner-margin-area',
+		);
+		$textrun = $section->createTextRun(array('widowControl'=>'true'));
+		$textrun->addText('已知函数已知函数已知函数已知函数已知函数已知函数已知函数已知函数',array('size'=>'14'));
+		$textrun->addImage('Public/tikupics/20151126/18/10/5656da7a510421448532602.gif',$imageStyle);
+		$textrun->addText('什么啊hinkPHP\Library\Vendor\PhpWord\src\PhpWord\Style\AbstractStyle.php 　LINE:hinkPHP\Library\Vendor\PhpWord\src\PhpWord\Style\AbstractStyle.php 　LINE:',array('size'=>'14'));
+		$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+		//$objWriter->save('helloWorld.docx');
+		
+		//$objWriter->save(Yii::app()->params['exportToDir'].$filename.".docx");
+        header("Content-Description: File Transfer");
+        header('Content-Disposition: attachment; filename="'.$_SESSION['shijuan']['title'].'.docx"');
+        //header("Content-Type: application/docx");
+        header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+        header('Content-Transfer-Encoding: binary');
+        header("Cache-Control: public");
+        header('Expires: 0');
+        $objWriter->save("php://output");
+	}
 	/**
 	 * 生成word文件
 	 */
@@ -159,14 +189,14 @@ class ShijuanController extends GlobalController {
 						$textrun->addText($val['order_char'].'.',array('size'=>13));
 						while($i<$text_count){
 							//echo $text_arr[$i];exit;
-							$textrun->addText($text_arr[$i],array('size'=>13));
+							$textrun->addText($text_arr[$i],array('size'=>13,'align'=>'both'));
 							if($i==$img_count) break;
-							$textrun->addImage($img_arr[$i],array('marginTop'=>100));
+							$textrun->addImage($img_arr[$i],array('positioning' => 'relative'));
 							$i++;
 						}
 						
 					}else{
-						$section->addText($val['order_char'].'.'.$question,array('size'=>13));
+						$section->addText($val['order_char'].'.'.$question,array('size'=>13,'align'=>'both'));
 					}
 					if($val['options']){
 						$options = json_decode($val['options']);
@@ -190,7 +220,7 @@ class ShijuanController extends GlobalController {
 									//echo $text_arr[$i];exit;
 									$textrun2->addText($option_index[$d].'.'.$text_arr[$i],array('size'=>13));
 									if($i==$img_count) break;
-									$textrun2->addImage($img_arr[$i],array('marginTop'=>100));
+									$textrun2->addImage($img_arr[$i],array('positioning' => 'relative'));
 									$i++;
 								}
 							}else{
