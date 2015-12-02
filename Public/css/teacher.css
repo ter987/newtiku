@@ -101,3 +101,178 @@
 .qj_xxjd .li_line{background:url(../images/li_line.gif) no-repeat center;width:66px;float:left;}
 .qj_xxjd .li_nobg{float:left;width:80px;height:40px;line-height:40px;text-align:center;font-weight:normal;background:none;}
 .qj_xxjd .li_noline{width:66px;float:left;background:none;}
+/*试题列表*/
+.quesList, .totalTitle {
+	width: 100%;
+	float: left;
+}
+.totalTitle {
+	line-height: 40px;
+}
+.totalTitle a {
+	color: #f43c5e;
+	font-size: 14px;
+	font-weight: bold;
+}
+.quesList table, .Notestime table {
+	float: left;
+	border-left: 1px solid #dedede;
+	border-top: 1px solid #dedede;
+}
+.quesList th, .quesList td, .Notestime th, .Notestime td {
+	border-right: 1px solid #dedede;
+	border-bottom: 1px solid #dedede;
+	padding: 5px 8px;
+}
+.quesList th, .Notestime th {
+	background-color: #eeeeee;
+	line-height: 28px;
+	color: #333;
+}
+.quesList td, .Notestime td {
+	background-color: #fff;
+	text-align: center;
+	line-height: 20px;
+}
+.quesList table .select h4 a, .quesList table .select li a {
+	color: #666;
+	display: block;
+}
+.quesList table .select h4 a:hover {
+	color: #666;
+	text-decoration: none;
+}
+.quesList table .select li a:hover {
+	color: #fff;
+	text-decoration: none;
+}
+.quesList table table {
+	border: 0px;
+	float: none;
+	display: inline;
+	vertical-align: middle;
+}
+.quesList .align-l {
+	text-align: left;
+}
+.quesList .col-f43 {
+	color: #f43c5e;
+}
+.quesList .goPay {
+	color: #929292;
+}
+.quesList .goPay a {
+	margin: 0px 5px;
+}
+.w2 .select, .w4 .select {
+	width: 100%;
+}
+.w2 .select h4, .w4 .select h4 {
+	width: 100%;
+	color: #333;
+	background-position: right 14px;
+}
+.w2 .select ul, .w2 .select li, .w4 .select ul, .w4 .select li {
+	width: 100%;
+	font-weight: normal;
+}
+.w2 .onselect h4, .w4 .onselect h4 {
+	background-color: #fff;
+	border: 1px solid #dedede;
+}
+.w2 .select li:hover, .w4 .select li:hover {
+	color: #fff;
+	background-color: #f43c5e;
+}
+.w3 .time {
+	display: block;
+	cursor: pointer;
+	color: #333;
+	background-position: right -22px;
+}
+
+.navIcon .icon1 a, .navIcon .icon9 a {
+	background-color: #1887e3;
+}
+.navIcon .icon1 a:hover, .navIcon .icon9 a:hover {
+	background-color: #1b99f0;
+}
+.navIcon .icon2 a, .navIcon .icon8 a {
+	background-color: #f43c5e;
+}
+.navIcon .icon2 a:hover, .navIcon .icon8 a:hover {
+	background-color: #fa446b;
+}
+.navIcon .icon3 a {
+	background-color: #ff8100;
+}
+.navIcon .icon3 a:hover {
+	background-color: #ff9200;
+}
+.navIcon .icon4 a {
+	background-color: #28b779;
+}
+.navIcon .icon4 a:hover {
+	background-color: #2dcc89;
+}
+.navIcon .icon5 a {
+	background-color: #23cad0;
+}
+.navIcon .icon5 a:hover {
+	background-color: #28dde2;
+}
+.navIcon .icon6 a {
+	background-color: #28b779;
+}
+.navIcon .icon6 a:hover {
+	background-color: #2dcc89;
+}
+.navIcon .icon7 a {
+	background-color: #23cad0;
+}
+.navIcon .icon7 a:hover {
+	background-color: #28dde2;
+}
+.handle span {
+	display: block;
+	float: left;
+	position: relative;
+}
+.handle a {
+	display: block;
+	width: 30px;
+	height: 26px;
+	margin-left: 12px;
+	text-indent: -9999px;
+}
+.handle .editor a {
+	background: url(../images/queshtbg.png) no-repeat;
+	background-position: -665px -5px;
+}
+.handle .del a {
+	background: url(../images/queshtbg.png) no-repeat;
+	background-position: -791px -275px;
+}
+.handle .editor a:hover {
+	background: url(../images/queshtbg.png) no-repeat;
+	background-position: -665px -42px;
+}
+.handle .del a:hover {
+	background: url(../images/queshtbg.png) no-repeat;
+	background-position: -841px -275px;
+}
+
+.handle font {
+	width: 51px;
+	height: 22px;
+	line-height: 22px;
+	padding-bottom: 6px;
+	text-align: center;
+	display: block;
+	position: absolute;
+	top: -26px;
+	left: 1px;
+	color: #999;
+	display: none;
+	background-position: -577px -44px;
+}

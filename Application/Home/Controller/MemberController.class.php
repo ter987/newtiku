@@ -99,6 +99,9 @@ class MemberController extends GlobalController {
 		}
 		
 	}
+	public function myshijuan(){
+		$this->display();
+	}
 	public function sendMailAgain(){
 		$user_id = I('get.id');
 		$Model = M('user');
@@ -206,7 +209,9 @@ class MemberController extends GlobalController {
 		}
 		
 	}
-	
+	public function resetpass(){
+		$this->display();
+	}
 	public function logout(){
 		session_destroy();
 		setcookie('user_name','',time()-3600,'/');

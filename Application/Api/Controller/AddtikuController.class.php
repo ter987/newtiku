@@ -14,7 +14,7 @@ class AddtikuController extends Controller {
 		$this->dir_path = 'Public/tikupics/';
 		$this->date = date('Ymd');
 		$this->course_id = 3;//数学
-		$this->cookies = 'jsessionid=9C2363E70DEE26A9B1D5AF249BFCED78';
+		$this->cookies = 'jsessionid=DD4603F1AA07570C579CEBB3F0BE442B';
 	}
 	function flash(){
 		ob_start();

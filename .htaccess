@@ -14,6 +14,7 @@
   RewriteRule ^jingpin/(\w+)\/$ index.php/home/jingpin/index/param/$1/
   RewriteRule ^jingpin/$ index.php/home/jingpin/
   RewriteRule ^jingpin/detail/(\d+).html$ index.php/home/jingpin/detail/id/$1/
-    RewriteRule ^tongbu/(\w+)\/$ index.php/home/tongbu/index/param/$1/
+  RewriteRule ^tongbu/(\w+)\/$ index.php/home/tongbu/index/param/$1/
   RewriteRule ^tongbu/$ index.php/home/tongbu/
+  RewriteRule ^ceping/$ index.php/home/ceping/
 </IfModule>
