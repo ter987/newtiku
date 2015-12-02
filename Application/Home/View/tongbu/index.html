@@ -1,0 +1,269 @@
+<include file="common:header" />
+<script>
+	/* 选择题型   **/
+	function select_book(c,id){
+	    var href = window.location.href;
+	    var reg = /tongbu\/(\w*)b(\d+)(\w*)(\/)/g;
+		
+		if(href.search(/\?p=\d+|c\d+/)!=-1){
+			href = href.replace(/\?p=\d+|c\d+/,'');
+		}
+	    if(href.search(reg)!=-1){
+	    	if(id==0){
+	    		var loc = href.replace(/b\d+/g,'');
+	    	}else{
+	        	var loc = href.replace(/b\d+/g,c+id);
+	       }
+	    }else{
+	    	var str = '';
+	    	if(href.search(/tongbu\/\w+/g)==-1){
+	    		str = '/';
+	    	}
+	        var loc = href.replace(/tongbu\//g,'tongbu/'+c+id+str);
+	    }
+	    window.location.href = loc;
+	}
+	/* 选择难度   **/
+	function select_version(c,id){
+	    window.location.href = '/tongbu/v'+id+'/';
+	}
+
+
+	
+</script>
+<script src="__PUBLIC__/js/menu.js" type="text/javascript"></script>
+<!--main-->
+<div class="width">
+	<div class="tk_bg">
+		<!--标题-->
+        <div class="tit"><a href="##">题库</a> 〉<a href="">精品试卷</a> </div>
+        
+        <!--小标-->
+        <ul class="sj_ul">
+        	<li style="width:194px;">&nbsp;&nbsp;&nbsp;&nbsp;科目：高中语文<div class="clear"></div>
+                <dl class="sub_ul">
+                      <dt><a href="">高中数学</a></dt>
+                      <dt><a href="">高中数学</a></dt>
+                </dl>
+            </li>
+            <li  ><a href="/tiku/">知识点选题</a></li>
+            <li class="hover"><a href="/tongbu/">章节选题</a></li>
+            <li><a href="/jingpin/">精品试卷</a></li>
+            <li><a href="">我的题库</a></li>
+        </ul>
+        
+        <div class="clear"></div>
+        
+        <div class="ss"><form><input type="button" class="btn"  value="搜索"/><input type="text" class="text" /></form></div>
+        
+        <!--快速搜索-->
+        <div id="quick_goods" class="mt20">
+            <ul>
+                <li class="fixed"><strong id="dsdsd">版本：</strong></li>
+                <li>
+                    <dl> 
+                        <volist name='version_data' id='vo'>
+                        <dt  <eq name="version_id" value="$vo.id">class="hover"</eq>><a href="javascript:select_version('v',{$vo.id})">{$vo.version_name}</a></dt>
+                        </volist>
+               		 </dl>
+                </li>
+            </ul>
+            <div class="clear"></div>
+                           
+            <ul>
+                <li class="fixed"><strong>教材：</strong></li>
+                <li>
+                    <dl>
+                        <volist name='book_data' id='vo'>
+                        <dt <eq name="book_id" value="$vo.id">class="hover"</eq>><a href="javascript:select_book('b',{$vo.id})">{$vo.book_name}</a></dt>
+                        </volist>
+
+                    </dl>
+                </li>
+            </ul>
+            <div class="clear"></div>
+
+        </div>
+        
+    </div>
+</div>
+
+
+<div class="width">
+	<div class="b_4">
+    	<!--left-->
+        <div class="tk_left mr10">
+			<h3>章节</h3>
+            <ul class="zsd_ul ce">
+            	<volist name="chapter_data" id="vo">
+            	<li>
+					<a class="xz" href="##" ><i class="ce_jia">+</i> <l id="{$vo.id}">{$vo.chapter_name}</l></a>
+					<notempty name="vo.childs">
+					<ul class="er">
+						<volist name="vo.childs" id="v">
+						<li class="e_li">
+							<a href="##" "><i class="ce_jia">+</i><l id="{$v.id}">&nbsp;{$v.chapter_name}</l></a>
+						</li>
+						</volist>
+					
+					</ul>
+					</notempty>
+				</li>
+				</volist>	
+                
+				<div class="clear"></div>
+            </ul>
+        </div>
+        
+        <!--right-->
+        <div class="tk_right">
+                <div class="mt10 b_4">
+                   <div class="dx left mr10">
+                   	<form>
+                    	<input type="checkbox" />过滤使用过的题目
+                        <input type="checkbox" />收藏的试题
+                    </form>
+                   </div>
+                   
+				   <div class="left">
+                    <ul class="qs_ul">
+                        <li><a href="">排序：</a></li>
+                        <li><a href="">最新<img src="__PUBLIC__/images/ico_down.gif" width="7" height="8"></a></li>
+                        <li><a href="">难度<img src="__PUBLIC__/images/ico_down.gif" width="7" height="8"></a></li>
+                        <li><a href="">使用频率<img src="__PUBLIC__/images/ico_down.gif" width="7" height="8"></a></li>
+                        <li><a href="">好评<img src="__PUBLIC__/images/ico_down.gif" width="7" height="8"></a></li>
+                    </ul>
+                    <div class="clear"></div>
+        	     </div>
+               </div>
+               <style>
+               	.em2 img{
+               		vertical-align: middle;
+               	}
+               </style>
+               <div class="clear"></div>
+               <ul class="tk_tm_ul">
+               	<notempty name="tiku_data">
+               <volist name="tiku_data" id="vo">
+               <li>
+                	<p class="c_z"><b>来源：{$vo.source_name}</b></p>
+                    <p>{$vo.content|htmlspecialchars_decode}</p>
+                    
+                    	<php>
+                    		if($vo['options']){
+                    			$options = json_decode($vo['options']);
+                    			$options_index = array(0=>'A',1=>'B',2=>'C',3=>'D',4=>'E');
+                    	</php>
+                    	<p>
+                    		<php>
+                    			$k = 0;
+                    			foreach($options as $k=>$val){
+                    		</php>
+                    			<span style="float:left;line-height:18px;font-size:14px;padding-right:30px;" class="em2"><php>echo $options_index[$k]</php>.<php>echo $val</php></span>
+                    		<php>
+                    			}
+                    		</php>
+                    	</p>
+                    	<php>
+                    	}
+                    	</php>
+                    
+                     <div class="jcbtn1">纠错</div>
+                            <div class="jc_list_b">
+                                <div class="left mr10">
+                                    <span class="jc_btn" id="{$vo.id}"  onclick="add_tiku({$vo.id},$(this))" style="cursor: pointer;">加入试卷</span>
+                                    <a target="_blank" href="/tiku/detail/{$vo.id}.html"><span class="jc_btn">查看解析</span></a>
+                                    <span class="jc_btn">下载试题</span>
+                                    <span class="jc_btn">收藏</span>
+                                    <span class="jc_btn2">点赞</span>
+                                    <span class="jc_btn2">分享</span>
+                                </div>
+                                
+                                <div class="right mr10">
+                                	<div class="left mr10">
+                                        <span style="line-height:30px;">
+                                            难度系数:<font class="c_z"><if condition="$vo.difficulty_id eq 1">1.00-0.86<elseif condition="$vo.difficulty_id eq 2"/>0.85-0.71<elseif condition="$vo.difficulty_id eq 3"/> 0.7-0.56 <elseif condition="$vo.difficulty_id eq 4"/>0.55-0.41<elseif condition="$vo.difficulty_id eq 5"/>0.40-0.26</if></font>
+                                        </span>
+                                    </div>
+                                	<div class="left">评分:</div>
+                                    <div class="left"><i class="dis score score3"></i></div>
+                               </div>
+                           </div>
+                           
+               </li>
+               </volist>
+               <else />
+               <li style="background:#fff;">
+                    <div style="padding:30px 0px;">
+						<div class="jc_null">	
+						</div>
+					    <div class="jc_n_text">
+							<p>抱歉，暂时没有符合条件的试题，我们将会尽快补充内容。请更换筛选条件进行选题。</p>
+						</div>
+					</div>					
+				</li>
+               </notempty>
+               </ul>
+               <style>
+               	.current{
+               		background: #f43c5e none repeat scroll 0 0;
+				    border: 1px solid #f28700;
+				    color: #fff;
+				    font-weight: bold;
+				    padding: 6px 10px;
+               	}
+               </style>
+               <div class="page" style="width:768px;">
+					{$page_show}
+				</div>
+        </div>
+    
+    </div>
+</div>
+
+<script>
+	$('.tk_left').find('l').click(
+		function(){
+			//alert($(this).attr('id'));
+			var id = $(this).attr('id');
+			var href = window.location.href;
+		    var reg = /tongbu\/(\w*)c(\d+)(\w*)(\/)/g;
+			
+			if(href.search(/\?p=\d+/)!=-1){
+				href = href.replace(/\?p=\d+/,'');
+			}
+			if(href.search(/r\d{1}/)!=-1){
+				href = href.replace(/r\d{1}/,'');
+			}
+		    if(href.search(reg)!=-1){
+		        var loc = href.replace(/c\d+/g,'c'+id);
+
+		    }else{
+		    	var str = '';
+		    	if(href.search(/tongbu\/\w+/g)==-1){
+		    		str = '/';
+		    	}
+		        var loc = href.replace(/tongbu\//g,'tongbu/'+'c'+id+str);
+		    }
+		    window.location.href = loc;
+		}
+	);
+	$(
+		function(){
+			$('.tk_left').find("l[id={$chapter_id}]").attr('style','color: rgb(244, 60, 94);');
+			$('.tk_left').find("l[id={$chapter_id}]").parent().parent().parent().show();
+			$('.tk_left').find("l[id={$chapter_id}]").parent().parent().parent().parent().parent().show();
+			//alert({$tikus_in_cart});
+			$.each({$tikus_in_cart},function(index,dom){
+				//alert(dom.id);
+				$(".tk_tm_ul").find("span[id="+dom.id+"]").html('移出试卷');
+			});
+		}
+	);
+
+</script>
+
+<!-- 右侧 试卷选项-->
+<include file="common:right" />
+
+<include file="common:footer" />

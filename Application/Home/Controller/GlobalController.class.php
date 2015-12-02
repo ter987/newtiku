@@ -81,6 +81,25 @@ class GlobalController extends Controller{
 
         return $childs;
     }
+	public function _getTree(&$data, $parent_id = 0) {
+        $Model = M('chapter');
+        $childs = $this->findChild($data, $parent_id);
+		
+        if (empty($childs)) {
+            return null;
+        }
+        foreach ($childs as $key => $val) {
+        	$result = $Model->where("parent_id=".$val['id'])->find();
+            if ($result) {
+                $treeList = $this->getTree($data, $val['id']);
+                if ($treeList !== null) {
+                    $childs[$key]['childs'] = $treeList;
+                }
+            }
+        }
+
+        return $childs;
+    }
 	/**
      * 数据列表
      *
