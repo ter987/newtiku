@@ -75,6 +75,40 @@ dia_log.prototype.check = function(){
 			}
 		});
 	});
+	$(".collect").click(function(){
+		var obj = $(this);
+		$.getJSON(
+			'/member/ajaxCollect',
+			{id:$(this).attr('name')},
+			function(data){
+				if(data.status=='notlogin'){
+					window.location.href = '/member/login';
+				}else if(data.status=='success' && data.action=='add'){
+						obj.removeClass('jc_btn');
+						obj.addClass('jc_btn_check');
+						obj.html('取消收藏');
+						$("#sc_sj").dialog({
+						title:"收藏试卷",
+						width:"540",
+						height:"auto",
+						modal:true,
+						create: function(){
+							
+						},
+						beforeClose: function() {
+							$('#datike').dialog("destroy");
+						}
+					});
+				}else if(data.status=='success' && data.action=='delete'){
+					obj.removeClass('jc_btn_check');
+					obj.addClass('jc_btn');
+					obj.html('收藏');
+				}
+			}
+		);
+		
+	});
+	
 };
 $(function(){
 	new dia_log();

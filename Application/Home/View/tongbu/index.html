@@ -174,9 +174,9 @@
                                     <span class="jc_btn" id="{$vo.id}"  onclick="add_tiku({$vo.id},$(this))" style="cursor: pointer;">加入试卷</span>
                                     <a target="_blank" href="/tiku/detail/{$vo.id}.html"><span class="jc_btn">查看解析</span></a>
                                     <span class="jc_btn">下载试题</span>
-                                    <span class="jc_btn">收藏</span>
-                                    <span class="jc_btn2">点赞</span>
-                                    <span class="jc_btn2">分享</span>
+                                    <span class="jc_btn collect" id="c_{$vo.id}" name="{$vo.id}"  style="cursor: pointer;">收藏</span>
+                                    <!-- <span class="jc_btn2">点赞</span>
+                                    <span class="jc_btn2">分享</span> -->
                                 </div>
                                 
                                 <div class="right mr10">
@@ -257,6 +257,12 @@
 			$.each({$tikus_in_cart},function(index,dom){
 				//alert(dom.id);
 				$(".tk_tm_ul").find("span[id="+dom.id+"]").html('移出试卷');
+				$(".tk_tm_ul").find("span[id="+dom.id+"]").attr('class','jc_btn_check');
+			});
+			//alert({$tikus_in_collect});
+			$.each({$tikus_in_collect},function(index,dom){
+				$(".tk_tm_ul").find("span[id=c_"+dom.tiku_id+"]").html('取消收藏');
+				$(".tk_tm_ul").find("span[id=c_"+dom.tiku_id+"]").attr('class','jc_btn_check collect');
 			});
 		}
 	);

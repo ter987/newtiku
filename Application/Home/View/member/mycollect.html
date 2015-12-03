@@ -11,7 +11,7 @@
         <div class="uright">
             
             <div class="jcj ">
-            	<select class="sel"><option>高中语文</option></select>
+            	<!-- <select class="sel"><option>高中语文</option></select> -->
            	
             <div class="clear"></div>
             
@@ -19,32 +19,43 @@
             	<!--左侧-->
             	<div class="jspan1 left">
                 	<ul class="jc_ul">
-                    	<li class="jc_tit">知识点</li>
-                        <li><a href="">全部</a></li>
-                        <li><a href="">基础知识及语言表达</a></li>
-                        <li><a href="">诗歌鉴赏</a></li>
-                        <li><a href="">文言文阅读</a></li>
-                        <li><a href="">现代文阅读</a></li>
-                        <li><a href="">作文及写作</a></li>
-                        <li><a href="">名句默写</a></li>
-                        <li><a href="">其他</a></li>
+                    	<li class="jc_tit"><a href="">全部</a></li>
+                    	<li><a href="">无标签</a></li>
+                    	<volist name="my_tags" id="vo">
+                        <li><a href="">{$vo.tag_name}</a></li>
+                        </volist>
                     </ul>
                 
                 </div>                
                 <!--右侧-->
                 <div class="jspan2 left">
                 	<ul class="jc_list">
+                		<volist name="tiku_data" id="vo">
                     	<li>
-                        	<p>1.下列词语中加横线的字，每对读音都不相同的一项是（   ）</p>
-                            <p>A.崩盘/硼砂          搽粉/换茬          找碴/豆腐渣          黯然/三聚氰胺</p>
-                            <p>A.崩盘/硼砂          搽粉/换茬          找碴/豆腐渣          黯然/三聚氰胺</p>
-                            <p>A.崩盘/硼砂          搽粉/换茬          找碴/豆腐渣          黯然/三聚氰胺</p>
-                            <p>A.崩盘/硼砂          搽粉/换茬          找碴/豆腐渣          黯然/三聚氰胺</p>
-                            <div class="jcbtn1">分享</div> <div class="jcbtn">纠错</div>
+                        	<p>{$vo.content|htmlspecialchars_decode}</p>
+                            <php>
+                    		if($vo['options']){
+                    			$options = json_decode($vo['options']);
+                    			$options_index = array(0=>'A',1=>'B',2=>'C',3=>'D',4=>'E');
+	                    	</php>
+	                    	<p>
+	                    		<php>
+	                    			$k = 0;
+	                    			foreach($options as $k=>$val){
+	                    		</php>
+	                    			<span style="float:left;line-height:18px;font-size:14px;padding-right:30px;" class="em2"><php>echo $options_index[$k]</php>.<php>echo $val</php></span>
+	                    		<php>
+	                    			}
+	                    		</php>
+	                    	</p>
+	                    	<php>
+	                    	}
+	                    	</php>
+                            <!-- <div class="jcbtn1">分享</div> <div class="jcbtn">纠错</div> -->
                             <div class="jc_list_b">
                                 <div class="left mr10">
-                                    <span class="jc_btn">加入试卷</span>
-                                    <span class="jc_btn">查看解析</span>
+                                    <!-- <span class="jc_btn">加入试卷</span> -->
+                                    <a target="_blank" href="/tiku/detail/{$vo.id}.html"><span class="jc_btn">查看解析</span></a>
                                     <span class="jc_btn">下载试题</span>
                                     
                                 </div>
@@ -56,39 +67,12 @@
                                </div>
                            </div>
                         </li>
-                        
-                        <li>
-                        	<p>1.下列词语中加横线的字，每对读音都不相同的一项是（   ）</p>
-                            <p>A.崩盘/硼砂          搽粉/换茬          找碴/豆腐渣          黯然/三聚氰胺</p>
-                            <p>A.崩盘/硼砂          搽粉/换茬          找碴/豆腐渣          黯然/三聚氰胺</p>
-                            <p>A.崩盘/硼砂          搽粉/换茬          找碴/豆腐渣          黯然/三聚氰胺</p>
-                            <p>A.崩盘/硼砂          搽粉/换茬          找碴/豆腐渣          黯然/三聚氰胺</p>
-                            <div class="jcbtn1">分享</div> <div class="jcbtn">纠错</div>
-                            <div class="jc_list_b">
-                                <div class="left mr10">
-                                    <span class="jc_btn">加入试卷</span>
-                                    <span class="jc_btn">查看解析</span>
-                                    <span class="jc_btn">下载试题</span>
-                                    
-                                </div>
-                                
-                                <div class="right">
-                                	<div class="left mr10">难度:<font class="c_z">0.76-0.85</font></div>
-                                	<div class="left">评分:</div>
-                                    <div class="left"><i class="dis score score3"></i></div>
-                               </div>
-                           </div>
-                        </li>
+                       </volist>
                         
                         
                 	</ul>
 					<div class="page">
-						<a href="##">上一页</a>
-						<a class="check" href="##">1</a>
-						<a href="##">2</a>
-						<a href="##">3</a>
-						<a href="##">4</a>
-						<a href="##">下一页</a>
+						{$page_show}
 					</div>
                 </div>
                 

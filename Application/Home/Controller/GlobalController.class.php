@@ -14,12 +14,7 @@ class GlobalController extends Controller{
 	public function checkLogin(){
 		if(empty($_SESSION['user_id'])){
 			if(!empty($_COOKIE['user_name'])){
-				if(!$this->autoLogin($_COOKIE['user_name'], $_COOKIE['password'])){
-					$login_controller_arr = array('/member/index','/shijuan/index','/shijuan/createToWord');
-					if(in_array('/'.strtolower(CONTROLLER_NAME).'/'.strtolower(ACTION_NAME), $login_controller_arr)){
-						redirect('/member/login');
-					}
-				}
+				$this->autoLogin($_COOKIE['user_name'], $_COOKIE['password']);
 			}
 			
 		}
@@ -27,7 +22,22 @@ class GlobalController extends Controller{
 			$this->assign('user_id',$_SESSION['user_id']);
 			$this->assign('nick_name',$_SESSION['nick_name']);
 			$this->assign('user_type',$_SESSION['user_type']);
+			$this->getCollectIds();
+			$login_controller_arr = array('/member/login','/member/register','/member/resetpass');
+			if(in_array('/'.strtolower(CONTROLLER_NAME).'/'.strtolower(ACTION_NAME), $login_controller_arr)){
+				redirect('/member/');
+			}
+		}else{
+			$login_controller_arr = array('/member/index','/shijuan/index','/shijuan/createToWord');
+			if(in_array('/'.strtolower(CONTROLLER_NAME).'/'.strtolower(ACTION_NAME), $login_controller_arr)){
+				redirect('/member/login');
+			}
 		}
+	}
+	protected function getCollectIds(){
+		$Model = M('user_collected');
+		$data = $Model->field("tiku_id")->where("user_id=".$_SESSION['user_id'])->select();
+		$this->assign('tikus_in_collect',json_encode($data));
 	}
 	private function autoLogin($user_name,$password){
 			$Model = M('User');

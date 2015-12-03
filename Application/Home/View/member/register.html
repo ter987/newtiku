@@ -10,8 +10,8 @@
     <div class="reg_line"></div>
 	
 	<div class="reg_form">
-		{$error_msg}
 		<form class="demo" method="post" action="/member/register">
+			<div class="error" style="margin-left:90px;<empty name="error_msg">display:none;</empty>" id="">{$error_msg}</div>
 			<input type="hidden" id="type" name="type" value="1" />
 			<input type="hidden" name="is_mail" id="is_mail" value="0"/>
 			<div class="reg_br" id="is_mail_type" style="display:none;">

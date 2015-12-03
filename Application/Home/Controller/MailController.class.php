@@ -13,7 +13,7 @@ class MailController extends GlobalController {
 	public function sendMail($template_code,$mailto,$url=false){
 		$mail = new \Org\Util\sendmail();
 		$mail->setServer(C('MAIL_SMTP'),C('MAIL_ADDRESS'),C('MAIL_PASSWORD'),C('MAIL_PORT'));
-		$mail->setReceiver('396444855@qq.com');
+		$mail->setReceiver($mailto);
 		$mail->setFrom(C('MAIL_ADDRESS'));
 		$mail_template = $this->getMailTemplate($template_code);
 		//var_dump($template_code);exit;

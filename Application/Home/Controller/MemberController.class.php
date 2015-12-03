@@ -102,6 +102,32 @@ class MemberController extends GlobalController {
 	public function myshijuan(){
 		$this->display();
 	}
+	public function myCollect(){
+		$tag_id = I('get.tagid');
+		//获取题库数据
+		$Model = M('user_collected');
+		$where = "user_collected.user_id=".$_SESSION['user_id'];
+		$count = $Model->where($where)->count();
+		//echo $Model->getLastSql();exit;
+		//echo $count;exit;
+		$Page = new \Think\Page($count,2);
+		$Page->setConfig('prev','上一页');
+		$Page->setConfig('next','下一页');
+		$Page->setConfig('first','首页');
+		$Page->setConfig('last','末页');
+		$page_show = $Page->_show($params);
+		$this->assign('page_show',$page_show);
+		$tiku_data = $Model->field("tiku.`id`,tiku.options,tiku.`content`,tiku.`clicks`,tiku_source.`source_name`,tiku.difficulty_id")
+		->join("tiku on user_collected.tiku_id=tiku.id")
+		->join("tiku_source on tiku_source.id=tiku.source_id")
+		->where($where)->limit($Page->firstRow.','.$Page->listRows)->select();
+		//var_dump($tiku_data);
+		//echo $Model->getLastSql();
+		$this->assign('tiku_data',$tiku_data);
+		$myTags = $this->getMytags();
+		$this->assign('my_tags',$myTags);
+		$this->display();
+	}
 	public function sendMailAgain(){
 		$user_id = I('get.id');
 		$Model = M('user');
@@ -201,16 +227,75 @@ class MemberController extends GlobalController {
 					setcookie('user_name',$user,time()+C('COOKIE_EXPIRE'),'/');
 					setcookie('password',$password,time()+C('COOKIE_EXPIRE'),'/');
 				}
-				redirect("/member/");
+				redirect($_COOKIE['pre_page']);
+				//redirect("/member/");
 			}
 			
 		}else{
+			setcookie('pre_page',$_SERVER['HTTP_REFERER']);
 			$this->display();
 		}
 		
 	}
 	public function resetpass(){
 		$this->display();
+	}
+	public function ajaxCollect(){
+		if(empty($_SESSION['user_id'])){
+			$this->ajaxReturn(array('status'=>'notlogin'));
+		}
+		$id = I('get.id');
+		$Model = M('user_collected');
+		$data['user_id'] = $_SESSION['user_id'];
+		$data['tiku_id'] = $id;
+		$data['collected_time'] = time();
+		if($result = $Model->where("user_id=".$_SESSION['user_id']." AND tiku_id=$id")->find()){
+			$Model->where("id=".$result['id'])->delete();
+			$Model->table('collected_tag')->where("user_id=".$_SESSION['user_id']." AND tiku_id=$id")->delete();
+			$this->ajaxReturn(array('status'=>'success','action'=>'delete'));
+		}else{
+			$Model->add($data);
+			$tag = $this->getDefaultTag($id);
+			$this->ajaxReturn(array('status'=>'success','action'=>'add','tag'=>$tag,'tiku_id'=>$id));
+		}
+	}
+	public function ajaxAddTag(){
+		$tiku_id = I('get.id');
+		$tagStr = I('get.tag');
+		$tagArr = explode(',',$tagStr);
+		$tagModel = M('tag');
+		$collectedTagModel = M('collected_tag');
+		foreach($tagArr as $val){
+			if(!empty($val)){
+				if($result = $tagModel->where("tag_name='".$val."'")->find()){
+					$data['tag_id'] = $result['id'];
+				}else{
+					$data['tag_id'] = $tagModel->add(array('tag_name'=>$val));
+				}
+				$data['user_id'] = $_SESSION['user_id'];
+				$data['tiku_id'] = $tiku_id;
+				$collectedTagModel->add($data);
+			}
+		}
+		$this->ajaxReturn(array('status'=>'success'));
+	}
+	protected function getMytags(){
+		$Model = M('tag');
+		$data = $Model->field("DISTINCT tag.*")->join("collected_tag on collected_tag.tag_id=tag.id")
+		->where("collected_tag.user_id=".$_SESSION['user_id'])->select();
+		return $data;
+	}
+	private function getDefaultTag($tiku_id){
+		$Model = M('tiku');
+		$data = $Model->join("tiku_source ON tiku.`source_id`=tiku_source.`id`")
+		->join("tiku_course ON tiku_source.`course_id`=tiku_course.`id`")
+		->join("tiku_type ON tiku.`type_id`=tiku_type.`id`")
+		->where("tiku.id=$tiku_id")->find();
+		if($data['course_type']==1){
+			return '高中'.$data['course_name'].$data['type_name'];
+		}else{
+			return '初中'.$data['course_name'].$data['type_name'];
+		}
 	}
 	public function logout(){
 		session_destroy();
