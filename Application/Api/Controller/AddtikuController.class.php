@@ -543,9 +543,9 @@ style='font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:宋体;color:black
 	public function checkChapter(){
 		$tikuModel = M('tiku');
 		$matchingModel = M('matching');
-		$max = $tikuModel->where("chapter_id=0")->order('id desc')->find();
+		$max = $tikuModel->count();
 		//echo $max['id'];exit;
-		for($i=1;$i<=$max['id'];$i++){
+		for($i=1;$i<=$max;$i++){
 			$result = $tikuModel->where("id=$i")->find();
 			$_result = $matchingModel->where("spider_code=".$result['spider_code'])->find();
 			//echo $matchingModel->getLastSql();exit;
@@ -678,6 +678,7 @@ style='font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:宋体;color:black
 			}
 		}
 		echo 'Spider Sucess!';
+		$this->checkChapter();
 	}
 	/**
 	 * 采集章节

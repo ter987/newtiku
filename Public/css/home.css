@@ -660,6 +660,10 @@ h2{font-weight:100;}
 	background:#feeff2;
 	border:1px solid #f43c5e;
 }
+#parthead3:hover{
+	background:#feeff2;
+	border:1px solid #f43c5e;
+}
 #pui_body .parthead.partmenu, .pui_titlemenu a, .pui_noticemenu a {
 	color: #333;
 }
@@ -778,6 +782,9 @@ div.quesopmenu .score {
 div.quesopmenu .icon3, div.quesopmenu .overicon3 {
 	background:url('../images/questionBank.png') no-repeat #1887e3;
 	background-position: -178px -654px;
+}
+div.quesopmenu .overicon3 {
+	background-color: #999;
 }
 .succeed{
 	background:url('../images/succeed.gif') no-repeat;

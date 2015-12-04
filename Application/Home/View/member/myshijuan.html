@@ -26,48 +26,23 @@
 							操作
 						</th>
 					</tr>
+					<volist name="my_shijuan" id="vo">
 					<tr>
 						<td style="display:none">
-							高中语文随堂练习-20151129
+							{$vo.title}
 						</td>
 						<td class="align-l allcheck">
-							<input name="items[]" value="40457" type="checkbox"><span><a href="http://www.yitiku.cn/Exam/myExamEdit/id/40457" style="margin-left:28px" target="_blank">高中语文随堂练习-20151129</a></span>
+							<input name="items[]" value="{$vo.id}" type="checkbox"><span><a href="/member/shijuandetail?id={$vo.id}" style="margin-left:28px" target="_blank">{$vo.title}</a></span>
 						</td>
 						<td>
-							2015-11-29
+							{$vo.create_time|date="Y-m-d",###}
 						</td>
 						<td class="handle">
-							<span class="editor"><a href="http://www.yitiku.cn/Exam/myExamEdit/id/40457" style="margin-left:28px" target="_blank">编辑</a><font style="left:17px">编辑下载</font></span><span class="del"><a href="javascript:;" class="deleteexam" style="margin-left:28px" examid="40457">删除</a><font style="left:17px">删除</font></span>
+							<span class="editor"><a href="/member/shijuandetail?id={$vo.id}" style="margin-left:28px" target="_blank">编辑</a><font style="left:17px">编辑下载</font></span><span class="del" ><a href="javascript:;" id="{$vo.id}" class="deleteexam" style="margin-left:28px" examid="40457" >删除</a><font style="left:17px" >删除</font></span>
 						</td>
 					</tr>
-					<tr>
-						<td style="display:none">
-							高中语文随堂练习-20151129
-						</td>
-						<td class="align-l allcheck">
-							<input name="items[]" value="40426" type="checkbox"><span><a href="http://www.yitiku.cn/Exam/myExamEdit/id/40426" style="margin-left:28px" target="_blank">高中语文随堂练习-20151129</a></span>
-						</td>
-						<td>
-							2015-11-29
-						</td>
-						<td class="handle">
-							<span class="editor"><a href="http://www.yitiku.cn/Exam/myExamEdit/id/40426" style="margin-left:28px" target="_blank">编辑</a><font style="left:17px">编辑下载</font></span><span class="del"><a href="javascript:;" class="deleteexam" style="margin-left:28px" examid="40426">删除</a><font style="left:17px">删除</font></span>
-						</td>
-					</tr>
-					<tr>
-						<td style="display:none">
-							高中英语随堂练习-20151105
-						</td>
-						<td class="align-l allcheck">
-							<input name="items[]" value="37381" type="checkbox"><span><a href="http://www.yitiku.cn/Exam/myExamEdit/id/37381" style="margin-left:28px" target="_blank">高中英语随堂练习-20151105</a></span>
-						</td>
-						<td>
-							2015-11-05
-						</td>
-						<td class="handle">
-							<span class="editor"><a href="http://www.yitiku.cn/Exam/myExamEdit/id/37381" style="margin-left:28px" target="_blank">编辑</a><font style="left:17px">编辑下载</font></span><span class="del"><a href="javascript:;" class="deleteexam" style="margin-left:28px" examid="37381">删除</a><font style="left:17px">删除</font></span>
-						</td>
-					</tr>
+					</volist>
+					
 					</tbody>
 				</table>
 			</div>
@@ -75,14 +50,18 @@
 					<div class="allcheck fl" style="margin-top:10px;">
 						<label style="margin-top:4px"><input name="all_chose" id="CheckedAll" value="del_all" type="checkbox"><span>全选</span></label><label><input value="全部删除" type="submit"></label>
 					</div>
+					<style>
+                        	.current{
+                        		background: #f43c5e none repeat scroll 0 0;
+							    border: 1px solid #f28700;
+							    color: #fff;
+							    font-weight: bold;
+							    padding: 6px 10px;
+                        	}
+                        </style>
 					<div class="fr">
 						<div class="page">
-							<a href="##">上一页</a>
-							<a class="check" href="##">1</a>
-							<a href="##">2</a>
-							<a href="##">3</a>
-							<a href="##">4</a>
-							<a href="##">下一页</a>
+							{$page_show}
 						</div>
 					</div>
 					<div class="clear">
@@ -95,16 +74,20 @@
     
     </div>
 </div>
-
+<script>
+	$('.deleteexam').click(function(){
+		$.getJSON(
+			'/member/delShijuan',
+			{id:$(this).attr('id')},
+			function(data){
+				if(data.status=='success'){
+					location.reload();
+				}else{
+					alert('删除失败！');
+				}
+			}
+		);
+	});
+</script>
 <!--footer-->
-<div id="footer">
-	<div class="footer">
-    	<div class="left"><a href="">关于我们</a> 丨 <a href="">隐私保护政策</a>  丨  <a href="">服务条款</a> 丨 <a href="">联系我们</a>   丨  
-        <br />
-        COPYRIGHT 2015  哈学库  版权所有   www.haxueku.com</div>
-        <div class="right"></div>
-    </div>
-</div>
-
-</body>
-</html>
+<include file="common:footer" />

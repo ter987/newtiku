@@ -19,10 +19,10 @@
             	<!--左侧-->
             	<div class="jspan1 left">
                 	<ul class="jc_ul">
-                    	<li class="jc_tit"><a href="">全部</a></li>
-                    	<li><a href="">无标签</a></li>
+                    	<li class="jc_tit"><a href="/member/mycollect">全部</a></li>
+                    	<!-- <li><a href="/member/mycollect?tagid=0">无标签</a></li> -->
                     	<volist name="my_tags" id="vo">
-                        <li><a href="">{$vo.tag_name}</a></li>
+                        <li><a href="/member/mycollect?tagid={$vo.id}">{$vo.tag_name}</a></li>
                         </volist>
                     </ul>
                 
@@ -61,14 +61,22 @@
                                 </div>
                                 
                                 <div class="right">
-                                	<div class="left mr10">难度:<font class="c_z">0.76-0.85</font></div>
-                                	<div class="left">评分:</div>
-                                    <div class="left"><i class="dis score score3"></i></div>
+                                	<div class="left mr10">难度:<font class="c_z"><if condition="$vo.difficulty_id eq 1">1.00-0.86<elseif condition="$vo.difficulty_id eq 2"/>0.85-0.71<elseif condition="$vo.difficulty_id eq 3"/> 0.7-0.56 <elseif condition="$vo.difficulty_id eq 4"/>0.55-0.41<elseif condition="$vo.difficulty_id eq 5"/>0.40-0.26</if></font></div>
+                                	<!-- <div class="left">评分:</div>
+                                    <div class="left"><i class="dis score score3"></i></div> -->
                                </div>
                            </div>
                         </li>
                        </volist>
-                        
+                        <style>
+                        	.current{
+                        		background: #f43c5e none repeat scroll 0 0;
+							    border: 1px solid #f28700;
+							    color: #fff;
+							    font-weight: bold;
+							    padding: 6px 10px;
+                        	}
+                        </style>
                         
                 	</ul>
 					<div class="page">

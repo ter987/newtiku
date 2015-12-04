@@ -167,7 +167,7 @@
             <li  class="hover"><a href="/tiku/">知识点选题</a></li>
             <li><a href="/tongbu/">章节选题</a></li>
             <li><a href="/jingpin/">精品试卷</a></li>
-            <li><a href="">我的题库</a></li>
+            <!-- <li><a href="">我的题库</a></li> -->
         </ul>
         
         <div class="clear"></div>
@@ -421,7 +421,6 @@
 <script>
 	$('.tk_left').find('l').click(
 		function(){
-			//alert($(this).attr('id'));
 			var id = $(this).attr('id');
 			var href = window.location.href;
 		    var reg = /tiku\/(\w*)p(\d+)(\w*)(\/)/g;
@@ -445,6 +444,8 @@
 		    window.location.href = loc;
 		}
 	);
+	
+	
 	$(
 		function(){
 			$('.tk_left').find("l[id={$point_id}]").attr('style','color: rgb(244, 60, 94);');

@@ -100,27 +100,80 @@ class MemberController extends GlobalController {
 		
 	}
 	public function myshijuan(){
+		$Model = M('user_shijuan');
+		$count = $Model->where("user_id=".$_SESSION['user_id'])->count();
+		$Page = new \Think\Page($count,5);
+		$Page->setConfig('prev','上一页');
+		$Page->setConfig('next','下一页');
+		$Page->setConfig('first','首页');
+		$Page->setConfig('last','末页');
+		$page_show = $Page->m_show();
+		$data = $Model->where("user_id=".$_SESSION['user_id'])->limit($Page->firstRow.','.$Page->listRows)->order("id desc")->select();
+		$this->assign('my_shijuan',$data);
 		$this->display();
+	}
+	public function delShijuan(){
+		$id = I('get.id');
+		$Model = M('user_shijuan');
+		if($Model->where("user_id=".$_SESSION['user_id'].' AND id='.$id)->delete()){
+			$this->ajaxReturn(array('status'=>'success'));
+		}else{
+			$this->ajaxReturn(array('status'=>'error'));
+		}
+	}
+	public function shijuanDetail(){
+		$id = I('get.id');
+		$Model = M('user_shijuan');
+		$data = $Model->where("user_id=".$_SESSION['user_id']." AND id=$id")->find();
+		if(!$data){//404错误
+			
+		}
+		
+		unset($_SESSION['shijuan']);
+		unset($_SESSION['cart']);
+		
+		$_SESSION['shijuan'] = json_decode($data['content'],true);
+		$_SESSION['course_id'] = $data['course_id'];
+		$_SESSION['cart'] = json_decode($data['cart'],true);
+		redirect('/shijuan/');
 	}
 	public function myCollect(){
 		$tag_id = I('get.tagid');
 		//获取题库数据
 		$Model = M('user_collected');
-		$where = "user_collected.user_id=".$_SESSION['user_id'];
-		$count = $Model->where($where)->count();
-		//echo $Model->getLastSql();exit;
-		//echo $count;exit;
-		$Page = new \Think\Page($count,2);
-		$Page->setConfig('prev','上一页');
-		$Page->setConfig('next','下一页');
-		$Page->setConfig('first','首页');
-		$Page->setConfig('last','末页');
-		$page_show = $Page->_show($params);
-		$this->assign('page_show',$page_show);
-		$tiku_data = $Model->field("tiku.`id`,tiku.options,tiku.`content`,tiku.`clicks`,tiku_source.`source_name`,tiku.difficulty_id")
-		->join("tiku on user_collected.tiku_id=tiku.id")
-		->join("tiku_source on tiku_source.id=tiku.source_id")
-		->where($where)->limit($Page->firstRow.','.$Page->listRows)->select();
+		if(empty($tag_id)){
+			$where = "user_collected.user_id=".$_SESSION['user_id'];
+			$count = $Model->where($where)->count();
+			//echo $Model->getLastSql();exit;
+			//echo $count;exit;
+			$Page = new \Think\Page($count,5);
+			$Page->setConfig('prev','上一页');
+			$Page->setConfig('next','下一页');
+			$Page->setConfig('first','首页');
+			$Page->setConfig('last','末页');
+			$page_show = $Page->m_show();
+			$this->assign('page_show',$page_show);
+			$tiku_data = $Model->field("tiku.`id`,tiku.options,tiku.`content`,tiku.`clicks`,tiku_source.`source_name`,tiku.difficulty_id")
+			->join("tiku on user_collected.tiku_id=tiku.id")
+			->join("tiku_source on tiku_source.id=tiku.source_id")
+			->where($where)->limit($Page->firstRow.','.$Page->listRows)->select();
+		}else{
+			$result = $Model->query("SELECT COUNT(*) AS counts FROM (SELECT * FROM user_collected WHERE user_collected.`tiku_id` IN 
+(SELECT collected_tag.`tiku_id` FROM collected_tag WHERE collected_tag.`user_id`=".$_SESSION['user_id']." AND collected_tag.`tag_id`=$tag_id)) AS a 
+INNER JOIN tiku ON a.tiku_id=tiku.`id`");
+			$count = $result[0]['counts'];
+			$Page = new \Think\Page($count,5);
+			$Page->setConfig('prev','上一页');
+			$Page->setConfig('next','下一页');
+			$Page->setConfig('first','首页');
+			$Page->setConfig('last','末页');
+			$page_show = $Page->m_show();
+			$this->assign('page_show',$page_show);
+			$tiku_data = $Model->query("SELECT tiku.* FROM (SELECT * FROM user_collected WHERE user_collected.`tiku_id` IN 
+(SELECT collected_tag.`tiku_id` FROM collected_tag WHERE collected_tag.`user_id`=".$_SESSION['user_id']." AND collected_tag.`tag_id`=$tag_id)) AS a 
+INNER JOIN tiku ON a.tiku_id=tiku.`id`");
+		}
+		
 		//var_dump($tiku_data);
 		//echo $Model->getLastSql();
 		$this->assign('tiku_data',$tiku_data);
