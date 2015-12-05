@@ -10,12 +10,17 @@ class MemberController extends GlobalController {
 		parent::_initialize();
 	}
     public function index(){
+    	redirect('/member/info');
         $this->display();
 	}
 	public function info(){
 		$Modle = M('user');
 		$data = $Modle->where("id=".$_SESSION['user_id'])->find();
 		$this->assign('user_info',$data);
+		$menPhotos = $this->getPhotoByRand('men');
+		$womenPhotos = $this->getPhotoByRand('women');
+		$this->assign('menPhotos',$menPhotos);
+		$this->assign('womenPhotos',$womenPhotos);
 		$this->display();
 	}
 	public function register(){
@@ -98,6 +103,34 @@ class MemberController extends GlobalController {
 			$this->display();
 		}
 		
+	}
+	public function ajaxEditPhoto(){
+		$photo = I('get.photo');
+		$Model = M('user');
+		if($Model->where('id='.$_SESSION['user_id'])->save(array('photo'=>$photo))){
+			$this->ajaxReturn(array('status'=>'success','photo'=>$photo));
+		}else{
+			$this->ajaxReturn(array('status'=>'error'));
+		}
+	}
+	protected function getPhotoByRand($gender){
+		if($handle = opendir('Public/photo/'.$gender)){
+			while(false !==($file=readdir($handle))){
+				if ($file != "." && $file != "..") {
+					$file_arr[] = $file;
+				}
+			}
+		}
+		$count = count($file_arr);
+		for($i=1;$i<$count;$i++){
+			$rand = mt_rand(0, $count-1);
+			if(!in_array($file_arr[$rand], $new_file)){
+				$new_file[] = '/Public/photo/'.$gender.'/'.$file_arr[$rand];
+				if(count($new_file)==5) break;
+			}
+			
+		}
+		return $new_file;
 	}
 	public function myshijuan(){
 		$Model = M('user_shijuan');
@@ -364,6 +397,28 @@ INNER JOIN tiku ON a.tiku_id=tiku.`id`");
 			$this->ajaxReturn(array('status'=>'n','info'=>'该用户还未注册'));
 		}else{
 			$this->ajaxReturn(array('status'=>'y','info'=>'验证通过'));
+		}
+	}
+	public function ajaxCheckPassword(){
+		$password = I('post.param');;
+		$Model = M('User');
+		$result = $Model->field('password,salt')->where("id=".$_SESSION['user_id'])->find();
+		if(md5(md5($password.$result['salt']))!=$result['password']){
+			$this->ajaxReturn(array('status'=>'n','info'=>'旧密码输入有误！'));
+		}else{
+			$this->ajaxReturn(array('status'=>'y','info'=>'验证通过'));
+		}
+	}
+	public function ajaxResetPassword(){
+		$password = I('get.password');
+		$new_password = I('get.new_password');
+		$Model = M('User');
+		$result = $Model->field('password,salt')->where("id=".$_SESSION['user_id'])->find();
+		if(md5(md5($password.$result['salt']))!=$result['password']){
+			$this->ajaxReturn(array('status'=>'error','info'=>'旧密码输入有误！'));
+		}else{
+			$Model->where("id=".$_SESSION['user_id'])->save(array('password'=>md5(md5($new_password.$result['salt']))));
+			$this->ajaxReturn(array('status'=>'success'));
 		}
 	}
 	public function ajaxCheckEmail(){

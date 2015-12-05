@@ -10,11 +10,16 @@ class AddtikuController extends Controller {
 	 * 初始化
 	 */
 	function _initialize()
-	{
+	{   //'disciplineCode'=>'2','disciplineId'=>'21','disciplineType'=>'2','flag'=>'3'
 		$this->dir_path = 'Public/tikupics/';
 		$this->date = date('Ymd');
-		$this->course_id = 3;//数学
-		$this->cookies = 'jsessionid=F08A21B16B4E7305CEFCE8AD1E8B74F1';
+		$this->course_id = 1;//数学3   物理1
+		$this->cookies = 'jsessionid=0FA3A38C35FCBE6D202C490DB746353E';
+		$this->disciplineCode = 4;
+		$this->disciplineId = 23;
+		$this->disciplineType =2;
+		$this->flag = 3;
+		
 	}
 	function flash(){
 		ob_start();
@@ -307,14 +312,14 @@ style='font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:宋体;color:black
 		$point_data = $pointModel->field("knowledgeId,id")->where("course_id=$this->course_id AND level=3")->select();
 		//var_dump($point_data);exit;
 		foreach($point_data as $pv){
-			$queTypeIds = 13648;//采集源题型ID
+			$queTypeIds = 13618;//采集源题型ID
 			$point_id = $pv['knowledgeid'];
-			$type_id = 3;//本地题型ID
-			$is_xuanzheti = false;//如果是选择题，设置为true
+			$type_id = 1;//本地题型ID
+			$is_xuanzheti = true;//如果是选择题，设置为true
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie:$this->cookies"));
 			curl_setopt($ch, CURLOPT_URL, "http://www.jtyhjy.com/sts/question_findQuestionPage.action");
-			curl_setopt($ch, CURLOPT_POSTFIELDS, array('difficults'=>'1,2,3,4,5','disciplineCode'=>'2','disciplineId'=>'21','disciplineType'=>'2','flag'=>'3','knowledgeIds'=>$point_id,'knowledgeLevel'=>'3','page'=>'1','queTypeIds'=>$queTypeIds,'rows'=>'10'));
+			curl_setopt($ch, CURLOPT_POSTFIELDS, array('difficults'=>'1,2,3,4,5','disciplineCode'=>$this->disciplineCode,'disciplineId'=>$this->disciplineId,'disciplineType'=>$this->disciplineType,'flag'=>$this->flag,'knowledgeIds'=>$point_id,'knowledgeLevel'=>'3','page'=>'1','queTypeIds'=>$queTypeIds,'rows'=>'10'));
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			$data = curl_exec($ch);
 			curl_close($ch);
@@ -331,7 +336,7 @@ style='font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:宋体;color:black
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie:$this->cookies"));
 				curl_setopt($ch, CURLOPT_URL, "http://www.jtyhjy.com/sts/question_findQuestionPage.action");
-				curl_setopt($ch, CURLOPT_POSTFIELDS, array('difficults'=>'1,2,3,4,5','disciplineCode'=>'2','disciplineId'=>'21','disciplineType'=>'2','flag'=>'3','knowledgeIds'=>$point_id,'knowledgeLevel'=>'3','page'=>$page,'queTypeIds'=>$queTypeIds,'rows'=>'10'));
+				curl_setopt($ch, CURLOPT_POSTFIELDS, array('difficults'=>'1,2,3,4,5','disciplineCode'=>$this->disciplineCode,'disciplineId'=>$this->disciplineId,'disciplineType'=>$this->disciplineType,'flag'=>$this->flag,'knowledgeIds'=>$point_id,'knowledgeLevel'=>'3','page'=>$page,'queTypeIds'=>$queTypeIds,'rows'=>'10'));
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
 				$data = curl_exec($ch);
@@ -561,12 +566,14 @@ style='font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:宋体;color:black
 	/**
 	 * 采集知识点
 	 * 采集源：http://www.jtyhjy.com/sts/
+	 * 数学 ：'disciplineCode'=>'2','disciplineId'=>'21','disciplineType'=>'2'
+	 * 物理：'disciplineCode'=>'4','disciplineId'=>'23','disciplineType'=>'2'
 	 */
 	public function spider_point(){
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie:$this->cookies"));
 		curl_setopt($ch, CURLOPT_URL, "http://www.jtyhjy.com/sts/initPage_initQuestionPageForKnowledge.action");
-		curl_setopt($ch, CURLOPT_POSTFIELDS, array('disciplineCode'=>'2','disciplineId'=>'21','disciplineType'=>'2'));
+		curl_setopt($ch, CURLOPT_POSTFIELDS, array('disciplineCode'=>'4','disciplineId'=>'23','disciplineType'=>'2'));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$data = curl_exec($ch);
 		$data = json_decode($data,true);
@@ -605,6 +612,8 @@ style='font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:宋体;color:black
 	}
 	/**
 	 * 根据二级节点获取三级节点
+	 * 数学： 'disciplineCode'=>'2','disciplineId'=>'21'
+	 * 物理 ： 'disciplineCode'=>'04','disciplineId'=>'23'
 	 */
 	public function spider_children_point(){
 		$Model = M('tiku_point');
@@ -614,7 +623,7 @@ style='font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:宋体;color:black
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie:$this->cookies"));
 				curl_setopt($ch, CURLOPT_URL, "http://www.jtyhjy.com/sts/knowledge_findKnowledgeByParentId.action");
-				curl_setopt($ch, CURLOPT_POSTFIELDS, array('disciplineCode'=>'2','disciplineId'=>'21','parentId'=>$val['knowledgeid']));
+				curl_setopt($ch, CURLOPT_POSTFIELDS, array('disciplineCode'=>'4','disciplineId'=>'23','parentId'=>$val['knowledgeid']));
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				$data = curl_exec($ch);
 				$data = json_decode($data,true);
@@ -691,7 +700,7 @@ style='font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:宋体;color:black
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie:$this->cookies"));
 			curl_setopt($ch, CURLOPT_URL, "http://www.jtyhjy.com/sts/version_changeVersionForChapter.action");
-			curl_setopt($ch, CURLOPT_POSTFIELDS, array('disciplineCode'=>'2','disciplineId'=>'21','disciplineType'=>'2','versionId'=>$ver['spider_id']));
+			curl_setopt($ch, CURLOPT_POSTFIELDS, array('disciplineCode'=>$this->disciplineCode,'disciplineId'=>$this->disciplineId,'disciplineType'=>$this->disciplineType,'versionId'=>$ver['spider_id']));
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			$data = curl_exec($ch);
 			$data = json_decode($data,true);
@@ -715,7 +724,7 @@ style='font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:宋体;color:black
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie:$this->cookies"));
 				curl_setopt($ch, CURLOPT_URL, "http://www.jtyhjy.com/sts/book_changeBookForChapter.action");
-				curl_setopt($ch, CURLOPT_POSTFIELDS, array('disciplineCode'=>'2','disciplineId'=>'21','disciplineType'=>'2','bookId'=>$book_spider_id));
+				curl_setopt($ch, CURLOPT_POSTFIELDS, array('disciplineCode'=>$this->disciplineCode,'disciplineId'=>$this->disciplineId,'disciplineType'=>$this->disciplineType,'bookId'=>$book_spider_id));
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				$data = curl_exec($ch);
 				$data = json_decode($data,true);

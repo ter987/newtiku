@@ -80,6 +80,9 @@ class TikuController extends GlobalController {
 			//$where['tiku_source.source_type_id'] = ':source_type_id';
 			$bind[':source_type_id'] = array($feature_id,\PDO::PARAM_INT);
 		}
+		if($year){
+			$where .= " && tiku_source.year=$year";
+		}
 		if($province_id){
 			$where .= " && tiku_source.province_id=$province_id";
 			//$where['tiku_source.province_id'] = ':province_id';
