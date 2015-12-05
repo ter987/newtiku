@@ -1,7 +1,7 @@
 <?php
 namespace Home\Controller;
 use Home\Controller\GlobalController;
-class SmartController extends GlobalController {
+class OnlinetestController extends GlobalController {
 	/**
 	 * 初始化
 	 */

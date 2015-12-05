@@ -17,4 +17,5 @@
   RewriteRule ^tongbu/(\w+)\/$ index.php/home/tongbu/index/param/$1/
   RewriteRule ^tongbu/$ index.php/home/tongbu/
   RewriteRule ^ceping/$ index.php/home/ceping/
+  RewriteRule ^onlinetest/$ index.php/home/onlinetest/
 </IfModule>
