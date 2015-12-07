@@ -271,20 +271,7 @@ class TikuController extends GlobalController {
 		return $data;
 		
 	}
-	/**
-	 * 获取题型
-	 * 单选题、多选题。。。
-	 */
-	public function getTikuType($course_id){
-		$data = S('tiku_type_'.$course_id);
-		if(!$data){
-			$Model = M('tiku_type');
-			$data = $Model->field("tiku_type.`type_name`,tiku_type.`id`")->join("course_to_type on tiku_type.id=course_to_type.type_id")->where("course_to_type.course_id=$course_id")->select();
-
-			S('tiku_type_'.$course_id,$data,array('type'=>'file','expire'=>FILE_CACHE_TIME));
-		}
-		return $data;
-	}
+	
 	/**
 	 * 获取题库难度数据
 	 */

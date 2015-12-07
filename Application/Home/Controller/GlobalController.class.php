@@ -91,6 +91,91 @@ class GlobalController extends Controller{
 
         return $childs;
     }
+	public function getTopLevelPoint(){
+		$Model = M('tiku_point');
+		$top = $Model->field("id,point_name")->where("parent_id=0 AND course_id=".$_SESSION['course_id'])->select();
+		foreach($top as $val){
+			$data['childs'] = $Model->field("id,point_name")->where("parent_id=".$val['id']." AND course_id=".$_SESSION['course_id'])->select();
+			$data['top_id'] = $val['id'];
+			$data['top_name'] = $val['point_name'];
+			$second[] = $data;
+		}
+		$this->assign('top_point',$top);
+		$this->assign('second_point',$second);
+	}
+	public function getBookByVersionId($version_id){
+		$Model = M('books');
+		$chapterModel = M('chapter');
+		$book = $Model->where("version_id=$version_id")->select();
+		foreach($book as $val){
+			$data['top_name'] = $val['book_name'];
+			$data['top_id'] = $val['id'];
+			$top_chapter = $chapterModel->field("id,chapter_name")->where("parent_id=0 AND book_id=".$val['id'])->select();
+			foreach($top_chapter as $key =>$v){
+				$data['top_chapter'][$key] = $v;
+				$second_chapter = $chapterModel->field("id,chapter_name")->where("parent_id=".$v['id']." AND book_id=".$val['id'])->select();
+				$data['top_chapter'][$key]['childs'] = $second_chapter;
+				
+			}
+			$second[] = $data;
+			
+		}
+		$this->assign('top_point',$book);
+		$this->assign('second_point',$second);
+	}
+	/**
+	 * 获取题型
+	 * 单选题、多选题。。。
+	 */
+	public function getTikuType($course_id){
+		$data = S('tiku_type_'.$course_id);
+		if(!$data){
+			$Model = M('tiku_type');
+			$data = $Model->field("tiku_type.`type_name`,tiku_type.`id`")->join("course_to_type on tiku_type.id=course_to_type.type_id")->where("course_to_type.course_id=$course_id")->select();
+
+			S('tiku_type_'.$course_id,$data,array('type'=>'file','expire'=>FILE_CACHE_TIME));
+		}
+		return $data;
+	}
+	public function getSecondLevelPoint(){
+		$top_point_id = I('get.id');
+		$top_point_name = I('get.name');
+		if(empty($_GET['id'])){
+			$Model = M('tiku_point');
+			$top_data = $Model->field("id,point_name")->where("parent_id=0 AND course_id=".$_SESSION['course_id'])->find();
+			$top_point_id = $top_data['id'];
+			$top_point_name = $top_data['point_name'];
+		}
+		
+		$Model = M('tiku_point');
+		$data = $Model->field("id,point_name")->where("parent_id=".$top_point_id." AND course_id=".$_SESSION['course_id'])->select();
+		if(empty($_GET['id'])){
+			return array('top_id'=>$top_data['id'],'top_name'=>$top_point_name,'childs'=>$data);
+		}else{
+			$this->ajaxReturn(array('status'=>'success','top_id'=>$top_data['id'],'top_name'=>$top_point_name,'childs'=>$data));
+		}
+		
+	}
+	public function getVersionByCourseId(){
+		if(empty($_SESSION['course_id'])){
+			$courseModel = M('tiku_course');
+			$course = $courseModel->find();
+			$_SESSION['course_id'] = $course['id'];
+		}
+		$Model = M('version');
+		$data = $Model->where("course_id=".$_SESSION['course_id'])->select();
+		return $data;
+	}
+	public function ajaxChangeCourse(){
+		$course_id = I('get.id');
+		$_SESSION['course_id'] = $course_id;
+	}
+	public function ajaxGetTikuTypeByCourseId(){
+		$id = I('get.id');
+		$Model = M('tiku_type');
+		$data = $Model->join("course_to_type on tiku_type.id=course_to_type.type_id")->where("course_to_type.course_id=$id")->select();
+		$this->ajaxReturn(array('status'=>'success','data'=>$data));
+	}
 	public function _getTree(&$data, $parent_id = 0) {
         $Model = M('chapter');
         $childs = $this->findChild($data, $parent_id);
