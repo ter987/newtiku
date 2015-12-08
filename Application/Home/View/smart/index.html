@@ -142,7 +142,11 @@
 					</volist>
 					</eq>
 					<form method="post" action="/smart/start" id="start">
-					
+					<eq name="zsd_select" value="1">
+						<input type="hidden" name="zsd_select" value="1" />
+					<else />
+						<input type="hidden"  name="zsd_select" value="0" />
+					</eq>
 					<div class="hasKnowledge">
 						<h4>已选知识点（共<span class="zs_num">0</span>个）：</h4>
 						<ul id="tag_box">

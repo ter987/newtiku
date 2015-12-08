@@ -39,7 +39,46 @@ class SmartController extends GlobalController {
 		$this->display();
 	}
 	public function start(){
-		var_dump($_POST);
+		$zsd_select = I('post.zsd_select');
+		if($zsd_select){
+			$point_id = I('post.items_submit');
+			$pointModel = M('tiku_point');
+			foreach($point_id as $val){
+				$point = $pointModel->field("id")->where("parent_id=".$val)->select();
+				foreach($point as $v){
+					$ids .= $v['id'].',';
+				}
+			}
+			$ids = trim($ids,',');
+			
+		}else{
+			$chapter_id = I('post.items_submit');
+			$ids = implode(',',$chapter_id);
+		}
+		
+		
+		$tixing = I('post.tixing');
+		$difficulty_id = I('post.difficulty_id');
+		$Model = M('tiku');
+		foreach($tixing as $key=>$val){
+			if($zsd_select){
+				$data = $Model->field("tiku.id,tiku_type.type_name")
+				->join("tiku_type on tiku.type_id=tiku_type.id")
+				->join("tiku_to_point on tiku_to_point.tiku_id=tiku.id")
+				->where("tiku.difficulty_id=$difficulty_id AND tiku.type_id=$key AND tiku_to_point.point_id IN($ids)")
+				->limit($val)->order("rand()")->select();
+			}else{
+				$data = $Model->field("tiku.id,tiku_type.type_name")
+				->join("tiku_type on tiku.type_id=tiku_type.id")
+				->where("tiku.difficulty_id=$difficulty_id AND tiku.type_id=$key AND tiku.chapter_id IN($ids)")
+				->limit($val)->order("rand()")->select();
+			}
+			//echo $Model->getLastSql();exit;
+			foreach($data as $k=>$v){
+				$_SESSION['cart'][$v['id']] = $v; 
+			}
+		}
+		redirect('/shijuan/');
 	}
 }
 ?>
