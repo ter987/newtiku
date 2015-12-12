@@ -1,0 +1,75 @@
+<include file="common:_header" />
+<link href="__PUBLIC__/css/user.css" rel="stylesheet" type="text/css" />
+<!--main-->
+<div class="width">
+	<div class="b_top">
+    	<!--left-->
+        	<include file="member:left" />
+        
+        <!--right-->
+        <div class="uright">
+
+           <div class="mt20">
+                <div class="left">
+                	<select class="left sel" id="course_sel">
+                	<volist name="course_data" id="vo">
+                	<option <eq name="course_id" value="$vo.id">selected=""</eq> value="{$vo.id}"><eq name="vo.course_type" value="1">高中<else />初中</eq>{$vo.course_name}</option>
+                	</volist>
+                	</select></div>
+                <div class="right"><span class="button_2" onclick="window.location.href='/onlinetest/'">开始新的练习</span></div>
+           </div>
+           
+           <div class="clear"></div>
+           
+           <div class="mt20">
+           		<ul class="xxjd_ul_lx">
+           			
+                     <li>
+                        <div class="w100"><b>练习名称</b></div>
+                        <!-- <div class="w60"><b>能力值</b></div> -->
+                        <div class="w60"><b>正确率</b></div>
+                        <div class="w60"><b>难度</b></div>
+                        <div class="w60"><b>试题数量</b></div>
+                        <div class="w240"><b>知识点</b></div>
+                        <div class="w90n"><b>操作</b></div>
+                    </li>
+                   
+                   <volist name="ot_data" id="vo">
+                    <li class="li1">
+                        <div class="w100 h60">{$vo.title}</div>
+                        <!-- <div class="w60 h60">{$vo.title}</div> -->
+                        <div class="w60 h60"><php>echo round($vo['right_num']/$vo['shiti_num']*100);</php>%</div>
+                        <div class="w60 h60">{$vo.section}</div>
+                        <div class="w60 h60">{$vo.shiti_num}</div>
+                        <div class="w240 h60">{$vo.point}</div>
+                        <div class="h60"><eq name="vo.submited" value="1">完成练习<else /> <a href="/id={$vo.id}" class="c_l mr10">继续练习</a></eq>  <a href="/member/testreport?id={$vo.id}" class="c_l">练习报告</a></div>
+                    </li>
+                    </volist>
+                   
+                    
+                </ul>
+                <style>
+                        	.current{
+                        		background: #f43c5e none repeat scroll 0 0;
+							    border: 1px solid #f28700;
+							    color: #fff;
+							    font-weight: bold;
+							    padding: 6px 10px;
+                        	}
+                        </style>
+				<div class="page">
+					{$page_show}
+				</div>
+           </div>
+
+        </div>
+    
+    </div>
+</div>
+<script>
+	$('#course_sel').change(function() {
+		window.location.href = '/member/onlinetest?id='+$(this).val();
+	});
+</script>
+<!--footer-->
+<include file="common:footer" />

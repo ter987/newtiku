@@ -1,0 +1,56 @@
+<include file="common:header" />
+<div class="width">
+	<div class="tk_bg_mm">
+		<div class="tit">
+		    <div class="right"><a href="">首页</a> >><a href="">找回密码</a></div>
+		</div>
+	</div>
+</div>	
+<div class="width">
+	<div class="findPwd">
+	<div>
+		<div style="width:680px;height:68px;margin:40px auto 20px;padding-left:67px;">
+			<div class="resetpass_a resetpass_act">
+				发送重置密码邮件
+			</div>
+			<div class="resetpass_a">
+				重置登录密码
+			</div>
+			<div class="resetpass_a" style="width:186px;padding-right:0">
+				找回成功
+			</div>
+		</div>
+	</div>
+	<div style="line-height:80px;text-align:center;display:block;clear:both;font-size:16px;font-family:微软雅黑;padding-left:33px">
+		<notempty name="email">邮件已经发送到您的邮箱{$email}，<br />请您立即登录该邮箱并按信中提示修改密码。
+
+如果您未收到邮件，请点击<a href="/member/resetpassEmail">再次发送邮件</a><else />请输入您注册时的邮箱账号</notempty>
+	</div>
+	<div class="txt1" <notempty name="email">style="display:none;"</notempty>>
+		<div class="userForm1">
+			<form action="/member/resetpassEmail" method="post" name="findPwdform" id="findPwdform">
+				<ul>
+					<li>
+						<label>邮箱：</label>
+						<input class="wh5" id="email" name="email" type="text" datatype="e" ajaxurl="/member/ajaxCheckUser" nullmsg="邮箱不能为空！" errormsg="请输入合法的邮箱地址！">
+						
+					</li>
+					<li><input class="btn btn2" value="重置密码" style="padding:10px 20px;margin:20px 150px;background:#ff730c;" type="submit"></li>
+				</ul>
+			</form>
+		</div>
+	</div>
+</div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/lib/Validform/5.3.2/Validform.min.js"></script>
+<link href="/Public/css/validform.css" rel="stylesheet" type="text/css" />
+<script>
+	$(
+		function(){
+   		$("form").Validform(
+   			{tiptype:3}
+   		);
+    });
+</script>	
+<!--footer-->
+<include file="common:footer" />

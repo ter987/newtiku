@@ -7,9 +7,18 @@
         
         <div class="mt20">
         	<div class="p10">
-            	<div class="left mr10"><select class="sel"><option>高中物理</option></select></div>
+            	<div class="left mr10">
+            		<form method="post" action="" id="course_form">
+	        		<select class="sel" id="course_select" name="course_select">
+	        		<volist name="course_data" id="vo">
+	        		<option value="{$vo.id}" <eq name="current_course" value="$vo.id">selected=""</eq> >高中{$vo.course_name}</option>
+	        		</volist>
+	        		</select>
+	        		</form>
+            	</div>
+            	<form method="post" action="/ceping/xuanti" id="ceping_form" name="">
                 <div class="left mr10">
-					<input id="" class="wh1" type="text" name="" value="高中英语在线测评（20151203）">
+					<input id="" class="wh1" type="text" name="title" value="{$title}">
 				</div>
             </div>
         </div>
@@ -23,7 +32,7 @@
         
          <div class="mt20">
         	<div class="p10" style="height:35px;line-height: 35px;">
-            	<input id="" class="wh1" type="text" name="" value="高中英语在线测评（20151203）"><span style="margin-left:20px;color:#F43C5E;">请输入正确的账号</span>
+            	<input id="" class="wh1" type="text" name="student" value="" datatype="*" ajaxurl="/ceping/ajaxCheckStudent" nullmsg="不能为空！">
             </div>
         </div>
         
@@ -47,7 +56,7 @@
         	<div class="p10">
             	<div class="left"><span class="button_2">试题数量</span></div>
                 <div class="left"><span class="button_4">—</span></div>
-                <div class="left"><input type="text" style="line-height:30px;border:none; width:30px;height:30px;" class="button_4"></div>
+                <div class="left"><input type="text" value="0" name="shiti_num" id="shiti_num" style="line-height:30px;border:none; width:30px;height:30px;" class="ipt"></div>
                 <div class="left"><span class="button_3">+</span></div>
             </div>
         </div>
@@ -58,7 +67,7 @@
         	<div class="p10">
             	<div class="left"><span class="button_2">测评总分</span></div>
                 <div class="left"><span class="button_4">—</span></div>
-                <div class="left"><input type="text" style="line-height:30px;border:none; width:30px;height:30px;" class="button_4"></div>
+                <div class="left"><input type="text" value="0" name="ceshi_score" id="ceshi_score" style="line-height:30px;border:none; width:30px;height:30px;" class="ipt"></div>
                 <div class="left"><span class="button_3">+</span></div>
             </div>
         </div>
@@ -69,7 +78,7 @@
         	<div class="p10">
             	<div class="left"><span class="button_2">测评时间</span></div>
                 <div class="left"><span class="button_4">—</span></div>
-                <div class="left"><input type="text" style="line-height:30px;border:none; width:30px;height:30px;" class="button_4"></div>
+                <div class="left"><input type="text" value="0" name="ceshi_time" id="ceshi_time" style="line-height:30px;border:none; width:30px;height:30px;" class="ipt"></div>
                 <div class="left"><span class="button_3">+</span></div>
             </div>
         </div>
@@ -90,9 +99,56 @@
         
         <div class="clear"></div>
         
-                 <div class="zj_tit">开始选题</div>
-
+                 <div class="zj_tit" style="cursor: pointer;">开始选题</div>
+</form>
 </div>
-
+<script type="text/javascript" src="__PUBLIC__/lib/Validform/5.3.2/Validform.min.js"></script>
+<link href="/Public/css/validform.css" rel="stylesheet" type="text/css" />
+<script>
+$(
+	function(){
+   	$("#ceping_form").Validform(
+   		{tiptype:3}
+   	);
+});
+$('#course_select').change(function() {
+	$('#course_form').submit();
+});
+$('.button_3').click(function(){
+	var obj = $(this).parent().parent().find('input[type=text]');
+	var num = parseInt(obj.val())+1;
+	obj.val(num);
+	
+	
+});
+$('.button_4').click(function(){
+	var obj = $(this).parent().parent().find('input[type=text]');
+	if(parseInt(obj.val())>0){
+		var num = parseInt(obj.val())-1;
+		obj.val(num);
+		
+	}
+});
+$('.ipt:input').blur(function() {
+	if(isNaN($(this).val())){
+		alert('请输入数字');
+	}
+});	
+$('.zj_tit').click(function(){
+	if(parseInt($('#ceshi_score').val())<1){
+		alert('请输入测试总分');
+		return false;
+	}
+	if(parseInt($('#shiti_num').val())<1){
+		alert('请输入试题数量');
+		return false;
+	}
+	if(parseInt($('#ceshi_time').val())<1){
+		alert('请输入测试时间');
+		return false;
+	}
+	$('#ceping_form').submit();
+});
+</script>
 <!--footer-->
 <include file="common:footer" />

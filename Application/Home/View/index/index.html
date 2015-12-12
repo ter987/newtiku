@@ -20,10 +20,10 @@
 	<!-- 登录 -->
 	<empty name="user_id">
       <div class="login_wz">
-        <form>
-          <input type="text" size="40" value="账号：" onblur="if(this.value=='')this.value=defaultValue" onfocus="if(this.value==defaultValue)this.value=''" class="ip" name="text">
+        <form method="post" action="/member/login">
+          <input type="text" size="40" value="账号：" onblur="if(this.value=='')this.value=defaultValue" onfocus="if(this.value==defaultValue)this.value=''" class="ip" name="username" datatype="*" ajaxurl="/member/ajaxCheckUser" nullmsg="账号不能为空！" errormsg="请输入合法的账号！">
           <br>
-          <input type="text" size="40" value="密码：" onblur="if(this.value=='')this.value=defaultValue" onfocus="if(this.value==defaultValue)this.value=''" class="ip" name="text2">
+          <input type="password" size="40" value="密码：" onblur="if(this.value=='')this.value=defaultValue" onfocus="if(this.value==defaultValue)this.value=''" class="ip" name="password" datatype="*6-20" nullmsg="密码不能为空！" errormsg="密码请输入6-16个字符">
           <br>
           <input type="checkbox" name="checkbox">
           下次自动登录
@@ -31,7 +31,7 @@
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="/member/resetpass">忘记密码</a><br>
                     <input type="submit" size="40" value="登录" class="btn" name="submit">
                     <br>
-                    <input type="submit" size="40" value="注册" class="btn" name="submit">
+                    <input type="button" size="40" value="注册" class="btn" onclick="window.location.href='/member/register'">
                     <br>
         </form>
       </div>
@@ -47,13 +47,13 @@
 		</div>
 		<div>
 			<div style="height:30px;line-height:30px;">
-				<span style="float:left;"><a href="">修改密码</a></span>
-				<span style="float:right;"><a style="color:#5487E3;" href="">激活学习卡</a></span>
+				<span style="float:left;"><a href="/member/info">修改密码</a></span>
+				<!-- <span style="float:right;"><a style="color:#5487E3;" href="">激活学习卡</a></span> -->
 				<div style="clear:both;"></div>
 			</div>
-			<div style="height:30px;line-height:30px;">
+			<!-- <div style="height:30px;line-height:30px;">
 				<a href="">使用帮助</a>
-			</div>
+			</div> -->
 		</div> 
 	  </div>
 	 </empty>
@@ -240,5 +240,14 @@
         
     </div>
 </div>
-
+<script type="text/javascript" src="__PUBLIC__/lib/Validform/5.3.2/Validform.min.js"></script>
+<link href="/Public/css/validform.css" rel="stylesheet" type="text/css" />
+<script>
+	$(
+		function(){
+   		$("form").Validform(
+   			{tiptype:3}
+   		);
+    });
+</script>
 <include file="common:footer" />

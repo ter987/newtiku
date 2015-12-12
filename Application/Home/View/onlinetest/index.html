@@ -7,7 +7,15 @@
         <div class="clear"></div>
         
         <div class="mt20">
-        	<div class="p10"><select class="sel"><option>高中语文</option></select></div>
+        	<div class="p10">
+        		<form method="post" action="" id="course_form">
+        		<select class="sel" id="course_select" name="course_select">
+        		<volist name="course_data" id="vo">
+        		<option value="{$vo.id}" <eq name="current_course" value="$vo.id">selected=""</eq> >高中{$vo.course_name}</option>
+        		</volist>
+        		</select>
+        		</form>
+        	</div>
         </div>
         
         <div class="clear"></div>
@@ -16,101 +24,26 @@
         
         <div class="mt20">
         	<div class="p10">
-            	<ul class="ch_ul">
-                	<li>单项选择</li>
-                    <li>多项选择</li>
-                    <li>填空题</li>
-                    <li>计算题</li>
-                    <li>实验题</li>
-                    <li>实验探究题</li>
-                 </ul>
             	
                 <ul class="ch_ul quesTypes" >
+                	
                 	<li>
-						<div style="height:30px;margin-left:15px;">
+						
+						<div style="height:30px;margin-left:15px;" id="{$vo.id}">
 							<div style="padding:4px 0;float:left;">
-								<button type="button" value="-" class="minus1" onclick="changeCount(countInput,this, '-')"></button>
+								<button type="button" value="-" class="minus1" ></button>
 							</div>
 							<div style="float:left;">	
-								<input value="0" id="countInput" maxlength="3" onblur="jiance($(this))" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" class="countInput" name="tx[1]" type="text">
+								<input value="0"  maxlength="3"  class="countInput"  type="text">
 							</div>
 							<div style="padding:4px 0;float:left;">	
-								<button type="button" value="+" class="add" onclick="changeCount(countInput,this, '+')"></button>
+								<button type="button" value="+" class="add" ></button>
 							</div>
 							<div class="clear"></div>
 						</div>
                     </li>
-                    <li>
-						<div style="height:30px;margin-left:15px;">
-							<div style="padding:4px 0;float:left;">
-								<button type="button" value="-" class="minus1" onclick="changeCount(countInput,this, '-')"></button>
-							</div>
-							<div style="float:left;">	
-								<input value="0" id="countInput" maxlength="3" onblur="jiance($(this))" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" class="countInput" name="tx[1]" type="text">
-							</div>
-							<div style="padding:4px 0;float:left;">	
-								<button type="button" value="+" class="add" onclick="changeCount(countInput,this, '+')"></button>
-							</div>
-							<div class="clear"></div>
-						</div>
-                    </li>
+                 
                     
-                     <li>
-						<div style="height:30px;margin-left:15px;">
-							<div style="padding:4px 0;float:left;">
-								<button type="button" value="-" class="minus1" onclick="changeCount(countInput,this, '-')"></button>
-							</div>
-							<div style="float:left;">	
-								<input value="0" id="countInput" maxlength="3" onblur="jiance($(this))" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" class="countInput" name="tx[1]" type="text">
-							</div>
-							<div style="padding:4px 0;float:left;">	
-								<button type="button" value="+" class="add" onclick="changeCount(countInput,this, '+')"></button>
-							</div>
-							<div class="clear"></div>
-						</div>
-                    </li>
-                     <li>
-						<div style="height:30px;margin-left:15px;">
-							<div style="padding:4px 0;float:left;">
-								<button type="button" value="-" class="minus1" onclick="changeCount(countInput,this, '-')"></button>
-							</div>
-							<div style="float:left;">	
-								<input value="0" id="countInput" maxlength="3" onblur="jiance($(this))" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" class="countInput" name="tx[1]" type="text">
-							</div>
-							<div style="padding:4px 0;float:left;">	
-								<button type="button" value="+" class="add" onclick="changeCount(countInput,this, '+')"></button>
-							</div>
-							<div class="clear"></div>
-						</div>
-                    </li>
-                     <li>
-						<div style="height:30px;margin-left:15px;">
-							<div style="padding:4px 0;float:left;">
-								<button type="button" value="-" class="minus1" onclick="changeCount(countInput,this, '-')"></button>
-							</div>
-							<div style="float:left;">	
-								<input value="0" id="countInput" maxlength="3" onblur="jiance($(this))" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" class="countInput" name="tx[1]" type="text">
-							</div>
-							<div style="padding:4px 0;float:left;">	
-								<button type="button" value="+" class="add" onclick="changeCount(countInput,this, '+')"></button>
-							</div>
-							<div class="clear"></div>
-						</div>
-                    </li>
-                     <li>
-						<div style="height:30px;margin-left:15px;">
-							<div style="padding:4px 0;float:left;">
-								<button type="button" value="-" class="minus1" onclick="changeCount(countInput,this, '-')"></button>
-							</div>
-							<div style="float:left;">	
-								<input value="0" id="countInput" maxlength="3" onblur="jiance($(this))" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" class="countInput" name="tx[1]" type="text">
-							</div>
-							<div style="padding:4px 0;float:left;">	
-								<button type="button" value="+" class="add" onclick="changeCount(countInput,this, '+')"></button>
-							</div>
-							<div class="clear"></div>
-						</div>
-                    </li>
                  </ul>
                  
             </div>
@@ -123,12 +56,13 @@
 
 		<div class="clear"></div>
          
-        <div class="mt20">
-        	<h3 class="p10"><a href="" class="c_z mr10">容易</a>  丨  
-            <a href="" class="mr10">较易</a>   丨 
-            <a href="" class="mr10">一般</a>   丨  
-            <a href="" class="mr10">较难</a>   丨  
-            <a href="" class="mr10">困难</a>
+        <div class="mt20" id="difficulty">
+        	<h3 class="p10"><a href="javascript:;" class="c_z mr10" reg="1">容易</a>  丨  
+            <a href="javascript:;" class="mr10" reg="2">较易</a>   丨 
+            <a href="javascript:;" class="mr10" reg="3">一般</a>   丨  
+            <a href="javascript:;" class="mr10" reg="4">较难</a>   丨  
+            <a href="javascript:;" class="mr10" reg="5">困难</a>
+            
             </h3>	
         </div>
         
@@ -140,179 +74,228 @@
         <div class="clear"></div>
         <div class="mt10">
         	<div class="p10"> 
-            	<select class="left sel mr10"><option>按章节查找</option></select>
-            	<select class="left sel mr10"><option>人教版</option></select>
+        		<form method="post" action="" id="zsd_form">
+            	<select class="left sel mr10" id="zsd_select" name="zsd_select">
+            		<option value="zsd" <eq name="current_zsd" value="zsd">selected=""</eq>>综合知识点</option>
+            		<volist name="version_data" id="vo">
+            			<option value="{$vo.id}" <eq name="current_zsd" value="$vo.id">selected=""</eq>>{$vo.version_name}</option>
+            		</volist>
+            	</select>
+            	</form>
+            	<!-- <select class="left sel mr10"><option>人教版</option></select>
                 <input type="submit" value="搜索" class="mr10 button_2" style="border:none;" />
-                <input type="checkbox" class="mr10" />全选
+                <input type="checkbox" class="mr10" />全选 -->
                 
             </div>	
         </div>
         
         <div class="clear"></div>
-		<form action="/ExamDiy/znExamZ" method="post" id="znExamZ_form">
+		
 		<div class="mt10">
         	<div class="p10"> <h2>请选择要考查的知识点</h2><div class="line"></div></div>	
         </div>
 			<div class="knowledgeMenu guideStep">
 				<!--      <div class="hasNav">-->
-				<div class="js_nav use" id="253">
-					<h3 id="253" class="js_h3">词汇</h3>
-					<ul style="display: none">
-						<li><a href="javascript:;" id="255" class="js_1ge">词组／短语</a></li>
-						<li><a href="javascript:;" id="1446" class="js_1ge">拼写</a></li>
-						<li><a href="javascript:;" id="1447" class="js_1ge">发音</a></li>
-						<li><a href="javascript:;" id="1448" class="js_1ge">同义词</a></li>
-						<li><a href="javascript:;" id="1449" class="js_1ge">反义词</a></li>
-						<li><a href="javascript:;" id="1450" class="js_1ge">构词法</a></li>
-					</ul>
+				<eq name="zsd_select" value="1">
+				<volist name="top_point" id="vo" key="k">
+				<div class="js_nav use <eq name="k" value="1">onHover</eq>" id="253">
+					<h3 id="{$vo.id}" class="js_h3">{$vo.point_name}</h3>
 				</div>
-				<!--      <div class="hasNav">-->
-				<div class="js_nav hasNav" id="256">
-					<h3 id="256" class="js_h3">词法</h3>
+				</volist>
+				<else />
+				<volist name="top_point" id="vo" key="k">
+				<div class="js_nav use <eq name="k" value="1">onHover</eq>" id="253">
+					<h3 id="{$vo.id}" class="js_h3">{$vo.book_name}</h3>
 				</div>
-				<!--      <div class="hasNav">-->
-				<div class="js_nav use" id="278">
-					<h3 id="278" class="js_h3">句法</h3>
-				</div>
-				<!--      <div class="hasNav">-->
-				<div class="js_nav use" id="304">
-					<h3 id="304" class="js_h3">完形填空</h3>
-				</div>
-				<!--      <div class="hasNav">-->
-				<div class="js_nav use" id="316">
-					<h3 id="316" class="js_h3">阅读理解</h3>
-				</div>
-				<!--      <div class="hasNav">-->
-				<div class="js_nav onHover hasNav" id="1470">
-					<h3 id="1470" class="js_h3">作文</h3>
-					<ul style="display: none">
-						<li><a href="javascript:;" id="1471" class="js_1ge">情景作文</a></li>
-					</ul>
-				</div>
-				<!--      <div class="hasNav">-->
-				<div class="js_nav use" id="1478">
-					<h3 id="1478" class="js_h3">短文改错</h3>
-					<ul style="display: none">
-						<li><a href="javascript:;" id="1471" class="js_1ge">情景作文</a></li>
-					</ul>
-				</div>
-				<!--      <div class="hasNav">-->
-				<div class="js_nav use" id="1553">
-					<h3 id="1553" class="js_h3">单词拼写</h3>
-					<ul style="display: none">
-						<li><a href="javascript:;" id="1471" class="js_1ge">情景作文</a></li>
-					</ul>
-				</div>
-				<!--      <div class="hasNav">-->
-				<div class="js_nav use" id="1554">
-					<h3 id="1554" class="js_h3">完成句子</h3>
-					<ul style="display: none">
-						<li><a href="javascript:;" id="1471" class="js_1ge">情景作文</a></li>
-					</ul>
-				</div>
-				<!--      <div class="hasNav">-->
-				<div class="js_nav use" id="1555">
-					<h3 id="1555" class="js_h3">英汉互译</h3>
-					<ul style="display: none">
-						<li><a href="javascript:;" id="1471" class="js_1ge">情景作文</a></li>
-					</ul>
-				</div>
-				<!--      <div class="hasNav">-->
-				<div class="js_nav use" id="1556">
-					<h3 id="1556" class="js_h3">单词读音</h3>
-					<ul style="display: none">
-						<li><a href="javascript:;" id="1471" class="js_1ge">情景作文</a></li>
-					</ul>
-				</div>
-				<!--      <div class="hasNav">-->
-				<div class="js_nav use" id="1557">
-					<h3 id="1557" class="js_h3">单句改错</h3>
-					<ul style="display: none">
-						<li><a href="javascript:;" id="1471" class="js_1ge">情景作文</a></li>
-					</ul>
-				</div>
-				<!--      <div class="hasNav">-->
-				<div class="js_nav use" id="1480">
-					<h3 id="1480" class="js_h3">其他</h3>
-					<ul style="display: none">
-						<li><a href="javascript:;" id="1471" class="js_1ge">情景作文</a></li>
-					</ul>
-				</div>
+				</volist>
+				</eq>
 			</div>
 			<div style="height: auto; padding: 0px;" class="knowledgeTxtBox">
 				<div class="knowledgeTxt guideStep">
-					<h3><font>您已经选择了<b class="zs_num">6</b>个知识点。</font><a style="display: block;" href="javascript:;" class="btn btn9" id="all_">选择全部知识点</a><a href="javascript:;" class="btn btn10" id="no_all_" style="display: none;">取消全部知识点</a></h3>
-					<div class="checkboxBox">
-						<h4><label id="js_zs_top"><input pid="1470" name="items_all[]" id="CheckedAll" value="1470" class="js_1" title="作文" type="checkbox"><span>作文</span></label></h4>
+					<h3><font>您已经选择了<b class="zs_num">0</b>个知识点。</font><a style="display: block;" href="javascript:;" class="btn btn9" id="all_zsd">选择全部知识点</a><a href="javascript:;" class="btn btn10" id="no_all_zsd" style="display: none;">取消全部知识点</a></h3>
+					<eq name="zsd_select" value="1">
+					<volist name="second_point" id="vo" key="k">
+					<div class="checkboxBox" id="div_{$vo.top_id}" <neq name="k" value="1">style="display:none;"</neq> >
+						<h4><label id="js_zs_top"><input  name="items_all[]" id="CheckedAll" value="{$vo.top_name}" class="js_1"  type="checkbox"><span id="top_point">{$vo.top_name}</span></label></h4>
+						
 						<ul class="js_zhishidian3">
-							<li class=""><label><input name="items[]" value="1471" id="情景作文" pid="1470" class="js_2" type="checkbox"><span>情景作文</span></label></li>
-							<li><label><input name="items[]" value="1472" id="提纲作文" pid="1470" class="js_2" type="checkbox"><span>提纲作文</span></label></li>
-							<li class="this"><label><input name="items[]" value="1473" id="开放作文" pid="1470" class="js_2" type="checkbox"><span>开放作文</span></label></li>
-							<li class=""><label><input name="items[]" value="9231" id="应用文" pid="1470" class="js_2" type="checkbox"><span>应用文</span></label></li>
+							<volist name="vo.childs" id="v">
+							<li class=""><label><input name="items[]" value="{$v.id}"  id="{$v.id}"  class="js_2" type="checkbox"><span>{$v.point_name}</span></label></li>
+							</volist>
 						</ul>
+						
 					</div>
+					</volist>
+					<else />
+					<volist name="second_point" id="vo" key="k">
+					<div class="checkboxBox" id="div_{$vo.top_id}" <neq name="k" value="1">style="display:none;"</neq> >
+						<h4><label id="js_zs_top"><input  name="items_all[]" id="CheckedAll" value="{$vo.top_name}" class="js_1"  type="checkbox"><span id="top_point">{$vo.top_name}</span></label></h4>
+						<volist name="vo.top_chapter" id="vs">
+						<h5>{$vs.chapter_name}</h5>
+						<ul class="js_zhishidian3">
+							<volist name="vs.childs" id="v">
+							<li class=""><label><input name="items[]" value="{$v.id}"  id="{$v.id}"  class="js_2" type="checkbox"><span>{$v.chapter_name}</span></label></li>
+							</volist>
+						</ul>
+						</volist>
+					</div>
+					</volist>
+					</eq>
+					<form method="post" action="/onlinetest/start" id="start">
+					<eq name="zsd_select" value="1">
+						<input type="hidden" name="zsd_select" value="1" />
+					<else />
+						<input type="hidden"  name="zsd_select" value="0" />
+					</eq>
 					<div class="hasKnowledge">
-						<h4>已选知识点（共<span class="zs_num">6</span>个）：</h4>
+						<h4>已选知识点（共<span class="zs_num">0</span>个）：</h4>
 						<ul id="tag_box">
-							<li class="" id="258" pid="256"><a href="javascript:;">代词／不定代词</a><input name="items_submit[]" value="258" type="hidden"></li>
-							<li class="" id="276" pid="256"><a href="javascript:;">形容词／比较等级</a><input name="items_submit[]" value="276" type="hidden"></li>
-							<li class="" id="259" pid="256"><a href="javascript:;">动词／动词词组</a><input name="items_submit[]" value="259" type="hidden"></li>
-							<li id="271" pid="256"><a href="javascript:;">副词／比较等级</a><input name="items_submit[]" value="271" type="hidden"></li>
-							<li class="" id="274" pid="256"><a href="javascript:;">数词／量词</a><input name="items_submit[]" value="274" type="hidden"></li>
-							<li id="1471" pid="1470"><a href="javascript:;">情景作文</a><input name="items_submit[]" value="1471" type="hidden"></li>
+							
 						</ul>
 					</div>
 					<div class="clear"></div>
 					<div class="guideStep">
+						
 						<div class="clearBoth fl mb">
-							<a href="javascript:;" id="submit_ajax" class="btn btn5" style="margin-left:270px;" rel="nofollow">开始考试</a>
+							
+								<input type="hidden" name="shiti_num" value="0" id="shiti_num" />
+							<input type="hidden" name="point_num" value="0" id="point_num" />
+							<input type="hidden" id="difficulty_id" name="difficulty_id" value="1" />
+							<a  id="submit_ajax" class="btn btn5" style="margin-left:270px;" >开始练习</a>
 						</div>
+						
 					</div>
+					</form>
 				</div>
 			</div>
 			<div class="clear">
 			</div>
-		</form>
 		
-        <!-- <div class="mt20">
-        	<div class="p10">
-                <ul class="ks_ul">
-                    <li><dl>
-                        <dt><input type="checkbox" class="mr10" />必修一</dt>
-                            <dd><input type="checkbox" class="mr10" />第一章《运动的轨迹》</dd>
-                            <dd><input type="checkbox" class="mr10" />第一章《运动的轨迹》</dd>
-                            <dd><input type="checkbox" class="mr10" />第一章《运动的轨迹》</dd>
-                            <dd><input type="checkbox" class="mr10" />第一章《运动的轨迹》</dd>
-                        </dl>
-                    </li>
-                    
-                    <li><dl>
-                        <dt><input type="checkbox" class="mr10" />必修一</dt>
-                            <dd><input type="checkbox" class="mr10" />第一章《运动的轨迹》</dd>
-                            <dd><input type="checkbox" class="mr10" />第一章《运动的轨迹》</dd>
-                            <dd><input type="checkbox" class="mr10" />第一章《运动的轨迹》</dd>
-                            <dd><input type="checkbox" class="mr10" />第一章《运动的轨迹》</dd>
-                        </dl>
-                    </li>
-                    
-                    
-                    <li><dl>
-                        <dt><input type="checkbox" class="mr10" />必修一</dt>
-                            <dd><input type="checkbox" class="mr10" />第一章《运动的轨迹》</dd>
-                            <dd><input type="checkbox" class="mr10" />第一章《运动的轨迹》</dd>
-                            <dd><input type="checkbox" class="mr10" />第一章《运动的轨迹》</dd>
-                            <dd><input type="checkbox" class="mr10" />第一章《运动的轨迹》</dd>
-                        </dl>
-                    </li>
-                    
-                 </ul>
-             </div>
-             
-             <div class="zj_tit">开始考试</div>
-             
-         </div> -->
+		
 
 </div>
+<script>
+	$('#course_select').change(function() {
+		$('#course_form').submit();
+	});
+	$('#zsd_select').change(function() {
+		$('#zsd_form').submit();
+	});
+	$('#difficulty').find('a').click(function(){
+		$('.c_z').removeClass('c_z');
+		$(this).addClass('c_z mr10');
+		
+		$('#difficulty_id').val($(this).attr('reg'));
+	});
+	$('.js_h3').click(function(){
+		$('.onHover').removeClass('onHover');
+		$(this).parent().addClass('onHover');
+		$('#div_'+$(this).attr('id')).show();
+		$('#div_'+$(this).attr('id')).siblings('.checkboxBox').hide();
+	});
+	$('.js_zhishidian3').find(':input').click(function(){
+		if($(this).attr('checked')!='checked'){
+			$(this).attr('checked',true);
+			var add = '<li class="" id="'+$(this).val()+'"><a href="javascript:;" onclick="del_point($(this),'+$(this).val()+');">'+$(this).next().html()+'</a><input name="items_submit[]" value="'+$(this).val()+'" type="hidden"></li>';
+			$('#tag_box').append(add);
+			$('.zs_num').html($('#tag_box').find('li').length);
+			$('#point_num').val($('#tag_box').find('li').length);
+		}else{
+			$(this).removeAttr('checked');
+			$('#tag_box').find('li[id='+$(this).val()+']').remove();
+			$('.zs_num').html($('#tag_box').find('li').length);
+			$('#point_num').val($('#tag_box').find('li').length);
+		}
+	});
+	$('div #CheckedAll').click(function(){
+		if($(this).attr('checked')!='checked'){
+			$(this).attr('checked',true);
+			$(this).parent().parent().parent().find('li input').attr('checked',' ');
+			//alert($(this).parent().parent().parent().find('li input:checked'));
+			$(this).parent().parent().parent().find('li input:checked').each(function(dom){
+				if($('#tag_box').find('li[id='+$(this).val()+']').length==0){
+					var add = '<li class="" id="'+$(this).val()+'"><a href="javascript:;" onclick="del_point($(this),'+$(this).val()+');">'+$(this).next().html()+'</a><input name="items_submit[]" value="'+$(this).val()+'" type="hidden"></li>';
+					$('#tag_box').append(add);
+				}
+			});
+			$('.zs_num').html($('#tag_box').find('li').length);
+			$('#point_num').val($('#tag_box').find('li').length);
+		}else{
+			$(this).removeAttr('checked');
+			$(this).parent().parent().parent().find('li input').removeAttr('checked');
+			
+			$(this).parent().parent().parent().find('li input').each(function(dom){
+				if($('#tag_box').find('li[id='+$(this).val()+']').length>0){
+					$('#tag_box').find('li[id='+$(this).val()+']').remove();
+				}
+			});
+			$('.zs_num').html($('#tag_box').find('li').length);
+			$('#point_num').val($('#tag_box').find('li').length);
+		}
+	});
+	function del_point(obj,id){
+		obj.parent().remove();
+		$('input[id='+id+']').removeAttr('checked');
+		$('.zs_num').html($('#tag_box').find('li').length);
+		$('#point_num').val($('#tag_box').find('li').length);
+	}
+	$('.add').click(function(){
+		var obj = $(this).parent().parent().find('input[type=text]');
+		var num = parseInt(obj.val())+1;
+		obj.val(num);
+		$('#shiti_num').val(num);
+		
+	});
+	$('.minus1').click(function(){
+		var obj = $(this).parent().parent().find('input[type=text]');
+		if(parseInt(obj.val())>0){
+			var num = parseInt(obj.val())-1;
+			obj.val(num);
+			$('#shiti_num').val(num);
+		}
+	});
+	$('.countInput').blur(function() {
+		if(parseInt($(this).val())=='NaN'){
+			$(this).val(0);
+		}else{
+			$('#shiti_num').val(parseInt($(this).val()));
+		}
+	});
+	$('#submit_ajax').click(function(){
+		if(parseInt($('#shiti_num').val())<1) return false;
+		if(parseInt($('#point_num').val())<1) return false;
+		$('#start').submit();
+		
+	});
+	$('#all_zsd').click(function(){
+		$(this).hide();
+		$('#no_all_zsd').show();
+		$('.checkboxBox input').attr('checked',' ');
+		
+		//alert($(this).parent().parent().parent().find('li input:checked'));
+		$(this).parent().parent().parent().find('li input:checked').each(function(dom){
+			if($('#tag_box').find('li[id='+$(this).val()+']').length==0){
+				var add = '<li class="" id="'+$(this).val()+'"><a href="javascript:;" onclick="del_point($(this),'+$(this).val()+');">'+$(this).next().html()+'</a><input name="items_submit[]" value="'+$(this).val()+'" type="hidden"></li>';
+				$('#tag_box').append(add);
+			}
+		});
+		$('.zs_num').html($('#tag_box').find('li').length);
+		$('#point_num').val($('#tag_box').find('li').length)
+	});
+	$('#no_all_zsd').click(function(){
+		$(this).hide();
+		$('#all_zsd').show();
 
+		$('.checkboxBox input').removeAttr('checked');
+		
+		$(this).parent().parent().parent().find('li input').each(function(dom){
+			if($('#tag_box').find('li[id='+$(this).val()+']').length>0){
+				$('#tag_box').find('li[id='+$(this).val()+']').remove();
+			}
+		});
+		$('.zs_num').html($('#tag_box').find('li').length);
+		$('#point_num').val($('#tag_box').find('li').length);
+	});
+</script>
 <!--footer-->
 <include file="common:footer" />

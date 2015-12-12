@@ -23,11 +23,19 @@
 					<li>{$vo.type_name}(<span>{$vo.num}</span>/{$vo.num})</li>
 					</volist>
 				</ul>
+				<neq name="ceping" value="yes">
 				<div>
 					<a href="/shijuan/" class="btn btn3" id="mbsaveQues" rel="nofollow">生成试卷</a>
 					<div style="clear:both">
 					</div>
 				</div>
+				<else />
+				<div>
+					<a href="/ceping/exam" class="btn btn3" id="mbsaveQues" rel="nofollow">生成测评</a>
+					<div style="clear:both">
+					</div>
+				</div>
+				</neq>
 			</div>
 			<div style="color:#333;font-size:12px;margin:0 auto;text-align:center;width:96px">
 				暂不支持迅雷下载

@@ -1,0 +1,113 @@
+<include file="common:_header" />
+
+<!--main-->
+<div class="width">
+	<div class="tk_bg">
+		<!--标题-->
+        	<div class="p10">
+                   <h1 class="p10">
+                   		<span class="left mr10">在线练习</span>
+                        <span class="left mr10 c_z" style="width:600px;text-align:center;">答卷时间：<span id="minutes">{$minutes}</span>:<span id="seconds">{$seconds}</span></span>
+                        <span class="right"><input type="submit" class="button_3" value="提交"  style="border:none;cursor: pointer;"/></span>
+                   </h1>
+                   
+                   <div class="clear"></div>
+                   
+                   
+                   <div class="mt20">
+					   <div class="clear"></div>
+					   <ul class="zxlx_ul">
+					   	<volist name="tiku_data" key="key" id="vo">
+							<li>
+								<div class="x_icon">{$key}</div>
+								<div class="x_con">
+									<p>{$vo.content|htmlspecialchars_decode}</p>
+									<php>
+			                    		if($vo['options']){
+			                    			$options = json_decode($vo['options']);
+			                    			$options_index = array(0=>'A',1=>'B',2=>'C',3=>'D',4=>'E');
+			                    	</php>
+			                    	<p>
+			                    		<php>
+			                    			$k = 0;
+			                    			foreach($options as $k=>$val){
+			                    		</php>
+			                    			<p ><label><input type="radio" name="{$vo.id}" value="<php>echo $options_index[$k]</php>"> <php>echo $options_index[$k]</php>.<php>echo $val</php></label></p>
+			                    		<php>
+			                    			}
+			                    		</php>
+			                    		
+			                    	</p>
+			                    	<php>
+			                    	}
+			                    	</php>
+			                    	
+									<p>选择答案：<font color="#FF6600" id="{$vo.id}"></font></p>
+								</div>
+						   </li>
+						</volist>
+						  
+                   </div>
+             </div>
+        
+        
+    </div>
+</div>
+
+<!-- 代码 开始 -->
+<!-- <div id="box">
+	<span class="title">点击弹出</span>
+	<span class="q_top">测评考试</span>
+    <span class="q_bottom">问题反馈</span>
+	<ul class="qq">
+		<li class="hover"><a href="">1</a></li>
+        <li><a href="">2</a></li>
+        <li><a href="">3</a></li>
+        <li><a href="">4</a></li>
+	</ul>
+	
+</div> -->
+<!-- 代码 结束 -->
+<script>
+	setInterval("timer()",1000);
+	function timer(){
+		var minutes = parseInt($('#minutes').html());
+		var seconds = parseInt($('#seconds').html());
+		if(seconds==59){
+			$('#seconds').html(0);
+			$('#minutes').html(minutes+1);
+		}else{
+			$('#seconds').html(seconds+1);
+		}
+	}
+	$('input[type=radio]').click(function(){
+		var tiku_id = $(this).attr('name');
+		var answer = $(this).val();
+		$.getJSON(
+			'/onlinetest/ajaxExam',
+			{id:tiku_id,s_answer:answer},
+			function(data){
+				if(data.status=='success'){
+					//alert($('#'+tiku_id).html());
+					$('#'+tiku_id).html(answer);
+				}
+			}
+		);
+	});
+	$('.button_3').click(function(){alert(4);
+		$.getJSON(
+			'/onlinetest/submit',
+			{},
+			function(data){
+				if(data.status=='success'){
+					window.location.href="/member/";
+				}else{
+					alert('提交失败，请重试！');
+				}
+			}
+		);
+	});
+</script>
+
+<!--footer-->
+<include file="common:footer" />

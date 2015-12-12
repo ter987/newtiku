@@ -28,7 +28,11 @@ class GlobalController extends Controller{
 				redirect('/member/');
 			}
 		}else{
-			$login_controller_arr = array('/member/index','/shijuan/index','/shijuan/createToWord');
+			$login_controller_arr = array('/member/index','/member/info','/member/myshijuan','/member/mycollect','/member/teacherceping',
+			'/member/mynote','/ceping/index','/ceping/ajaxCheckStudent','/ceping/xuanti','/ceping/exam','/ceping/start',
+			'/onlinetest/index','/onlinetest/start','/onlinetest/exam','/onlinetest/ajaxExam','/onlinetest/submit',
+			'/smart/index','/smart/start','/hand/index','/hand/start',
+			'/member/studentceping','/shijuan/index','/shijuan/createToWord');
 			if(in_array('/'.strtolower(CONTROLLER_NAME).'/'.strtolower(ACTION_NAME), $login_controller_arr)){
 				redirect('/member/login');
 			}
@@ -128,6 +132,13 @@ class GlobalController extends Controller{
 	 * 单选题、多选题。。。
 	 */
 	public function getTikuType($course_id){
+		if(!empty($_SESSION['ceping'])){
+			$Model = M('tiku_type');
+			$data = $Model->field("tiku_type.`type_name`,tiku_type.`id`")
+			->where("tiku_type.id=1")->select();
+			$this->assign('ceping','yes');
+			return $data;
+		}
 		$data = S('tiku_type_'.$course_id);
 		if(!$data){
 			$Model = M('tiku_type');
@@ -382,5 +393,20 @@ class GlobalController extends Controller{
 			return cache($name);
 	 	}
 	 }
+	 public function verifyCode(){
+	 	$Verify = new \Think\Verify();
+		$Verify->useCurve =false;
+		$Verify->entry();
+	 }
+	 public function ajaxCheckVerifyCode(){
+	 	$verify_code = I('post.param');
+		$Verify = new \Think\Verify();
+		if(!$Verify->check($verify_code)){
+			$this->ajaxReturn(array('status'=>'n','info'=>"验证码有误！"));
+		}else{
+			$this->ajaxReturn(array('status'=>'y'));
+		}
+	 }
+	 
 }
 ?>

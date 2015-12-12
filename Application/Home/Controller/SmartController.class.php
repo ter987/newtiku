@@ -61,6 +61,7 @@ class SmartController extends GlobalController {
 		$difficulty_id = I('post.difficulty_id');
 		$Model = M('tiku');
 		foreach($tixing as $key=>$val){
+			if($val==0) continue;
 			if($zsd_select){
 				$data = $Model->field("tiku.id,tiku_type.type_name")
 				->join("tiku_type on tiku.type_id=tiku_type.id")

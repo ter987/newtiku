@@ -8,6 +8,8 @@ class MemberController extends GlobalController {
 	function _initialize()
 	{
 		parent::_initialize();
+		$course_data = parent::getCourse();
+		$this->assign('course_data',$course_data);
 	}
     public function index(){
     	redirect('/member/info');
@@ -104,6 +106,73 @@ class MemberController extends GlobalController {
 		}
 		
 	}
+	public function onlinetest(){
+		if(empty($_GET['id'])){
+			$course_id = 1;//默认物理
+		}else{
+			$course_id = I('get.id');
+		}
+		$Model = M('onlinetest');
+		$count = $Model->where("user_id=".$_SESSION['user_id']." AND course_id=$course_id")->count();
+		$Page = new \Think\Page($count,10);
+		$Page->setConfig('prev','上一页');
+		$Page->setConfig('next','下一页');
+		$Page->setConfig('first','首页');
+		$Page->setConfig('last','末页');
+		$page_show = $Page->m_show();
+		$Model = M('onlinetest');
+		$data = $Model->field('onlinetest.*,tiku_difficulty.section')->join("tiku_difficulty on onlinetest.difficulty_id=tiku_difficulty.id")->where("user_id=".$_SESSION['user_id']." AND course_id=$course_id")->limit($Page->firstRow.','.$Page->listRows)->select();
+		$this->assign('ot_data',$data);
+		$this->assign('page_show',$page_show);
+		$this->assign('course_id',$course_id);
+		$this->display();
+	}
+	public function testReport(){
+		$id = I('get.id');
+		$otModel = M('onlinetest');
+		$ot_data = $otModel->field('onlinetest.*,tiku_difficulty.section')->join("tiku_difficulty on onlinetest.difficulty_id=tiku_difficulty.id")->where("user_id=".$_SESSION['user_id']." AND onlinetest.id=$id")->find();
+		if(!$ot_data){//404
+			
+		}
+		$otextendModel = M('onlinetest_extend');
+		$count = $otextendModel->where("onlinetest_id=$id")->count();
+		$Page = new \Think\Page($count,10);
+		$Page->setConfig('prev','上一页');
+		$Page->setConfig('next','下一页');
+		$Page->setConfig('first','首页');
+		$Page->setConfig('last','末页');
+		$page_show = $Page->m_show();
+		$data = $otextendModel->field('onlinetest_extend.*,tiku_difficulty.section,tiku_point.point_name')
+		->join("tiku_to_point on onlinetest_extend.tiku_id=tiku_to_point.tiku_id")
+		->join("tiku_point on tiku_to_point.point_id=tiku_point.id")
+		->join("tiku_difficulty on onlinetest_extend.difficulty_id=tiku_difficulty.id")->where("onlinetest_extend.onlinetest_id=$id")->limit($Page->firstRow.','.$Page->listRows)->select();
+		$this->assign('shiti_data',$data);
+		$this->assign('page_show',$page_show);
+		$this->assign('ot_data',$ot_data);
+		$this->display();
+	}
+	public function myNote(){
+		if(empty($_GET['id'])){
+			$course_id = 1;//默认物理
+		}else{
+			$course_id = I('get.id');
+		}
+		$Model = M('onlinetest_note');
+		$count = $Model->where("user_id=".$_SESSION['user_id']." AND course_id=$course_id")->count();
+		$Page = new \Think\Page($count,10);
+		$Page->setConfig('prev','上一页');
+		$Page->setConfig('next','下一页');
+		$Page->setConfig('first','首页');
+		$Page->setConfig('last','末页');
+		$page_show = $Page->m_show();
+		if($count>0){
+			$data = $Model->field('onlinetest_note.*,tiku.content,tiku.options')->join("tiku on onlinetest_note.tiku_id=tiku.id")->where("onlinetest_note.user_id=".$_SESSION['user_id']." AND onlinetest_note.course_id=$course_id")->limit($Page->firstRow.','.$Page->listRows)->select();
+			$this->assign('note_data',$data);
+		}
+		$this->assign('page_show',$page_show);
+		$this->assign('course_id',$course_id);
+		$this->display();
+	}
 	public function ajaxEditPhoto(){
 		$photo = I('get.photo');
 		$Model = M('user');
@@ -143,6 +212,7 @@ class MemberController extends GlobalController {
 		$page_show = $Page->m_show();
 		$data = $Model->where("user_id=".$_SESSION['user_id'])->limit($Page->firstRow.','.$Page->listRows)->order("id desc")->select();
 		$this->assign('my_shijuan',$data);
+		$this->assign('page_show',$page_show);
 		$this->display();
 	}
 	public function delShijuan(){
@@ -209,6 +279,7 @@ INNER JOIN tiku ON a.tiku_id=tiku.`id`");
 		
 		//var_dump($tiku_data);
 		//echo $Model->getLastSql();
+		$this->assign('page_show',$page_show);
 		$this->assign('tiku_data',$tiku_data);
 		$myTags = $this->getMytags();
 		$this->assign('my_tags',$myTags);
@@ -326,6 +397,67 @@ INNER JOIN tiku ON a.tiku_id=tiku.`id`");
 	public function resetpass(){
 		$this->display();
 	}
+	public function resetpassEmail(){
+		if($_POST){
+			$email = I('post.email');
+			$userModel = M('user');
+			$result = $userModel->where("email='".$email."'")->find();
+			if(!$result){
+				$error_msg = '该邮箱未注册！';
+				$this->display();
+				return false;
+			}
+			$Mail = A('Mail');
+			$hash = $this->register_hash('encode', $result['id']);
+			$time_encrypt = base64_encode(md5(substr(md5($result['create_time']),6,4)).'_'.time());
+			$Mail->sendMail('resetpass_email',$email,$_SERVER['HTTP_HOST'].'/member/newpass?hash='.$hash.'&t='.$time_encrypt);
+			$this->assign('email',$email);
+		}
+		$this->display();
+	}
+	public function resetpassPhone(){
+		
+		$this->display();
+	}
+	public function newpass(){
+		if(!empty($_GET['hash'])){
+			$hash = I('get.hash');
+			$user_id = $this->register_hash('decode', $hash);
+			if(!$user_id) redirect('/');
+			$Model = M('user');
+			$result = $Model->where("id=$user_id")->find();
+			$time_str = base64_decode(I('get.t'));
+			$time_arr = explode('_',$time_str);
+			if($time_arr[0]!=md5(substr(md5($result['create_time']),6,4))){
+				redirect('/');
+			}
+			if((time()-$time_arr[1])>86400){
+				redirect('/');
+			}
+			if(!$result){
+				redirect('/');
+			}
+			if(empty($_POST)){
+				$this->display();
+			}else{
+				$new_password = I('post.new_password');
+				$data['salt'] = substr(uniqid(),2,6);
+				$data['password'] = md5(md5($new_password.$data['salt']));
+				$Model->where("id=$user_id")->save($data);
+				$_SESSION['nick_name'] = $result['nick_name'];
+				$_SESSION['user_id'] = $result['id'];
+				$_SESSION['user_type'] = $result['type'];
+				redirect('/member/resetok');
+			}
+		}else{
+			
+			$this->display();
+		}
+	}
+	public function resetok(){
+		
+		$this->display();
+	}
 	public function ajaxCollect(){
 		if(empty($_SESSION['user_id'])){
 			$this->ajaxReturn(array('status'=>'notlogin'));
@@ -364,6 +496,12 @@ INNER JOIN tiku ON a.tiku_id=tiku.`id`");
 			}
 		}
 		$this->ajaxReturn(array('status'=>'success'));
+	}
+	public function studentCeping(){
+		$this->display();
+	}
+	public function teacherCeping(){
+		$this->display();
 	}
 	protected function getMytags(){
 		$Model = M('tag');
@@ -412,6 +550,13 @@ INNER JOIN tiku ON a.tiku_id=tiku.`id`");
 	public function ajaxResetPassword(){
 		$password = I('get.password');
 		$new_password = I('get.new_password');
+		$check_new_password = I('get.check_new_password');
+		if(empty($new_password) || empty($password) || empty($check_new_password)){
+			$this->ajaxReturn(array('status'=>'error','info'=>'密码不能为空！'));
+		}
+		if($new_password != $check_new_password){
+			$this->ajaxReturn(array('status'=>'error','info'=>'两次输入的密码不一样！'));
+		}
 		$Model = M('User');
 		$result = $Model->field('password,salt')->where("id=".$_SESSION['user_id'])->find();
 		if(md5(md5($password.$result['salt']))!=$result['password']){

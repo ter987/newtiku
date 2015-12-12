@@ -158,8 +158,9 @@
 						
 						<div class="clearBoth fl mb">
 							<volist name="tiku_type" id="vo">
-								<input type="hidden" name="tixing[{$vo.id}]" value="" id="tixing_{$vo.id}" />
+								<input type="hidden" name="tixing[{$vo.id}]" value="" class="tixing" id="tixing_{$vo.id}" />
 							</volist>
+							<input type="hidden" name="point_num" value="0" id="point_num" />
 							<input type="hidden" id="difficulty_id" name="difficulty_id" value="1" />
 							<a  id="submit_ajax" class="btn btn5" style="margin-left:270px;" >生成试卷</a>
 						</div>
@@ -199,10 +200,12 @@
 			var add = '<li class="" id="'+$(this).val()+'"><a href="javascript:;" onclick="del_point($(this),'+$(this).val()+');">'+$(this).next().html()+'</a><input name="items_submit[]" value="'+$(this).val()+'" type="hidden"></li>';
 			$('#tag_box').append(add);
 			$('.zs_num').html($('#tag_box').find('li').length);
+			$('#point_num').val($('#tag_box').find('li').length);
 		}else{
 			$(this).removeAttr('checked');
 			$('#tag_box').find('li[id='+$(this).val()+']').remove();
 			$('.zs_num').html($('#tag_box').find('li').length);
+			$('#point_num').val($('#tag_box').find('li').length);
 		}
 	});
 	$('div #CheckedAll').click(function(){
@@ -217,6 +220,7 @@
 				}
 			});
 			$('.zs_num').html($('#tag_box').find('li').length);
+			$('#point_num').val($('#tag_box').find('li').length);
 		}else{
 			$(this).removeAttr('checked');
 			$(this).parent().parent().parent().find('li input').removeAttr('checked');
@@ -227,12 +231,14 @@
 				}
 			});
 			$('.zs_num').html($('#tag_box').find('li').length);
+			$('#point_num').val($('#tag_box').find('li').length);
 		}
 	});
 	function del_point(obj,id){
 		obj.parent().remove();
 		$('input[id='+id+']').removeAttr('checked');
 		$('.zs_num').html($('#tag_box').find('li').length);
+		$('#point_num').val($('#tag_box').find('li').length);
 	}
 	$('.add').click(function(){
 		var obj = $(this).parent().parent().find('input[type=text]');
@@ -256,6 +262,12 @@
 		}
 	});
 	$('#submit_ajax').click(function(){
+		var rs = 0;
+		$('.tixing').each(function(dom){
+			if(parseInt($(this).val())>0) rs=1;
+		});
+		if(rs==0) return false; 
+		if(parseInt($('#point_num').val())<1) return false;
 		$('#start').submit();
 		
 	});

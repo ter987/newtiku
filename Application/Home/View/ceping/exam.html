@@ -1,0 +1,88 @@
+<include file="common:_header" />
+
+<!--main-->
+<div class="width">
+	<div class="tk_bg">
+		<!--标题-->
+        	<div class="p10">
+                   <h1 class="p10">
+                   		<span class="left mr10">在线测评</span>
+                        
+                        <span class="right"><input type="submit" class="button_3" value="发起测评"  style="border:none;cursor: pointer;"/></span>
+                   </h1>
+                   
+                   <div class="clear"></div>
+                   
+                   
+                   <div class="mt20">
+					   <div class="clear"></div>
+					   <ul class="zxlx_ul">
+					   	<volist name="tiku_data" key="key" id="vo">
+							<li>
+								<div class="x_icon">{$key}</div>
+								<div class="x_con">
+									<p>{$vo.content|htmlspecialchars_decode}</p>
+									<php>
+			                    		if($vo['options']){
+			                    			$options = json_decode($vo['options']);
+			                    			$options_index = array(0=>'A',1=>'B',2=>'C',3=>'D',4=>'E');
+			                    	</php>
+			                    	<p>
+			                    		<php>
+			                    			$k = 0;
+			                    			foreach($options as $k=>$val){
+			                    		</php>
+			                    			<p ><label><php>echo $options_index[$k]</php>.<php>echo $val</php></label></p>
+			                    		<php>
+			                    			}
+			                    		</php>
+			                    		
+			                    	</p>
+			                    	<php>
+			                    	}
+			                    	</php>
+			                    	
+								</div>
+						   </li>
+						</volist>
+						  
+                   </div>
+             </div>
+        
+        
+    </div>
+</div>
+
+<!-- 代码 开始 -->
+<!-- <div id="box">
+	<span class="title">点击弹出</span>
+	<span class="q_top">测评考试</span>
+    <span class="q_bottom">问题反馈</span>
+	<ul class="qq">
+		<li class="hover"><a href="">1</a></li>
+        <li><a href="">2</a></li>
+        <li><a href="">3</a></li>
+        <li><a href="">4</a></li>
+	</ul>
+	
+</div> -->
+<!-- 代码 结束 -->
+<script>
+	$('.button_3').click(function(){
+		$.getJSON(
+			'/ceping/start',
+			{},
+			function(data){
+				if(data.status=='success'){
+					alert("发起测评成功！");
+					window.location.href='/member/';
+				}else{
+					alert('提交失败，请重试！');
+				}
+			}
+		);
+	});
+</script>
+
+<!--footer-->
+<include file="common:footer" />

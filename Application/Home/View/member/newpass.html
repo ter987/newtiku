@@ -1,0 +1,50 @@
+<include file="common:header" />
+<div class="width">
+	<div class="findPwd">
+		<div>
+			<div style="width:680px;height:68px;margin:40px auto 20px;padding-left:67px;">
+				<div class="resetpass_a">
+					验证手机号
+				</div>
+				<div class="resetpass_a resetpass_act">
+					重置登录密码
+				</div>
+				<div class="resetpass_a" style="width:186px;padding-right:0">
+					找回成功
+				</div>
+			</div>
+		</div>
+		<div style="line-height:80px;text-align:center;display:block;clear:both;font-size:16px;font-family:微软雅黑;padding-left:33px">
+			请输入您的密码
+		</div>
+		<div class="txt1">
+		<div class="userForm1">
+			<form action="" method="post" name="findPwdform" id="findPwdform">
+				<ul>
+					<li><label>新密码：</label>
+						<input class="wh5" name="new_password" type="password" id="newPassword"  datatype="*6-20" nullmsg="密码不能为空！" errormsg="密码请输入6-20个字符">
+						
+					</li>
+					<li><label>重置密码：</label>
+						<input class="wh5" recheck="new_password" name="check_new_password" type="password" id="check_new_password" datatype="*6-20" nullmsg="密码不能为空！">
+						
+					</li>
+					<li><input class="btn btn2" value="确认提交" style="padding:5px 20px;margin:20px 150px;" type="submit"></li>
+				</ul>
+			</form>
+		</div>
+	</div>
+</div>
+</div>	
+<script type="text/javascript" src="__PUBLIC__/lib/Validform/5.3.2/Validform.min.js"></script>
+<link href="/Public/css/validform.css" rel="stylesheet" type="text/css" />
+<script>
+	$(
+		function(){
+   		$("form").Validform(
+   			{tiptype:3}
+   		);
+    });
+</script>	
+<!--footer-->
+<include file="common:footer" />

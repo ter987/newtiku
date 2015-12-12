@@ -37,6 +37,7 @@ a:hover{color:#f30;}
 .button_2{float:left;padding:0 20px;line-height:30px;text-align:center;color:#fff;background:#1887e3;margin-right:10px;}
 .button_3{float:left;padding:0 20px;line-height:30px;text-align:center;color:#fff;background:#f43c5e;margin-right:10px;}
 .button_4{float:left;padding:0 20px;line-height:30px;text-align:center;color:#fff;background:#aaaaaa;margin-right:10px;}
+.ipt{float:left;padding:0 20px;line-height:30px;text-align:center;color:#fff;background:#aaaaaa;margin-right:10px;}
 .sel{border:1px solid #d2d2d2;height:35px;border-right:0;font-size:14px;width:200px;line-height:35px;padding:0 0 0 10px;color:#999;}
 .sel_1{border:1px solid #d2d2d2;height:25px;border-right:0;font-size:14px;width:80px;line-height:25px;padding:0 0 0 10px;color:#999;}
 .line{background:url(../images/line.gif) no-repeat top left;height:10px;display:block;clear:both;overflow:hidden;}

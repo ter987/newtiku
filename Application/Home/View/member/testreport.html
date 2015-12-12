@@ -1,0 +1,110 @@
+<include file="common:_header" />
+<link href="__PUBLIC__/css/user.css" rel="stylesheet" type="text/css" />
+
+<!--main-->
+<div class="width">
+	<div class="b_top">
+    	<!--left-->
+        	<include file="member:left" />
+        
+        <!--right-->
+        <div class="uright">
+        	<div class="lxbg_btn">练习报告</div>
+           	
+            <!--第一屏-->
+            <div class="lxbg1 mt20">
+            	<!--左侧-->
+            	<div class="cc_1 left">
+                	<div class="btn1">
+                    	<div class="left mr10 wz_x">能<br />力<br />值</div>
+                        <div class="left wz_d">7</div>
+                    </div>
+                    <div class="btn2">
+                    	<div class="left mr10 wz_x">正<br />确<br />率</div>
+                        <div class="left wz_d"><php>echo round($ot_data['right_num']/$ot_data['shiti_num']*100);</php>%</div>
+                    </div> 
+           		</div>
+                <!--右侧-->
+                <div class="cc_2 left">
+                	<div class="b_4">
+                    	<ul class="cc_2_ul">
+                        	<li class="li1"><i>&nbsp;</i>在线练习详情</li>
+                            <li class="li1">
+                            	<span class="span1">知识点</span>
+                                <span class="span2">试题数量</span>
+                                <span class="span2">难度</span>
+                                <span class="span2">用时</span>
+                                <span class="span2">做题情况</span>
+                            </li>
+                            
+                            <li class="li2">
+                            	<span class="span1">{$ot_data.point}</span>
+                                <span class="span2">{$ot_data.shiti_num}</span>
+                                <span class="span2">{$ot_data.section}</span>
+                                <span class="span2"><php>echo floor($ot_data['used_time']/60);</php>分<php>echo $ot_data['used_time']%60;</php>秒</span>
+                                <span class="span2"><font class="c_z">{$ot_data.shiti_num}</font>丨{$ot_data.right_num}</span>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                </div>
+             </div>
+             
+             <div class="clear"></div>
+             <!--第二屏-->
+             <div class="cc_2">
+                	<div class="b_4">
+                    	<ul class="cc_2_ul">
+                        	<li class="li1">&nbsp;&nbsp;&nbsp;&nbsp;学习建议</li>                            
+                            <li class="li3">
+                            	别气馁，鼓足勇气加油啊！从最基础的简单的题做起，
+                                加大做题量，<br />同时注意题目下知识点的解析，找出自己的不足，循序渐进，坚持下去，分数一定会提高的！
+                            </li>
+                            
+                        </ul>
+                    </div>
+              </div>
+            
+            <div class="clear"></div>
+            <!--两个按钮-->
+            <!-- <div class="al">
+            	<span class="btn1">开始新的练习</span>
+                <span class="btn2">能力评估报告</span>
+            </div> -->
+            
+            <!--试卷分析-->
+            <div class="cc_2 left">
+                	<div class="b_4">
+                    	<ul class="cc_2_ul">
+                        	<li class="li1"><i>&nbsp;</i>在线练习详情</li>
+                            <li class="li1">
+                            	<span class="span3 span_b">试题 </span>
+                                <span class="span4">对错</span>
+                                <span class="span2 span_b"><b>难度系数</b></span>
+                                <span class="span4">知识点</span>
+                                <span class="span2">练习推荐</span>
+                            </li>
+                            <volist name="shiti_data" key="k" id="vo">
+                            <li class="li4">
+                            	<span class="span3 span_b">第{$k}题<a href="" class="c_l">（查看）</a></span>
+                                <span class="span4"><eq name="vo.is_right" value="1">对<else />错 已加入错题集</eq></span>
+                                <span class="span2 span_b"><b>{$vo.section}</b></span>
+                                <span class="span4">{$vo.point_name}</span>
+                                <span class="span2"><a href="" class="c_l">推荐练习</a></span>
+                            </li>
+                            </volist>
+                            
+                        </ul>
+						<div class="page">
+							{$page_show}
+						</div>
+                    </div>
+                </div>
+            
+        </div>
+    
+    </div>
+</div>
+
+<!--footer-->
+<include file="common:footer" />
