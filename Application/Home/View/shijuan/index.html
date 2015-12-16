@@ -331,7 +331,7 @@
 			<ul class="mt">
 				<li><label>主标题：</label><textarea name="save_title" class="wh2">{$shijuan_title}</textarea></li>
 				<li><label>副标题：</label><textarea name="save_title1" class="wh2">{$shijuan_subtitle}</textarea></li>
-				<li><input type="button" class="btn2 fine_save_paper" id="download_shijuan" value="下载试卷"></li>
+				<li><input type="button" class="btn2 fine_save_paper" id="download_shijuan" value="下一步"></li>
 			</ul>
 		</div>
 	</div>
@@ -386,15 +386,15 @@
 						<span>格式</span>
 					</div>
 					<div class="fl">
-						<label><input class="wp_hover" name="doctype" value="doc" checked type="radio"><span>word2003</span><font class="save_title_doc">高中语文随堂练习-20151129_yitiku.docx_yitiku.doc</font>
+						<!-- <label><input class="wp_hover" name="doctype" value="doc" checked type="radio"><span>word2003</span><font class="save_title_doc">{$shijuan.title}.doc</font>
 						<div class="wp_value" style="text-align:center;padding-top:5px;color:#f43c5e;font-size:12px;text-indent:94px">
 							为保证试卷显示正常，建议使用 Microsoft Office Word 打开下载的试卷
 						</div>
-						</label><label><input id="wp_hover1" name="doctype" value="docx" type="radio"><span>word2007/2010</span><font class="save_title_docx">高中语文随堂练习-20151129_yitiku.docx_yitiku.docx</font>
+						</label> --><label><input id="wp_hover1" name="doctype" value="docx" type="radio" checked=""><span>word2007/2010</span><font class="save_title_docx">{$shijuan.title}.docx</font>
 						<div class="wp_value1" style="text-align:center;padding-top:5px;color:#f43c5e;font-size:12px;display:none;text-indent:94px">
 							为保证试卷显示正常，建议使用 Microsoft Office Word 打开下载的试卷
 						</div>
-						</label><label><input class="wp_display" name="doctype" value="pdf" type="radio"><span>pdf</span><font class="save_title_pdf">高中语文随堂练习-20151129_yitiku.docx_yitiku.pdf</font></label>
+						</label><!-- <label><input class="wp_display" name="doctype" value="pdf" type="radio"><span>pdf</span><font class="save_title_pdf">高中语文随堂练习-20151129_yitiku.docx_yitiku.pdf</font></label> -->
 					</div>
 					</li>
 					<li>
@@ -413,7 +413,7 @@
 						<label><input checked name="answer_order" style="margin-left:15px" value="2" type="radio"><span>试题跟答案解析分离</span></label>
 						<label style="margin-left:67px"><input name="answer_order" value="1" type="radio"><span>试题后面紧跟答案解析</span></label>
 					</li>
-					<li><input value="&nbsp;下&nbsp;&nbsp;载&nbsp;" class="btn btn2 mt load" style="margin-left:240px;margin-top:10px" id="xiazai" type="button"></li>
+					<li><input value="&nbsp;下&nbsp;&nbsp;载&nbsp;"  class="btn btn2 mt load" style="margin-left:240px;margin-top:10px" id="xiazaishijuan" type="button"></li>
 					<li style="text-align:center;padding-top:5px;color:#f43c5e">小提示：为保证试卷的正常下载，建议使用chrome浏览器、或IE8以上浏览器</li>
 				</ul>
 			</form>
@@ -461,6 +461,7 @@
 			</ul>
 		</div>
 	</div>
+
 <link href="__PUBLIC__/js/jquery-ui-1.11.2.custom/jquery-ui.css" rel="stylesheet" type="text/css" />
 <script src="__PUBLIC__/js/jquery-ui-1.11.2.custom/jquery-ui.js" type="text/javascript"></script>
 <script src="__PUBLIC__/js/menu.js" type="text/javascript"></script>
@@ -501,7 +502,68 @@ $('#save_shijuan').click(function(){
 	
 	$('#save_sj').dialog("close");
 });
+$("#mbsaveQues").click(function(){
+	$.getJSON(
+		'/shijuan/ajacCheckIsSaved',
+		'',
+		function(data){
+			if(data.status=='yes'){
+				$.getJSON(
+					'/shijuan/ajaxSave',
+					'',
+					function(data){
+						if(data.status=='success'){
+							$("#is_save2").dialog({
+							title:"保存试卷",
+							width:"430",
+							height:"auto",
+							modal:true,
+							create: function(){
+							},
+							});
+						}
+					}
+				);
+			}else{
+				$("#save_sj").dialog({
+				title:"保存试卷",
+				width:"430",
+				height:"auto",
+				modal:true,
+				create: function(){
+				},
+				beforeClose: function() {
+					$('#save_sj').dialog("destroy");
+				}
+				});
+			}
+		}
+	);
+	
+});
 $('#download_shijuan').click(function(){
+	$.getJSON(
+		'/shijuan/ajaxSave',
+		'',
+		function(data){
+			if(data.status=='success'){
+				$('#down_sj').dialog("destroy");
+				$("#down_sj2").dialog({
+					title:"下载试卷",
+					width:"660",
+					height:"auto",
+					modal:true,
+					create: function(){
+					},
+					beforeClose: function() {
+						$('#down_sj2').dialog("destroy");
+					}
+				});
+			}
+		}
+	);
+	
+	
 	$.getJSON(
 		'/shijuan/ajaxDownload',
 		'',
@@ -513,6 +575,53 @@ $('#download_shijuan').click(function(){
 	);
 	
 	$('#down_sj').dialog("close");
+});
+$('#xiazaishijuan').click(function(){
+	$.getJSON(
+		'/shijuan/ajaxDownload',
+		'',
+		function(data){
+			if(data.status=='success'){
+				$('#down_iframe').attr('src','/shijuan/createtoword');
+			}
+		}
+	);
+	
+	$('#down_sj2').dialog("close");
+});
+$("#mbdownQues").click(function(){
+	$.getJSON(
+		'/shijuan/ajacCheckIsSaved',
+		'',
+		function(data){
+			if(data.status=='yes'){
+				$("#down_sj2").dialog({
+					title:"下载试卷",
+					width:"660",
+					height:"auto",
+					modal:true,
+					create: function(){
+					},
+					beforeClose: function() {
+						$('#down_sj2').dialog("destroy");
+					}
+				});
+			}else{
+				$("#down_sj").dialog({
+					title:"下载试卷",
+					width:"430",
+					height:"auto",
+					modal:true,
+					create: function(){
+					},
+					beforeClose: function() {
+						$('#down_sj').dialog("destroy");
+					}
+				});
+			}
+			}
+		);
+	
 });
 </script>
 <script>

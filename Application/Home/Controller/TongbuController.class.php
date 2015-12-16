@@ -89,14 +89,14 @@ class TongbuController extends GlobalController {
 		$Page->setConfig('last','末页');
 		$page_show = $Page->_show($params);
 		$this->assign('page_show',$page_show);
-		S(array('type'=>'Memcache','host'=>C('MEMCACHED_HOST'),'port'=>C('MEMCACHED_POST'),'expire'=>C('MEMCACHED_EXPIRE')));
-		$tiku_data = S(md5($where."limit $Page->firstRow,$Page->listRows"));
-		if(!$tiku_data){
+		//S(array('type'=>'Memcache','host'=>C('MEMCACHED_HOST'),'port'=>C('MEMCACHED_POST'),'expire'=>C('MEMCACHED_EXPIRE')));
+		//$tiku_data = S(md5($where."limit $Page->firstRow,$Page->listRows"));
+		//if(!$tiku_data){
 			$tiku_data = $Model->field("tiku.`id`,tiku.options,tiku.`content`,tiku.`clicks`,tiku_source.`source_name`,tiku.difficulty_id")
 			->join("tiku_source on tiku.source_id=tiku_source.id")
 			->where($where)->limit($Page->firstRow.','.$Page->listRows)->select();
 			S(md5($where."limit $Page->firstRow,$Page->listRows"),$tiku_data);
-		}
+		//}
 		//var_dump($tiku_data);
 		//echo $Model->getLastSql();
 		$this->assign('tiku_data',$tiku_data);

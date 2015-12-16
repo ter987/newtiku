@@ -13,10 +13,11 @@ class AddtikuController extends Controller {
 	{   //'disciplineCode'=>'2','disciplineId'=>'21','disciplineType'=>'2','flag'=>'3'
 		$this->dir_path = 'Public/tikupics/';
 		$this->date = date('Ymd');
-		$this->course_id = 1;//数学3   物理1
-		$this->cookies = 'jsessionid=38CB97DF38960EA0427609B6BB5BFD3F';
-		$this->disciplineCode = 4;
-		$this->disciplineId = 23;
+		$this->course_id = 3;//数学3   物理1
+		$this->source_name_default = '高中数学（未知）';
+		$this->cookies = 'jsessionid=A84372BADDA7390AFB4AE959D305BFB6';
+		$this->disciplineCode = 2;
+		$this->disciplineId = 21;
 		$this->disciplineType =2;
 		$this->flag = 3;
 		
@@ -348,8 +349,8 @@ style='font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:宋体;color:black
 					$tiku['type_id'] = $type_id;
 					$spider_error = false;
 					$tiku['difficulty_id'] = $val['difficult'];
-					$source_name = trim($val['queSource']);
-					$result = $sourceModel->where("source_name='$source_name'")->find();
+					$source_name = empty($val['queSource'])?$this->source_name_default:trim($val['queSource']);
+					$result = $sourceModel->where("source_name='$source_name' AND course_id=$this->course_id")->find();
 					if(!$result){
 						$pattern_1 = "/河北|山西|辽宁|吉林|黑龙江|江苏|浙江|安徽|福建|江西|山东|河南|湖北|湖南|广东|海南|四川|贵州|云南|陕西|甘肃|青海|北京|天津|上海|重庆|广西|内蒙古|西藏|宁夏|新疆|新课标全国卷|新课标全国卷Ⅰ|新课标全国卷Ⅱ|大纲全国卷|大纲全国卷II/";
 						$pattern_2 = "/\d{4}/";
@@ -690,6 +691,7 @@ style='font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:宋体;color:black
 		echo 'Spider Sucess!';
 		$this->checkChapter();
 	}
+	
 	/**
 	 * 采集章节
 	 * 采集源：http://www.jtyhjy.com/sts/
@@ -786,5 +788,68 @@ style='font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:宋体;color:black
 		curl_close($ch);
 		fclose($handle);
 		return '/'.$new_file;
+	}
+	/**
+	 * 重新采集sourse_id
+	 */
+	public function pipei_source(){
+		$pointModel = M('tiku_point');
+		$tikuModel = M('tiku');
+		$point_data = $pointModel->field("knowledgeId,id")->where("course_id=$this->course_id AND level=3")->select();
+		//var_dump($point_data);exit;
+		foreach($point_data as $pv){
+			$queTypeIds = '13646,13647,13648';//采集源题型ID
+			$point_id = $pv['knowledgeid'];
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie:$this->cookies"));
+			curl_setopt($ch, CURLOPT_URL, "http://www.jtyhjy.com/sts/question_findQuestionPage.action");
+			curl_setopt($ch, CURLOPT_POSTFIELDS, array('difficults'=>'1,2,3,4,5','disciplineCode'=>$this->disciplineCode,'disciplineId'=>$this->disciplineId,'disciplineType'=>$this->disciplineType,'flag'=>$this->flag,'knowledgeIds'=>$point_id,'knowledgeLevel'=>'3','page'=>'1','queTypeIds'=>$queTypeIds,'rows'=>'10'));
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			$data = curl_exec($ch);
+			curl_close($ch);
+			$data = json_decode($data,true);
+			$total = $data['data']['questionList']['total'];
+			$page_num = ceil($total/10);
+			//var_dump($data);exit;
+			$sourceModel = M('tiku_source');
+			$provinceModel = M('province');
+			$page = $page_num;
+			while($page>0){
+				$tikus = array();
+				$tiku = array();
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie:$this->cookies"));
+				curl_setopt($ch, CURLOPT_URL, "http://www.jtyhjy.com/sts/question_findQuestionPage.action");
+				curl_setopt($ch, CURLOPT_POSTFIELDS, array('difficults'=>'1,2,3,4,5','disciplineCode'=>$this->disciplineCode,'disciplineId'=>$this->disciplineId,'disciplineType'=>$this->disciplineType,'flag'=>$this->flag,'knowledgeIds'=>$point_id,'knowledgeLevel'=>'3','page'=>$page,'queTypeIds'=>$queTypeIds,'rows'=>'10'));
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
+				$data = curl_exec($ch);
+				curl_close($ch);
+				$data = json_decode($data,true);
+				$tikus = $data['data']['questionList']['rows'];
+				foreach($tikus as $val){
+					$tr = $tikuModel->field("id,source_id")->where("spider_code=".$val['questionId'])->find();
+					if($tr['source_id']==90){
+						$sr = $sourceModel->where("source_name='".$this->source_name_default."' AND course_id=$this->course_id")->find();
+						if($sr){
+							$tiku['source_id'] = $sr['id'];
+						}else{
+							$source_data['course_id'] = $this->course_id;
+							$source_data['source_name'] = $this->source_name_default;
+							$source_data['update_time'] = time();
+							$source_id = $sourceModel->add($source_data);
+							$tiku['source_id']  = $source_id;
+						}
+						$tikuModel->where("id=".$tr['id'])->save($tiku);
+					}
+
+					unset($tiku);
+				}
+				
+				$page--;
+			}
+		}
+		unset($point_data);
+		echo ' OK!';
 	}
 }

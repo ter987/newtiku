@@ -21,6 +21,7 @@ class TikuController extends GlobalController {
 		if(!$course_id){//错误跳转
 			
 		}
+		//$course_id =3;
     	$params = I('get.param');
 		$result1 = preg_split("/[0-9]/", $params,0,PREG_SPLIT_NO_EMPTY);
 		$result2 = preg_split("/[a-z]/", $params,0,PREG_SPLIT_NO_EMPTY );
@@ -105,8 +106,8 @@ class TikuController extends GlobalController {
 		//获取年份数据 地区数据
 		$year_data = S('tiku_year_'.$where);
 		if(!$year_data){
-			$year_data = $Model->field("distinct tiku_source.year")->join($join)->join($join2)->where($where)->order("tiku_source.year desc")->select();
-			S('tiku_year_'.$where,$year_data,array('type'=>'file','expire'=>FILE_CACHE_TIME));
+			$year_data = $Model->field("distinct tiku_source.year")->join($join)->join($join2)->where($where." AND tiku_source.year <>''")->order("tiku_source.year desc")->select();
+			S('tiku_year_'.$where,$year_data,array('type'=>'file','expire'=>C('FILE_CACHE_TIME')));
 		}
 		
 		$this->assign('year_data',$year_data);
@@ -115,7 +116,7 @@ class TikuController extends GlobalController {
 		if(!$province_data){
 			$province_data = $Model->field("distinct province.id,province.province_name")->join($join)->join($join2)->join("province on tiku_source.province_id=province.id")->where($where)->order("tiku_source.year desc")->select();
 			//var_dump($province_data);exit;
-			S('province_data_'.$where,$province_data,array('type'=>'file','expire'=>FILE_CACHE_TIME));
+			S('province_data_'.$where,$province_data,array('type'=>'file','expire'=>C('FILE_CACHE_TIME')));
 		}
 		
 		$this->assign('province_data',$province_data);
@@ -125,7 +126,7 @@ class TikuController extends GlobalController {
 			$result = $Model->field("COUNT(*) AS tp_count")->join($join)->join($join2)->where($where)->find();
 			//echo $Model->getLastSql();
 			$count = $result['tp_count'];
-			S('tiku_count_'.$where,$count,array('type'=>'file','expire'=>FILE_CACHE_TIME));
+			S('tiku_count_'.$where,$count,array('type'=>'file','expire'=>C('FILE_CACHE_TIME')));
 		}
 		
 		//echo $count;
@@ -137,15 +138,15 @@ class TikuController extends GlobalController {
 		$Page->setConfig('last','末页');
 		$page_show = $Page->_show($params);
 		$this->assign('page_show',$page_show);
-		S(array('type'=>'Memcache','host'=>C('MEMCACHED_HOST'),'port'=>C('MEMCACHED_POST'),'expire'=>C('MEMCACHED_EXPIRE')));
-		$tiku_data = S(md5($where."limit $Page->firstRow,$Page->listRows"));
-		if(!$tiku_data){
+		//S(array('type'=>'Memcache','host'=>C('MEMCACHED_HOST'),'port'=>C('MEMCACHED_POST'),'expire'=>C('MEMCACHED_EXPIRE')));
+		//$tiku_data = S(md5($where."limit $Page->firstRow,$Page->listRows"));
+		//if(!$tiku_data){
 			$tiku_data = $Model->field("tiku.`id`,tiku.options,tiku.`content`,tiku.`clicks`,tiku_source.`source_name`,tiku.difficulty_id")
 			->join($join)
 			->join($join2)
 			->where($where)->limit($Page->firstRow.','.$Page->listRows)->select();
 			S(md5($where."limit $Page->firstRow,$Page->listRows"),$tiku_data);
-		}
+		//}
 		//var_dump($tiku_data);
 		//echo $Model->getLastSql();
 		$this->assign('tiku_data',$tiku_data);
@@ -280,7 +281,7 @@ class TikuController extends GlobalController {
 		if(!$data){
 			$Model = M('tiku_difficulty');
 			$data = $Model->order('degreen desc')->select();
-			S('tiku_difficulty',$data,array('type'=>'file','expire'=>FILE_CACHE_TIME));
+			S('tiku_difficulty',$data,array('type'=>'file','expire'=>C('FILE_CACHE_TIME')));
 		}
 		return $data;
 	}
@@ -293,7 +294,7 @@ class TikuController extends GlobalController {
 		if(!$data){
 			$Model = M('source_type');
 			$data = $Model->where("course_type=$course_type")->select();
-			S('source_type',$data,array('type'=>'file','expire'=>FILE_CACHE_TIME));
+			S('source_type',$data,array('type'=>'file','expire'=>C('FILE_CACHE_TIME')));
 		}
 		return $data;
 	}
@@ -303,7 +304,7 @@ class TikuController extends GlobalController {
 			$Model = M('tiku_course');
 			$data = $Model->field('course_type')->where("id=$course_id")->find();
 			$course_type = $data['course_type'];
-			S('course_type',$course_type,array('type'=>'file','expire'=>FILE_CACHE_TIME));
+			S('course_type',$course_type,array('type'=>'file','expire'=>C('FILE_CACHE_TIME')));
 		}
 		return $course_type;
 	}

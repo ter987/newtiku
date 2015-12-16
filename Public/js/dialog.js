@@ -82,19 +82,7 @@ dia_log.prototype.check = function(){
 			}
 		});
 	});
-	$("#mbdownQues").click(function(){
-		$("#down_sj").dialog({
-			title:"下载试卷",
-			width:"430",
-			height:"auto",
-			modal:true,
-			create: function(){
-			},
-			beforeClose: function() {
-				$('#down_sj').dialog("destroy");
-			}
-		});
-	});
+	
 	$("#down_next").click(function(){
 		$('#down_sj').dialog("destroy");
 		$("#down_sj2").dialog({
@@ -109,19 +97,7 @@ dia_log.prototype.check = function(){
 			}
 		});
 	});
-	$("#mbsaveQues").click(function(){
-		$("#save_sj").dialog({
-			title:"保存试卷",
-			width:"430",
-			height:"auto",
-			modal:true,
-			create: function(){
-			},
-			beforeClose: function() {
-				$('#save_sj').dialog("destroy");
-			}
-		});
-	});
+	
 	
 	$("#save_butt").click(function(){
 		$('#save_sj').dialog("destroy");

@@ -18,7 +18,7 @@ return array(
     'DB_MASTER_NUM'         =>  1, // 读写分离后 主服务器数量
     'DB_SLAVE_NO'           =>  '', // 指定从服务器序号
     //	缓存设置
-    'FILE_CACHE_TIME'		=>  3600,//文件形式缓存时间
+    'FILE_CACHE_TIME'		=>  2592000,//文件形式缓存时间,30天
     //邮件配置
     'MAIL_ADDRESS'			=>'wys030231@163.com', // 邮箱地址
 	'MAIL_SMTP'				=>'smtp.163.com', // 邮箱SMTP服务器
@@ -34,4 +34,6 @@ return array(
 	'MEMCACHED_EXPIRE'		=> '0',
 	//cookie配置
 	'COOKIE_EXPIRE'			=> 604800,//7天
+	
+	'URL_MODEL'             =>  1,
 );

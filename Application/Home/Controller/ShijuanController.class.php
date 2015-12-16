@@ -378,6 +378,14 @@ class ShijuanController extends GlobalController {
 		}
 		
 	}
+	public function ajacCheckIsSaved(){
+		$Model = M('user_shijuan');
+		if(isset($_SESSION['shijuan']['id'])&&$Model->where("id=".$_SESSION['shijuan']['id'].' AND user_id='.$_SESSION['user_id'])->find()){//更新数据库
+			$this->ajaxReturn(array('status'=>'yes'));
+		}else{
+			$this->ajaxReturn(array('status'=>'no'));
+		}
+	}
 	public function ajaxDownload(){
 		if(isset($_SESSION['shijuan']['id'])){
 			$this->ajaxReturn(array('status'=>'success'));
