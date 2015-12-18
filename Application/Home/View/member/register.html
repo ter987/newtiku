@@ -10,30 +10,30 @@
     <div class="reg_line"></div>
 	
 	<div class="reg_form">
-		<form class="demo" method="post" action="/member/register">
+		<form class="demo" method="post" action="/member/register" >
 			<div class="error" style="margin-left:90px;<empty name="error_msg">display:none;</empty>" id="">{$error_msg}</div>
 			<input type="hidden" id="type" name="type" value="1" />
 			<input type="hidden" name="is_mail" id="is_mail" value="0"/>
 			<div class="reg_br" id="is_mail_type" style="display:none;">
 				<div class="reg_l">邮箱：</div>
 				<div class="reg_r">
-					<input id="email"  type="text" name="email" datatype="e" ajaxurl="/member/ajaxcheckemail" nullmsg="邮箱不能为空！" errormsg="请输入合法的邮箱地址！" class="required email"/>
+					<input id="email"  type="text" name="email"  ajaxurl="/member/ajaxcheckemail" nullmsg="邮箱不能为空！" errormsg="请输入合法的邮箱地址！" class="required email"/>
 				</div>
 				<div class="clear"></div>
 			</div>
 			<div class="reg_br" id="is_tel_type">
 				<div class="reg_l">手机号：</div>
 				<div class="reg_r">
-					<input id="telphone" type="text" name="telphone" datatype="m" />
+					<input id="telphone" type="text" name="telphone" datatype="m" ajaxurl="/member/ajaxCheckTelphone"/>
 				</div>
 				<div class="clear"></div>
 			</div>
 			<div class="reg_br" id="verify_code" >
 				<div class="reg_l">短信验证码：</div>
 				<div class="reg_r" style="width:120px;">
-					<input id="code" type="text" name="code" datatype="n6-6" style="width:100px;" />
+					<input id="code" type="text" name="code" datatype="n4-4" nullmsg="验证码不能为空！" style="width:100px;" ajaxurl="/member/ajaxCheckPvCode"/>
 				</div>
-				<button class="reg_rr">获取验证码</button>
+				<button class="reg_rr" onclick="send_vcode($(this));" >获取验证码</button>
 				<div class="clear"></div>
 			</div>
 			<div class="reg_br">
@@ -99,6 +99,39 @@
     		obj.html('使用邮箱注册？');
     	}
     }
+    var tin;
+    function send_vcode(obj){
+    	if($('#telphone').attr('class')=='Validform_error' || $('#telphone').val()=='') return false;
+    	$.getJSON(
+			'/member/ajaxSendPvCode',
+			{telphone:$('#telphone').val()},
+			function(data){
+				if(data.status=='error'){
+					alert("验证码发送失败！");
+				}else{
+					obj.attr('onclick','');
+					obj.html('重新获取(60)');
+					tin = setInterval("timer()",1000);
+				}
+			}
+			);
+    }
+    var sec = 60;
+   
+	function timer(){
+		sec = sec-1;
+		if(sec==0){
+			$('.reg_rr').attr('onclick','send_vcode($(this));');
+			$('.reg_rr').html('获取验证码');
+			clearInterval(tin);
+			sec = 60;
+		}else{
+			var html = '重新获取('+sec+')';;
+			$('.reg_rr').html(html);
+			
+		}
+		
+	}
 </script>
 
 <include file="common:footer" />

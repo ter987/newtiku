@@ -401,12 +401,36 @@ class GlobalController extends Controller{
 	 public function ajaxCheckVerifyCode(){
 	 	$verify_code = I('post.param');
 		$Verify = new \Think\Verify();
+		//$this->ajaxReturn(array('status'=>$verify_code,'info'=>"验证码有误！"));
 		if(!$Verify->check($verify_code)){
 			$this->ajaxReturn(array('status'=>'n','info'=>"验证码有误！"));
 		}else{
 			$this->ajaxReturn(array('status'=>'y'));
 		}
 	 }
-	 
+	 public function ajaxSendPvCode(){
+	 	$telphone = I("get.telphone");
+		import('Org\Util\Sendmessage');
+		$obj = new \Org\Util\Sendmessage();
+		$rand_code = mt_rand(1000,9999);
+		$message = '【百胜通软件技术有限公司】您的验证码是'.$rand_code.'。回复T退订';
+		$result = $obj->send_sms($message,$telphone);
+		$result = json_decode($result,true);
+		if($result['msg']=='OK'){
+			$_SESSION['phone_vcode'] = $rand_code;
+			setcookie(session_name(),session_id(),time()+60);  
+			$this->ajaxReturn(array('status'=>'success'));
+		}else{
+			$this->ajaxReturn(array('status'=>'error'));
+		}
+	 }
+	 public function ajaxCheckPvCode(){
+	 	$code = I('post.param');
+	 	if($code==$_SESSION['phone_vcode']){
+			$this->ajaxReturn(array('status'=>'y','info'=>'通过验证'));
+		}else{
+			$this->ajaxReturn(array('status'=>'n','info'=>'验证码有误！'));
+		}
+	 }
 }
 ?>

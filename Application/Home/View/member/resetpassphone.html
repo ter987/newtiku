@@ -26,17 +26,14 @@
 		</div>
 		<div class="txt1">
 		<div class="userForm1">
-			<form action="/User/resetpass_three" method="post" name="findPwdform" id="findPwdform">
+			<form action="/member/resetpassPhone_two" method="post" name="findPwdform" id="findPwdform">
 				<ul>
-					<li><label>验证码：</label><input class="confirm" id="yzm" name="verify_code" type="text" datatype="s2-10" ajaxurl="/member/ajaxCheckVerifyCode">
+					<li><label>验证码：</label><input class="confirm" id="yzm" name="verify_code" type="text" datatype="*">
 					<a href="javascript:;"><img id="verify" src="/member/verifyCode" alt="验证码" height="35" width="70" onclick="$(this).attr('src','/member/verifyCode?'+Math.random());"></a>
 					<a href="javascript:;" id="change_code" onclick="$('#verify').attr('src','/member/verifyCode?'+Math.random());">换一换</a>
-					<div style="width:200px;float:left">
-						<span style="display:none" class="yzmerror onError_top">验证码错误！</span><span style="display:none" class="yzmerror onError_bot"></span>
-					</div>
 					</li>
-					<li><label>手机号：</label><input class="wh5" id="phone" name="phone1" type="text"><input class="send_phone_button send_confirm_button" id="send_phone" value="获取验证码" type="button"></li>
-					<li><label>手机验证码：</label><input class="wh5" id="yanzhengma" name="yanzhengma" type="text"><span class="onShow" style="margin:0;padding:0;background:transparent none repeat scroll 0 0" id="yanzhengmaTip"></span></li>
+					<li><label>手机号：</label><input class="wh5" id="phone" name="telphone" datatype="m" type="text" ajaxurl="/member/ajaxCheckUser"><input class="send_phone_button send_confirm_button" id="send_phone" value="获取验证码" onclick="send_vcode($(this))" type="button"></li>
+					<li><label>手机验证码：</label><input class="wh5" id="yanzhengma"  datatype="*" name="yanzhengma" type="text" ajaxurl="/member/ajaxCheckPvCode"><span class="onShow" style="margin:0;padding:0;background:transparent none repeat scroll 0 0" id="yanzhengmaTip"></span></li>
 					<li><input class="btn btn2" value="继续" style="padding:5px 20px;margin:20px 150px;" type="submit"></li>
 				</ul>
 			</form>
@@ -55,24 +52,52 @@
     });
 </script>	
 <script>
-$('#send_phone').click(function(){
-	if($('#yzm').val()==''){
-		alert('请输入验证码！');
-		return false;
-	}
+var tin;
+function send_vcode(obj){
+	if($('#yzm').val()=='' || $('#phone').val()=='') return false;
 	$.post(
 		'/member/ajaxCheckVerifyCode',
 		{param:$('#yzm').val()},
 		function(data){
 			if(data.status=='y'){
-				$(this).val('重新获取(60)');
+				
+				$.getJSON(
+				'/member/ajaxSendPvCode',
+				{telphone:$('#phone').val()},
+				function(data){
+					if(data.status=='error'){
+						alert("验证码发送失败！");
+					}else{
+						obj.attr('onclick','');
+						obj.val('重新获取(60)');
+						tin = setInterval("timer()",1000);
+					}
+				}
+				);
 			}else{
 				alert('验证码有误！');
+				return false;
 			}
 		}
 		
 	);
-});
+    }
+    var sec = 60;
+   
+	function timer(){
+		sec = sec-1;
+		if(sec==0){
+		$('#send_phone').attr('onclick','send_vcode($(this));');
+		$('#send_phone').val('获取验证码');
+		clearInterval(tin);
+		sec = 60;
+	}else{
+		var html = '重新获取('+sec+')';
+		$('#send_phone').val(html);
+		
+	}
+	
+}
 </script>
 <!--footer-->
 <include file="common:footer" />

@@ -59,7 +59,7 @@ class MemberController extends GlobalController {
 					return false;
 				}
 				//校验短信验证码
-				if(I('post.code')!=$_SESSION['code']){
+				if(I('post.code')!=$_SESSION['phone_vcode']){
 					
 				}
 				if($Model->where("telphone=$telphone")->find()){
@@ -419,6 +419,36 @@ INNER JOIN tiku ON a.tiku_id=tiku.`id`");
 		
 		$this->display();
 	}
+	public function resetpassPhone_two(){
+		if(!empty($_POST)){
+			if($_POST['yanzhengma']!=$_SESSION['phone_vcode']){
+				redirect('/');
+			}
+			$_SESSION['telphone'] = I('post.telphone');
+			setcookie(session_name(),session_id(),time()+120);
+			$this->display();
+		}else{
+			redirect('/');
+		}
+	}
+	public function resetpassPhone_three(){
+		if(!isset($_SESSION['telphone'])){
+			redirect('/');
+		}
+		$userModel = M('user');
+		$result = $userModel->where("telphone='".$_SESSION['telphone']."'")->find();
+		if(!$result){
+			redirect('/');
+		}
+		$new_password = I('post.new_password');
+		$data['salt'] = substr(uniqid(),2,6);
+		$data['password'] = md5(md5($new_password.$data['salt']));
+		$userModel->where("id=".$result['id'])->save($data);
+		$_SESSION['nick_name'] = $result['nick_name'];
+		$_SESSION['user_id'] = $result['id'];
+		$_SESSION['user_type'] = $result['type'];
+		redirect('/member/resetok');
+	}
 	public function newpass(){
 		if(!empty($_GET['hash'])){
 			$hash = I('get.hash');
@@ -450,8 +480,7 @@ INNER JOIN tiku ON a.tiku_id=tiku.`id`");
 				redirect('/member/resetok');
 			}
 		}else{
-			
-			$this->display();
+			redirect('/');
 		}
 	}
 	public function resetok(){
@@ -573,7 +602,17 @@ INNER JOIN tiku ON a.tiku_id=tiku.`id`");
 		if(!$resutl){
 			$this->ajaxReturn(array('status'=>'y','info'=>'通过验证'));
 		}else{
-			$this->ajaxReturn(array('status'=>'n','info'=>'该邮箱已存在！'));
+			$this->ajaxReturn(array('status'=>'n','info'=>'该邮箱已注册！'));
+		}
+	}
+	public function ajaxCheckTelphone(){
+		$tel = I('post.param');
+		$Model = M('User');
+		$resutl = $Model->where("telphone='$tel'")->find();
+		if(!$resutl){
+			$this->ajaxReturn(array('status'=>'y','info'=>'通过验证'));
+		}else{
+			$this->ajaxReturn(array('status'=>'n','info'=>'该手机已注册！'));
 		}
 	}
 	public function ajaxCheckNickname(){

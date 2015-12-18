@@ -1,9 +1,9 @@
 <?php
 namespace Org\Util;
-class sendMessage {
+class Sendmessage {
 	public $apikey;
 	public function __construct(){
-		$this->apikey = '';
+		$this->apikey = '07e2595e275430b23b9454bf8887e7df';
 	}
 	/**
 	* 智能匹配模版接口发短信
@@ -16,7 +16,7 @@ class sendMessage {
 	    $encoded_text = urlencode("$text");
 	    $mobile = urlencode("$mobile");
 	    $post_string="apikey=$this->apikey&text=$encoded_text&mobile=$mobile";
-	    return sock_post($url, $post_string);
+	    return $this->sock_post($url, $post_string);
 	}
 	
 	/**
@@ -31,7 +31,7 @@ class sendMessage {
 	    $encoded_tpl_value = urlencode("$tpl_value");  //tpl_value需整体转义
 	    $mobile = urlencode("$mobile");
 	    $post_string="apikey=$apikey&tpl_id=$tpl_id&tpl_value=$encoded_tpl_value&mobile=$mobile";
-	    return sock_post($url, $post_string);
+	    return $this->sock_post($url, $post_string);
 	}
 	
 	/**

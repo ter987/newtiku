@@ -13,12 +13,13 @@ class AddtikuController extends Controller {
 	{   //'disciplineCode'=>'2','disciplineId'=>'21','disciplineType'=>'2','flag'=>'3'
 		$this->dir_path = 'Public/tikupics/';
 		$this->date = date('Ymd');
-		$this->course_id = 3;//数学3   物理1
-		$this->source_name_default = '高中数学（未知）';
-		$this->cookies = 'jsessionid=A84372BADDA7390AFB4AE959D305BFB6';
-		$this->disciplineCode = 2;
-		$this->disciplineId = 21;
+		$this->course_id = 2;//数学3   物理1  化学2
+		$this->source_name_default = '高中化学（未知）';
+		$this->cookies = 'jsessionid=A47C2165C7CCD189F219D39EA732F3F7';
+		$this->disciplineCode = 5;//物理4  数学2 化学5
+		$this->disciplineId = 24;//物理23  数学21  化学24
 		$this->disciplineType =2;
+		$this->queTypeIds = '13625,13626,16300,13628';
 		$this->flag = 3;
 		
 	}
@@ -33,276 +34,8 @@ class AddtikuController extends Controller {
 		$handle = fopen('in.swf', 'w+');
 		fwrite($handle, $data);
 	}
-    public function addtiku(){
-        $content = $_POST['content'];
-		$answer = $_POST['post.answer'];
-		$analysis = $_POST['post.analysis'];
-		$data['type'] = 1;//题型，1表示单选题
-		$data['course_id'] =$this->course_id;//科目，3表示数学
-		$data['difficulty_id'] = mt_rand(1,5);//难度系数
-		$data['feature_id'] = rand(1,3);//题目特点
-		$data['source_id'] = 2;
-		$data['update_time'] = time();
-		$data['create_time'] = time();
-		//$content = '①对任意两向量a,b,均有:|a|-|b|&lt;|a|+|b|;<br />②对任意两向量a,b,a-b与b-a是相反向量;<br />③在△ABC中,<img src="0e5e6fe9ab59cf7293c79efbad0f3321.png" style="vertical-align:middle;" />+<img src="060cfa9c7418c3496215e69518513a3b.png" style="vertical-align:middle;" />-<img src="03598a0fdc0bbfb772c817c289310e4a.png" style="vertical-align:middle;" />=0';
-		$pattern = '/src="/i';
-		$replacement = 'src="/Files/images/'.$this->date.'/';
-		$data['content'] = preg_replace($pattern, $replacement, $content);
-		$data['answer'] = preg_replace($pattern, $replacement, $answer);
-		$data['analysis'] = preg_replace($pattern, $replacement, $analysis);
-		
-		$dir = 'Files/images/';
-		if(!file_exists($dir.$this->date)){
-			mkdir($dir.$this->date);
-		}
-		$Model = M('tiku');
-		if($tiku_id = $Model->add($data)){
-			$_model = M('tiku_to_point');
-			$_data['tiku_id']=$tiku_id;
-			$rand_arr = array(12,13,15,16,17,18);
-			$rand_index = mt_rand(0,5);
-			$_data['point_id'] = $rand_arr[$rand_index];
-			if($_model->add($_data)){
-				echo 'success';
-			}
-		}else{
-			echo 'failed';
-		}
-	}
+    
 	
-	public function addTikuByShijuan(){
-		$data['course_id'] =$this->course_id;//科目，3表示数学
-		$data['difficulty_id'] = mt_rand(1,5);//难度系数
-		$data['feature_id'] = rand(1,3);//题目特点
-		$data['update_time'] = time();
-		$data['create_time'] = time();
-		$grade = trim($_POST['grade']);
-		$grade_arr = array('高一'=>'1','高二'=>'2','高三'=>'3');
-		if(empty($grade)){
-			$s = trim($_POST['source_name']);
-			//$s = '2015届甘肃省天水市高三一轮复习基础知识检测理科数学试卷（带解析）';
-			preg_match('/高\W{3}/i',$s,$mat);
-			if($mat){
-				$grade = $mat[0];
-			}
-		}
-		$source_data['grade'] = $grade_arr[$grade];
-		
-		$content = $_POST['content'];
-		
-		$pattern = '/<div class="shiti">\w+<\/div>/i';
-		$pattern_2 = '/<h3>/i';
-		$result = preg_split($pattern_2, $content,0,PREG_SPLIT_NO_EMPTY);
-		$pattern_3 = '/<div class="shiti">/i';
-		//preg_match_all($pattern,$content,$matchs);
-		//var_dump($result);exit;
-		foreach($result as $val){
-			//var_dump($val);
-			preg_match('/\s*\S+<\/h3>/',$val,$matchs);
-			$type_name = trim(str_replace('</h3>','',$matchs[0]));
-			//echo $type_name;
-			$val = preg_replace('/\s*\S+<\/h3>\s*/','',$val);
-			$result_2 = preg_split($pattern_3,$val,0,PREG_SPLIT_NO_EMPTY);
-			//var_dump($result_2);exit;
-			foreach($result_2 as $v){
-				//var_dump($v);exit;
-				preg_match('/<p>[\w|\W]+<p class="btns">/i',$v,$m);
-				$q = preg_replace('/（本小题满分\d+分）<br>/i', '', $m[0]);
-				//echo $q;exit;
-				$q = preg_replace('/\s*<p class="btns">/','',$q);
-				preg_match_all('/src="\S+"/i',$q,$mt);
-				$img_path = str_replace('src=','',$mt[0]);
-				$img_path = str_replace('"','',$img_path);
-				foreach($img_path as $vl){//下载文件
-					$this->downFile($vl);
-				}
-				//最终的题目内容
-				$q = preg_replace('/http:\/\/tiku.21cnjy.com\/tikupic\/\w{2}\/\w{2}/','/'.$this->dir_path.$this->date,$q);
-				$v = str_replace(' class="paper_viewall"','',$v);
-				$v = str_replace(' target=_blank','',$v);
-				preg_match_all('/<a href=[\s|\S]+>答案与解析<\/a>/i',$v,$ms);
-				//var_dump($ms);exit;
-				$url_path = str_replace('<a href=\'','',$ms[0][0]);
-				$url_path = str_replace('\'>答案与解析</a>','',$url_path);
-				$url_path = 'http://tiku.21cnjy.com'.$url_path;
-				
-				$html = file_get_contents($url_path);
-				//echo $url_path;exit;
-				preg_match('/<p><span class="option">答案<\/span><i>[\w|\W]+<\/i><\/p>/U',$html,$a_match);
-				//var_dump($a_match);exit;
-				$a_match = str_replace('<p><span class="option">答案</span><i>','',$a_match[0]);
-				//最终的答案
-				$a_match = str_replace('</i></p>','',$a_match);
-				preg_match_all('/src="\S+"/i',$a_match,$a_m);
-				if($a_m){
-					$a_match = preg_replace('/http:\/\/tiku.21cnjy.com\/tikupic\/\w{2}\/\w{2}/','/'.$this->dir_path.$this->date,$a_match);
-					$img_path = str_replace('src=','',$a_m[0]);
-					$img_path = str_replace('"','',$img_path);
-					foreach($img_path as $vl){//下载文件
-						$this->downFile($vl);
-					}
-				}
-				preg_match('/<span class="parsing">解析<\/span><i>试题分析：[\w|\W]+<\/i><\/p>/U',$html,$as_match);
-				//var_dump($a_match);exit;
-				$as_match = str_replace('<span class="parsing">解析</span><i>试题分析：','',$as_match[0]);
-				//最终的解析
-				$analysis = str_replace('</i></p>','',$as_match);
-				//echo $analysis;exit;
-				preg_match_all('/src="\S+"/i',$analysis,$a_m);
-				if($a_m){
-					$analysis = preg_replace('/http:\/\/tiku.21cnjy.com\/tikupic\/\w{2}\/\w{2}/','/'.$this->dir_path.$this->date,$analysis);
-					$img_path = str_replace('src=','',$a_m[0]);
-					$img_path = str_replace('"','',$img_path);
-					foreach($img_path as $vl){//下载文件
-						$this->downFile($vl);
-					}
-				}
-				//插入数据
-				//$data['type'] = 1;//题型，1表示单选题
-				$data['content'] = $q;
-				$data['answer'] = $a_match;
-				$data['analysis'] = $analysis;
-				
-				$source_name = trim($_POST['source_name']);
-				$typeModel = M('tiku_type');
-				if($type_name=='选择题'){$type_name='单选题';}
-				$result = $typeModel->where("type_name='$type_name'")->find();
-				if($result){
-					$data['type_id'] = $result['id'];
-				}else{
-					$data['type_id'] = $typeModel->data(array('type_name'=>$type_name))->add();
-					$courseTypeModel = M('course_to_type');
-					$result_3 = $courseTypeModel->where("course_id=$this->course_id AND type_id=".$data['type_id'])->find();
-					if(!$result_3){
-						$courseTypeModel = $courseTypeModel->data(array('course_id'=>$this->course_id,'type_id'=>$data['type_id']))->add();
-					}
-				}
-				
-				$source_data['year'] = trim($_POST['year']);
-				$source_data['source_name'] = trim($_POST['source_name']);
-				$source_data['source_type_id'] = 0;
-				$province = trim($_POST['province']);
-				$provinceModel = M('province');
-				$result = $provinceModel->where("province_name='$province'")->find();
-				if($result){
-					$source_data['province_id'] = $result['id'];
-				}else{
-					$source_data['province_id'] = $provinceModel->data(array('province_name'=>$province))->add();
-				}
-				$sourceModel = M('tiku_source');
-				$result = $sourceModel->where("source_name='$source_name'")->find();
-				if($result){
-					$data['source_id'] = $result['id'];
-				}else{
-					$data['source_id'] = $sourceModel->add($source_data);
-				}
-				$Model = M('tiku');
-				$tiku_id = $Model->add($data);
-				$_model = M('tiku_to_point');
-				$_data['tiku_id']=$tiku_id;
-				$rand_arr = array(12,13,15,16,17,18);
-				$rand_index = mt_rand(0,5);
-				$_data['point_id'] = $rand_arr[$rand_index];
-				$_model->add($_data);
-				//echo $question;exit;
-				//var_dump($q);exit;
-			}
-			
-		}
-		
-		//var_dump($result);
-	}
-	public function test(){
-		$Model = M('temp');
-		for($i=1000;$i<10000;$i++){
-			$Model->add(array('status'=>$i));
-		}
-		exit;
-		$arr = preg_split('/<p[\s|\S]*>|<br \/>/U',$str);
-		var_dump($arr);exit;
-		$str = preg_replace('/\s{2,}/',' ',$str);
-		echo $str;exit;
-		preg_match('/\s/',$str,$match);
-		//$count = preg_match_all('/(&nbsp;)/', $match[0],$m);
-		//echo $count;
-		var_dump($match);exit;
-		for($i=0;$i<$count;$i++){
-			$underline .= '_';
-		}
-		//echo $count;exit;
-		$str = preg_replace('/[\'|"]mso-spacerun:yes[\'|"]>(&nbsp;){3,}[\s|\S]*<\/span>/','"mso-spacerun:yes">'.$underline.'</span>',$str);
-		echo $str;exit;
-		// preg_match_all('/<p[\s|\S]*<\/p>/U',$str,$matchs);
-		// $count = count($matchs[0]);
-		// if($count){
-			// $i = $count-1;
-			// while($i>0){
-				// if(preg_match('/[ABCD](．|\.){1}/',strip_tags($matchs[0][$i]),$m) || preg_match('/（[ABCD]）/',strip_tags($matchs[0][$i]),$m)){
-					// $str = str_replace($matchs[0][$i],'',$str);
-				// }
-				// $i--;
-			// }
-		// }
-		// echo $str;exit;
-
-		$str = strip_tags($str,'<img>');
-		//$str= preg_replace('/\s*/','',$str);
-		echo $str;exit;
-		$str = preg_replace('/\n/','',$str);
-		$result = preg_match('/A(．|\.){1}[^\n]+B(．|\.)/',$str,$match);
-
-		if(!$result){ if(preg_match('/A(．|\.){1}[\s|\S]+\n/U',$str,$match)){}else{preg_match('/（A）[\s|\S]+（B）/U',$str,$match);$match[0] = preg_replace('/（A）|（B）/','',$match[0]);}}
-		//var_dump($match);exit;
-		$a = preg_replace('/A．|A\.|B．|B\.|&nbsp;/','',$match[0]);
-		//echo $a;exit;
-		$result = preg_match('/B(．|\.){1}[^\n]+C(．|\.)/',$str,$match);
-		if(!$result){ if(preg_match('/B(．|\.){1}[\s|\S]+\n/U',$str,$match)){}else{preg_match('/（B）[\s|\S]+（C）/U',$str,$match);$match[0] = preg_replace('/（B）|（C）/','',$match[0]);}}
-		//var_dump($match);exit;
-		$b = preg_replace('/B．|B\.|C．|C\.|&nbsp;/i','',$match[0]);
-		$result = preg_match('/C(．|\.){1}[^\n]+D(．|\.)/',$str,$match);
-		if(!$result){ if(preg_match('/C(．|\.){1}[\s|\S]+\n/U',$str,$match)){}else{preg_match('/（C）[\s|\S]+（D）/U',$str,$match);$match[0] = preg_replace('/（C）|（D）/','',$match[0]);}}
-		$c = preg_replace('/C．|C\.|D．|D\.|&nbsp;/i','',$match[0]);
-		$result = preg_match('/&nbsp;\s*D(．|\.){1}[\s|\S]+/i',$str,$match);
-		if(!$result){ if(preg_match('/D(．|\.){1}[\s|\S]+/i',$str,$match)){}else{preg_match('/（D）[\s|\S]+/',$str,$match);$match[0] = preg_replace('/（D）/','',$match[0]);}}
-		$d = preg_replace('/D．|D\.|&nbsp;/i','',$match[0]);
-		$option_arr = array($a,$b,$c,$d);
-		var_dump($option_arr);exit;
-		echo $d;exit;
-		echo $str;exit;
-		mkdir('pub/s');
-		if(!file_exists($this->dir_path.$this->date)){
-			mkdir($this->dir_path.$this->date.'/'.date('i'));
-		}exit;
-		//echo uniqid().time();exit;
-		$s = "<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-11.0pt;mso-bidi-font-size:10.5pt;font-family:宋体;color:black'>若集合<img width=13 height=15
-src=\"http://i.jtyhjy.com/hstsnew/stsdoc/2/02/quehtml/20150523/body16128250.files/image004.gif\" v:shapes=\"Picture_x0020_78\"><span
-lang=EN-US>A</span>＝<span lang=EN-US>{</span>－<span lang=EN-US>1</span>，<span
-lang=EN-US>1}</span>，<span lang=EN-US>B</span>＝<span lang=EN-US>{0</span>，<span
-lang=EN-US>2}</span>，则集合</span><span lang=EN-US style='font-size:11.0pt;
-mso-bidi-font-size:12.0pt;font-family:宋体;color:black;position:relative;
-top:8.0pt;mso-text-raise:-8.0pt'><img width=193 height=29
-src=\"http://i.jtyhjy.com/hstsnew/stsdoc/2/02/quehtml/20150716/body16216131.files/image002.gif\" v:shapes=\"_x0000_i1025\"></span><span
-style='font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:宋体;color:black'>中的元素的个数为（
-）<span lang=EN-US><o:p></o:p></span></span></p>";
-		preg_match_all('/src=[\'|"]{1}\S+[\'|"]{1}/i',$s,$a_m);
-		//var_dump($a_m);exit;
-		if($a_m){
-			//$analysis = preg_replace('/http:\/\/tiku.21cnjy.com\/tikupic\/\w{2}\/\w{2}/','/'.$this->dir_path.$this->date,$analysis);
-			// $img_path = str_replace('src=','',$a_m[0]);
-			// $img_path = str_replace('"','',$img_path);
-			$imgs = $a_m[0];
-			$imgs = preg_replace('/src=[\'|"]{1}/','',$imgs);
-			$imgs = preg_replace('/[\'|"]/','',$imgs);
-			//var_dump($imgs);exit;
-			foreach($imgs as $vl){//下载文件
-				$new_file = $this->downFile($vl);
-				$s = str_replace($vl,$new_file,$s);
-			}
-		}
-		echo $s;
-
-	}
 	/**
 	 * 采集题库
 	 * 采集源：http://www.jtyhjy.com/sts/
@@ -314,9 +47,9 @@ style='font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:宋体;color:black
 		$point_data = $pointModel->field("knowledgeId,id")->where("course_id=$this->course_id AND level=3")->select();
 		//var_dump($point_data);exit;
 		foreach($point_data as $pv){
-			$queTypeIds = 11112810;//采集源题型ID
+			$queTypeIds = 13625;//采集源题型ID
 			$point_id = $pv['knowledgeid'];
-			$type_id = 6;//本地题型ID
+			$type_id = 1;//本地题型ID
 			$is_xuanzheti = true;//如果是选择题，设置为true
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie:$this->cookies"));
@@ -575,7 +308,7 @@ style='font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:宋体;color:black
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie:$this->cookies"));
 		curl_setopt($ch, CURLOPT_URL, "http://www.jtyhjy.com/sts/initPage_initQuestionPageForKnowledge.action");
-		curl_setopt($ch, CURLOPT_POSTFIELDS, array('disciplineCode'=>'4','disciplineId'=>'23','disciplineType'=>'2'));
+		curl_setopt($ch, CURLOPT_POSTFIELDS, array('disciplineCode'=>$this->disciplineCode,'disciplineId'=>$this->disciplineId,'disciplineType'=>$this->disciplineType));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$data = curl_exec($ch);
 		$data = json_decode($data,true);
@@ -625,7 +358,7 @@ style='font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:宋体;color:black
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie:$this->cookies"));
 				curl_setopt($ch, CURLOPT_URL, "http://www.jtyhjy.com/sts/knowledge_findKnowledgeByParentId.action");
-				curl_setopt($ch, CURLOPT_POSTFIELDS, array('disciplineCode'=>'4','disciplineId'=>'23','parentId'=>$val['knowledgeid']));
+				curl_setopt($ch, CURLOPT_POSTFIELDS, array('disciplineCode'=>$this->disciplineCode,'disciplineId'=>$this->disciplineId,'parentId'=>$val['knowledgeid']));
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				$data = curl_exec($ch);
 				$data = json_decode($data,true);
@@ -798,12 +531,11 @@ style='font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:宋体;color:black
 		$point_data = $pointModel->field("knowledgeId,id")->where("course_id=$this->course_id AND level=3")->select();
 		//var_dump($point_data);exit;
 		foreach($point_data as $pv){
-			$queTypeIds = '13646,13647,13648';//采集源题型ID
 			$point_id = $pv['knowledgeid'];
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie:$this->cookies"));
 			curl_setopt($ch, CURLOPT_URL, "http://www.jtyhjy.com/sts/question_findQuestionPage.action");
-			curl_setopt($ch, CURLOPT_POSTFIELDS, array('difficults'=>'1,2,3,4,5','disciplineCode'=>$this->disciplineCode,'disciplineId'=>$this->disciplineId,'disciplineType'=>$this->disciplineType,'flag'=>$this->flag,'knowledgeIds'=>$point_id,'knowledgeLevel'=>'3','page'=>'1','queTypeIds'=>$queTypeIds,'rows'=>'10'));
+			curl_setopt($ch, CURLOPT_POSTFIELDS, array('difficults'=>'1,2,3,4,5','disciplineCode'=>$this->disciplineCode,'disciplineId'=>$this->disciplineId,'disciplineType'=>$this->disciplineType,'flag'=>$this->flag,'knowledgeIds'=>$point_id,'knowledgeLevel'=>'3','page'=>'1','queTypeIds'=>$this->queTypeIds,'rows'=>'10'));
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			$data = curl_exec($ch);
 			curl_close($ch);
@@ -812,7 +544,7 @@ style='font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:宋体;color:black
 			$page_num = ceil($total/10);
 			//var_dump($data);exit;
 			$sourceModel = M('tiku_source');
-			$provinceModel = M('province');
+			//$provinceModel = M('province');
 			$page = $page_num;
 			while($page>0){
 				$tikus = array();
@@ -820,7 +552,7 @@ style='font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:宋体;color:black
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie:$this->cookies"));
 				curl_setopt($ch, CURLOPT_URL, "http://www.jtyhjy.com/sts/question_findQuestionPage.action");
-				curl_setopt($ch, CURLOPT_POSTFIELDS, array('difficults'=>'1,2,3,4,5','disciplineCode'=>$this->disciplineCode,'disciplineId'=>$this->disciplineId,'disciplineType'=>$this->disciplineType,'flag'=>$this->flag,'knowledgeIds'=>$point_id,'knowledgeLevel'=>'3','page'=>$page,'queTypeIds'=>$queTypeIds,'rows'=>'10'));
+				curl_setopt($ch, CURLOPT_POSTFIELDS, array('difficults'=>'1,2,3,4,5','disciplineCode'=>$this->disciplineCode,'disciplineId'=>$this->disciplineId,'disciplineType'=>$this->disciplineType,'flag'=>$this->flag,'knowledgeIds'=>$point_id,'knowledgeLevel'=>'3','page'=>$page,'queTypeIds'=>$this->queTypeIds,'rows'=>'10'));
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
 				$data = curl_exec($ch);
@@ -830,16 +562,20 @@ style='font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:宋体;color:black
 				foreach($tikus as $val){
 					$tr = $tikuModel->field("id,source_id")->where("spider_code=".$val['questionId'])->find();
 					if($tr['source_id']==90){
-						$sr = $sourceModel->where("source_name='".$this->source_name_default."' AND course_id=$this->course_id")->find();
-						if($sr){
-							$tiku['source_id'] = $sr['id'];
-						}else{
-							$source_data['course_id'] = $this->course_id;
-							$source_data['source_name'] = $this->source_name_default;
-							$source_data['update_time'] = time();
-							$source_id = $sourceModel->add($source_data);
-							$tiku['source_id']  = $source_id;
+						if(!isset($source_id)){
+							$sr = $sourceModel->where("source_name='".$this->source_name_default."' AND course_id=$this->course_id")->find();
+							if($sr){
+								$source_id = $sr['id'];
+								//$tiku['source_id'] = $sr['id'];
+							}else{
+								$source_data['course_id'] = $this->course_id;
+								$source_data['source_name'] = $this->source_name_default;
+								$source_data['update_time'] = time();
+								$source_id = $sourceModel->add($source_data);
+								//$tiku['source_id']  = $source_id;
+							}
 						}
+						$tiku['source_id'] = $source_id;
 						$tikuModel->where("id=".$tr['id'])->save($tiku);
 					}
 

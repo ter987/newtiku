@@ -67,13 +67,19 @@ class SmartController extends GlobalController {
 				->join("tiku_type on tiku.type_id=tiku_type.id")
 				->join("tiku_to_point on tiku_to_point.tiku_id=tiku.id")
 				->where("tiku.difficulty_id=$difficulty_id AND tiku.type_id=$key AND tiku_to_point.point_id IN($ids)")
-				->limit($val)->order("rand()")->select();
+				->select();
 				//echo $Model->getLastSql();exit;
+				//var_dump($data);exit;
+				shuffle($data);
+				$data = array_slice($data,0,$val);
+				//var_dump($data);exit;
 			}else{
 				$data = $Model->field("tiku.id,tiku_type.type_name")
 				->join("tiku_type on tiku.type_id=tiku_type.id")
 				->where("tiku.difficulty_id=$difficulty_id AND tiku.type_id=$key AND tiku.chapter_id IN($ids)")
 				->limit($val)->order("rand()")->select();
+				shuffle($data);
+				$data = array_slice($data,0,$val);
 			}
 			//echo $Model->getLastSql();exit;
 			foreach($data as $k=>$v){
