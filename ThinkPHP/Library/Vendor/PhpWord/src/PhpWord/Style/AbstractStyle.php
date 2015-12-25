@@ -165,7 +165,7 @@ abstract class AbstractStyle
         if (method_exists($this, $method)) {
             $this->$method($value);
         }
-
+		
         return $this;
     }
 
@@ -180,7 +180,7 @@ abstract class AbstractStyle
         foreach ($values as $key => $value) {
             $this->setStyleValue($key, $value);
         }
-
+		
         return $this;
     }
 

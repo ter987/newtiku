@@ -218,7 +218,7 @@ class Paragraph extends Border
             'tabs'              => $this->getTabs(),
             'shading'           => $this->getShading(),
         );
-
+		
         return $styles;
     }
 

@@ -130,11 +130,17 @@ class Word2007 extends AbstractWriter implements WriterInterface
         $this->addNotes($zip, $rId, 'footnote');
         $this->addNotes($zip, $rId, 'endnote');
         $this->addChart($zip, $rId);
-
+		//var_dump($this->parts);exit;
         // Write parts
         foreach ($this->parts as $partName => $fileName) {
             if ($fileName != '') {
+            	if($partName=='Styles'){
+            		$content = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:styles xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:eastAsia="Arial" w:cs="Arial"/><w:sz w:val="30"/><w:szCs w:val="20"/></w:rPr></w:rPrDefault></w:docDefaults><w:docDefaults><w:pPrDefault><w:pPr><w:textAlignment w:val="center" /></w:pPr></w:pPrDefault></w:docDefaults><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/></w:style><w:style w:type="character" w:styleId="FootnoteReference"><w:name w:val="Footnote Reference"/><w:semiHidden/><w:unhideWhenUsed/><w:rPr><w:vertAlign w:val="superscript"/></w:rPr></w:style></w:styles>';
+            		$zip->addFromString($fileName, $content);
+				}else{
                 $zip->addFromString($fileName, $this->getWriterPart($partName)->write());
+				}
             }
         }
 

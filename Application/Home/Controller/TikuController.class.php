@@ -106,7 +106,7 @@ class TikuController extends GlobalController {
 		//获取年份数据 地区数据
 		$year_data = S('tiku_year_'.$where);
 		if(!$year_data){
-			$year_data = $Model->field("distinct tiku_source.year")->join($join)->join($join2)->where($where." AND tiku_source.year <>''")->order("tiku_source.year desc")->select();
+			$year_data = $Model->field("distinct tiku_source.year")->join($join)->join($join2)->where($where." AND tiku_source.year <>''")->select();
 			S('tiku_year_'.$where,$year_data,array('type'=>'file','expire'=>C('FILE_CACHE_TIME')));
 		}
 		
@@ -114,7 +114,7 @@ class TikuController extends GlobalController {
 		
 		$province_data = S('province_data_'.$where);
 		if(!$province_data){
-			$province_data = $Model->field("distinct province.id,province.province_name")->join($join)->join($join2)->join("province on tiku_source.province_id=province.id")->where($where)->order("tiku_source.year desc")->select();
+			$province_data = $Model->field("distinct province.id,province.province_name")->join($join)->join($join2)->join("province on tiku_source.province_id=province.id")->where($where)->select();
 			//var_dump($province_data);exit;
 			S('province_data_'.$where,$province_data,array('type'=>'file','expire'=>C('FILE_CACHE_TIME')));
 		}
@@ -145,7 +145,7 @@ class TikuController extends GlobalController {
 			->join($join)
 			->join($join2)
 			->where($where)->limit($Page->firstRow.','.$Page->listRows)->select();
-			S(md5($where."limit $Page->firstRow,$Page->listRows"),$tiku_data);
+			//S(md5($where."limit $Page->firstRow,$Page->listRows"),$tiku_data);
 		//}
 		//var_dump($tiku_data);
 		//echo $Model->getLastSql();

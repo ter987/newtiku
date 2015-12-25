@@ -13,11 +13,11 @@ class AddtikuController extends Controller {
 	{   //'disciplineCode'=>'2','disciplineId'=>'21','disciplineType'=>'2','flag'=>'3'
 		$this->dir_path = 'Public/tikupics/';
 		$this->date = date('Ymd');
-		$this->course_id = 2;//数学3   物理1  化学2
-		$this->source_name_default = '高中化学（未知）';
-		$this->cookies = 'jsessionid=A47C2165C7CCD189F219D39EA732F3F7';
-		$this->disciplineCode = 5;//物理4  数学2 化学5
-		$this->disciplineId = 24;//物理23  数学21  化学24
+		$this->course_id = 5;//数学3   物理1  化学2 历史4 语文5
+		$this->source_name_default = '高中语文（未知）';
+		$this->cookies = 'jsessionid=C82BC4D39D4E7BC4740ADE7D4342E58F';
+		$this->disciplineCode = 1;//物理4  数学2 化学5  历史8 语文1
+		$this->disciplineId = 20;//物理23  数学21  化学24  历史27 语文20
 		$this->disciplineType =2;
 		$this->queTypeIds = '13625,13626,16300,13628';
 		$this->flag = 3;
@@ -44,13 +44,13 @@ class AddtikuController extends Controller {
 	public function spider_tiku(){
 		$pointModel = M('tiku_point');
 		$tikuModel = M('tiku');
-		$point_data = $pointModel->field("knowledgeId,id")->where("course_id=$this->course_id AND level=3")->select();
+		$point_data = $pointModel->field("knowledgeId,id")->where("course_id=$this->course_id  AND level=3")->select();
 		//var_dump($point_data);exit;
 		foreach($point_data as $pv){
-			$queTypeIds = 13625;//采集源题型ID
+			$queTypeIds = 13640;//采集源题型ID
 			$point_id = $pv['knowledgeid'];
-			$type_id = 1;//本地题型ID
-			$is_xuanzheti = true;//如果是选择题，设置为true
+			$type_id = 13;//本地题型ID
+			$is_xuanzheti = false;//如果是选择题，设置为true
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie:$this->cookies"));
 			curl_setopt($ch, CURLOPT_URL, "http://www.jtyhjy.com/sts/question_findQuestionPage.action");
@@ -227,17 +227,18 @@ class AddtikuController extends Controller {
 						}else{
 							$spider_error = true;
 						}
-					}else{
-						
-						preg_match('/mso-spacerun:yes[\'|"]>(&nbsp;){3,}[\s|\S]*<\/span>/U',$content,$match);
-						$count = preg_match_all('/(&nbsp;)/', $match[0],$m);
-						$underline = '';
-						for($i=0;$i<$count;$i++){
-							$underline .= '_';
-						}
-						//echo $count;exit;
-						$content = preg_replace('/[\'|"]mso-spacerun:yes[\'|"]>(&nbsp;){3,}[\s|\S]*<\/span>/','"mso-spacerun:yes">'.$underline.'</span>',$content);
 					}
+					// else{
+// 						
+						// preg_match('/mso-spacerun:yes[\'|"]>(&nbsp;){3,}[\s|\S]*<\/span>/U',$content,$match);
+						// $count = preg_match_all('/(&nbsp;)/', $match[0],$m);
+						// $underline = '';
+						// for($i=0;$i<$count;$i++){
+							// $underline .= '_';
+						// }
+						// //echo $count;exit;
+						// $content = preg_replace('/[\'|"]mso-spacerun:yes[\'|"]>(&nbsp;){3,}[\s|\S]*<\/span>/','"mso-spacerun:yes">'.$underline.'</span>',$content);
+					// }
 					
 					$content = strip_tags(trim($content),"<p><a><span><img>");
 					$content= preg_replace('/<p[\s|\S]*>/U','',$content,1);
@@ -277,8 +278,8 @@ class AddtikuController extends Controller {
 			}
 		}
 		unset($point_data);
-		echo $page_num.' Pages,'.$total.' Totals Spider Success!Then Check The Chapter Id!';
-		$this->checkChapter();
+		echo 'Spider Success!';
+		//$this->checkChapter();
 	}
 	public function checkChapter(){
 		$tikuModel = M('tiku');
@@ -322,7 +323,7 @@ class AddtikuController extends Controller {
 			$p_point['point_name'] = trim($val['name']);
 			$p_point['parent_id'] = 0;
 			$p_point['course_id'] = $this->course_id;
-			$result = $Model->where("point_name='".$p_point['point_name']."' AND course_id=$this->course_id")->find();
+			$result = $Model->where("point_name='".$p_point['point_name']."' AND course_id=$this->course_id AND knowledgeId=".$p_point['knowledgeId'])->find();
 			if(!$result){
 				$point_id = $Model->add($p_point);
 			}else{
@@ -355,6 +356,7 @@ class AddtikuController extends Controller {
 		$result = $Model->where("level=2 AND course_id=$this->course_id")->select();
 		if($result){
 			foreach($result as $val){
+				//var_dump($val);exit;
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie:$this->cookies"));
 				curl_setopt($ch, CURLOPT_URL, "http://www.jtyhjy.com/sts/knowledge_findKnowledgeByParentId.action");
@@ -362,6 +364,7 @@ class AddtikuController extends Controller {
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				$data = curl_exec($ch);
 				$data = json_decode($data,true);
+				//var_dump($val['knowledgeid']);exit;
 				curl_close($ch);
 				$point_arr = $data['data'];
 				foreach($point_arr as $v){
@@ -371,7 +374,7 @@ class AddtikuController extends Controller {
 				$c_point['parent_id'] = $val['id'];
 				$c_point['course_id'] = $this->course_id;
 				$_result = $Model->where("point_name='".$c_point['point_name']."' AND parent_id=".$val['id'])->find();
-				
+				//var_dump($_result);exit;
 				if(!$_result){
 					$point_id = $Model->add($c_point);
 					//echo $Model->getLastSql();exit;

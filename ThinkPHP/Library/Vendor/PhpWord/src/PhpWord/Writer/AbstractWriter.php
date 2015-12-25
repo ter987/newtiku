@@ -216,7 +216,8 @@ abstract class AbstractWriter implements WriterInterface
     {
         // Temporary directory
         $this->setTempDir(Settings::getTempDir() . '/PHPWordWriter/');
-
+		//exit;
+//echo Settings::getTempDir() . '/PHPWordWriter/';exit;
         // Temporary file
         $this->originalFilename = $filename;
         if (strtolower($filename) == 'php://output' || strtolower($filename) == 'php://stdout') {
@@ -226,7 +227,7 @@ abstract class AbstractWriter implements WriterInterface
             }
         }
         $this->tempFilename = $filename;
-
+		//echo $this->originalFilename;exit;
         return $this->tempFilename;
     }
 

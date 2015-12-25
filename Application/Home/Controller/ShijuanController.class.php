@@ -160,7 +160,7 @@ class ShijuanController extends GlobalController {
 		
 		// Creating the new document...
 		$phpWord = new \PhpOffice\PhpWord\PhpWord();
-		$section = $phpWord->addSection();
+		
 		// Every element you want to append to the word document is placed in a section. So you need a section:
 		
 		$imageStyle = array(
@@ -168,13 +168,22 @@ class ShijuanController extends GlobalController {
 		    'posHorizontalRel' => 'inner-margin-area',
 		    'posVerticalRel' => 'inner-margin-area',
 		);
+		$sectionStyle = array(
+		    'align' => 'center',
+		    //'marginTop' => '100',
+		);
+		$section = $phpWord->addSection();
+		//exit;
 		$textrun = $section->createTextRun(array('widowControl'=>'true'));
-		$textrun->addText('已知函数已知函数已知函数已知函数已知函数已知函数已知函数已知函数',array('size'=>'14'));
-		$textrun->addImage('Public/tikupics/20151126/18/10/5656da7a510421448532602.gif',$imageStyle);
-		$textrun->addText('什么啊hinkPHP\Library\Vendor\PhpWord\src\PhpWord\Style\AbstractStyle.php 　LINE:hinkPHP\Library\Vendor\PhpWord\src\PhpWord\Style\AbstractStyle.php 　LINE:',array('size'=>'14'));
+		$textrun->addText('已知函数已知函数');
+		$textrun->addImage('Public/tikupics/20151202/20/31/565ee4ac675a91449059500.gif');
+		$textrun->addText('Merry Chrismers',array('size'=>40));
+		$textrun->addImage('Public/tikupics/20151202/20/31/565ee4ac675a91449059500.gif');
+		$textrun->addText('沦肌浃髓还有谁还有谁');
+		//$textrun->addImage('Public/tikupics/20151202/20/31/565ee4ac675a91449059500.gif');
 		$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
-		//$objWriter->save('helloWorld.docx');
-		
+		$objWriter->save('helloWorld.docx');
+		exit;
 		//$objWriter->save(Yii::app()->params['exportToDir'].$filename.".docx");
         header("Content-Description: File Transfer");
         header('Content-Disposition: attachment; filename="'.$_SESSION['shijuan']['title'].'.docx"');
@@ -198,7 +207,12 @@ class ShijuanController extends GlobalController {
 		// Creating the new document...
 		$phpWord = new \PhpOffice\PhpWord\PhpWord();
 		// Every element you want to append to the word document is placed in a section. So you need a section:
-		$section = $phpWord->addSection();
+		$sectionStyle = array(
+		    'orientation' => 'landscape',
+		    'align' => 'center',
+		    'colsNum' => 1,
+		);
+		$section = $phpWord->addSection($sectionStyle);
 		//$section->getStyle()->setPageNumberingStart(1);
 		$footer = $section->addFooter();
 		//$footer->addText('第1页');
@@ -236,9 +250,9 @@ class ShijuanController extends GlobalController {
 						$textrun->addText($val['order_char'].'.',array('size'=>13));
 						while($i<$text_count){
 							//echo $text_arr[$i];exit;
-							$textrun->addText($text_arr[$i],array('size'=>13,'align'=>'both'));
+							$textrun->addText($text_arr[$i],array('size'=>13));
 							if($i==$img_count) break;
-							$textrun->addImage($img_arr[$i],array('positioning' => 'relative'));
+							$textrun->addImage($img_arr[$i]);
 							$i++;
 						}
 						
