@@ -59,7 +59,7 @@ class TikuController extends GlobalController {
 		$Model = M('tiku');
 		$count = $Model->join("tiku_source on tiku.source_id = tiku_source.id")->where($where)->count();
 		//echo $Model->getLastSql();exit;
-		$Page = new \Think\Page($count,5);
+		$Page = new \Think\Page($count,50);
 		$Page->parameter['course_id'] = $course_id;
 		$Page->parameter['type_id'] = $type_id;
 		$Page->parameter['content'] = $content;
@@ -70,7 +70,7 @@ class TikuController extends GlobalController {
 		$page_show = $Page->show();
 		$this->assign('page_show',$page_show);
 		$tiku_data = $Model->field(" tiku.`id`,tiku.`content`,tiku.`clicks`,tiku.`status`,tiku.`create_time`,tiku_source.`source_name`")
-		->join("tiku_source on tiku.`source_id`=tiku_source.id")
+		->join("left join tiku_source on tiku.`source_id`=tiku_source.id")
 		->where($where)->limit($Page->firstRow.','.$Page->listRows)->select();
 		//echo $Model->getLastSql();
 		//var_dump($tiku_data);
@@ -101,18 +101,19 @@ class TikuController extends GlobalController {
 				$point_data['point_id'] = $_POST['point_id'];
 				$pointModel->data($point_data)->where("tiku_id=".$data['id'])->save();
 				//echo $pointModel->getLastSql();exit;
-				$this->_message('success','更新成功',$_SESSION['jump_url']);exit;
+				$this->_message('success','更新成功',$_SESSION['jump_url'],1);exit;
 			}else{
-				$this->_message('error','更新失败',$_SERVER['HTTP_REFERER']);exit;
+				$this->_message('error','更新失败',$_SERVER['HTTP_REFERER'],1);exit;
 			}
 		}else{
 			$tiku_id = $_GET['id'];
 			$Model = M('tiku');
 			$tiku_data = $Model->field(" tiku.`id`,tiku.difficulty_id,tiku.options,tiku.content_old,tiku.type_id,tiku_to_point.point_id,province.province_name,tiku.`content`,tiku.`clicks`,tiku.`status`,tiku.`answer`,tiku.`analysis`,tiku.`create_time`,tiku_source.course_id,tiku_source.source_name,tiku_source.course_id,year,tiku_source.grade,tiku_source.source_type_id,tiku_source.id as sid,tiku_source.wen_li")
 			->join("tiku_source on tiku.`source_id`=tiku_source.id")
-			->join("province on tiku_source.province_id=province.id")
+			->join("left join province on tiku_source.province_id=province.id")
 			->join("tiku_to_point on tiku_to_point.tiku_id=tiku.id")
 			->where("tiku.id=$tiku_id")->find();
+			//echo $Model->getLastSql();
 			//var_dump($tiku_data);exit;
 			$point_html = $this->getAllChildrenPointId(0,$tiku_data['course_id'],$tiku_data['point_id']);
 			$this->assign('point_html',$point_html);

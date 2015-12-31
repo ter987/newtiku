@@ -13,14 +13,18 @@ class AddtikuController extends Controller {
 	{   //'disciplineCode'=>'2','disciplineId'=>'21','disciplineType'=>'2','flag'=>'3'
 		$this->dir_path = 'Public/tikupics/';
 		$this->date = date('Ymd');
-		$this->course_id = 5;//数学3   物理1  化学2 历史4 语文5
-		$this->source_name_default = '高中语文（未知）';
-		$this->cookies = 'jsessionid=C82BC4D39D4E7BC4740ADE7D4342E58F';
-		$this->disciplineCode = 1;//物理4  数学2 化学5  历史8 语文1
-		$this->disciplineId = 20;//物理23  数学21  化学24  历史27 语文20
+		$this->course_id = 2;//数学3   物理1  化学2 历史4 语文5 生物6 地理7 英语8
+		$this->source_name_default = '高中英语（未知）';
+		$this->cookies = 'jsessionid=5E744A6A7C3BDAEAAD166B4671F927F7';
+		$this->disciplineCode = 5;//物理4  数学2 化学5  历史8 语文1 生物6 地理9 英语03
+		$this->disciplineId = 24;//物理23  数学21  化学24  历史27 语文20 生物25 地理28  英语22
 		$this->disciplineType =2;
+		//历史'13652,13653'  语文 '13635,1232453,13640,13641,13636,13642,3933440,2400602,13639,13637'
+		//生物 '13629,2400600,2400601'   地理  '13654,13656'   英语  '18170,13611,18174,13616,13613,13614,18176,18171,13617'
+		//物理 '13618,11112810,13622,13623,13621,11112811'  化学  '13625,13626,16300,13628'
 		$this->queTypeIds = '13625,13626,16300,13628';
 		$this->flag = 3;
+		$this->rows = 200;
 		
 	}
 	function flash(){
@@ -47,9 +51,9 @@ class AddtikuController extends Controller {
 		$point_data = $pointModel->field("knowledgeId,id")->where("course_id=$this->course_id  AND level=3")->select();
 		//var_dump($point_data);exit;
 		foreach($point_data as $pv){
-			$queTypeIds = 13640;//采集源题型ID
+			$queTypeIds = 13613;//采集源题型ID
 			$point_id = $pv['knowledgeid'];
-			$type_id = 13;//本地题型ID
+			$type_id = 27;//本地题型ID
 			$is_xuanzheti = false;//如果是选择题，设置为true
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie:$this->cookies"));
@@ -333,7 +337,7 @@ class AddtikuController extends Controller {
 				$c_point['diKnowledgeId'] = $v['diKnowledgeId'];
 				$c_point['knowledgeId'] = $v['knowledgeId'];
 				$c_point['level'] = $v['level'];
-				$c_point['point_name'] = $v['name'];
+				$c_point['point_name'] = htmlspecialchars($v['name']);
 				$c_point['parent_id'] = $point_id;
 				$c_point['course_id'] = $this->course_id;
 				$_result = $Model->where("point_name='".$c_point['point_name']."' AND parent_id=$point_id")->find();
@@ -370,10 +374,10 @@ class AddtikuController extends Controller {
 				foreach($point_arr as $v){
 				$c_point['knowledgeId'] = $v['knowledgeId'];
 				$c_point['level'] = $v['level'];
-				$c_point['point_name'] = $v['name'];
+				$c_point['point_name'] = htmlspecialchars($v['name']);
 				$c_point['parent_id'] = $val['id'];
 				$c_point['course_id'] = $this->course_id;
-				$_result = $Model->where("point_name='".$c_point['point_name']."' AND parent_id=".$val['id'])->find();
+				$_result = $Model->where('point_name="'.$c_point['point_name'].'" AND parent_id='.$val['id'])->find();
 				//var_dump($_result);exit;
 				if(!$_result){
 					$point_id = $Model->add($c_point);
@@ -397,18 +401,18 @@ class AddtikuController extends Controller {
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie:$this->cookies"));
 			curl_setopt($ch, CURLOPT_URL, "http://www.jtyhjy.com/sts/question_findQuestionPage.action");
-			curl_setopt($ch, CURLOPT_POSTFIELDS, array('difficults'=>'1,2,3,4,5','disciplineCode'=>'2','disciplineId'=>'21','disciplineType'=>'2','flag'=>'2','paragradphIds'=>$v['spider_id'],'page'=>1,'queTypeIds'=>'13646,13647,13648','rows'=>'10'));
+			curl_setopt($ch, CURLOPT_POSTFIELDS, array('difficults'=>'1,2,3,4,5','disciplineCode'=>$this->disciplineCode,'disciplineId'=>$this->disciplineId,'disciplineType'=>$this->disciplineType,'flag'=>$this->flag,'paragradphIds'=>$v['spider_id'],'page'=>1,'queTypeIds'=>$this->queTypeIds,'rows'=>'10'));
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			$data = curl_exec($ch);
 			$data = json_decode($data,true);
 			$total = $data['data']['questionList']['total'];
-			$page_num = ceil($total/10);
+			$page_num = ceil($total/$this->rows);
 			$page=1;
 			while($page<=$page_num){
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie:$this->cookies"));
 				curl_setopt($ch, CURLOPT_URL, "http://www.jtyhjy.com/sts/question_findQuestionPage.action");
-				curl_setopt($ch, CURLOPT_POSTFIELDS, array('difficults'=>'1,2,3,4,5','disciplineCode'=>'2','disciplineId'=>'21','disciplineType'=>'2','flag'=>'2','paragradphIds'=>$v['spider_id'],'page'=>$page,'queTypeIds'=>'13646,13647,13648','rows'=>'10'));
+				curl_setopt($ch, CURLOPT_POSTFIELDS, array('difficults'=>'1,2,3,4,5','disciplineCode'=>$this->disciplineCode,'disciplineId'=>$this->disciplineId,'disciplineType'=>$this->disciplineType,'flag'=>$this->flag,'paragradphIds'=>$v['spider_id'],'page'=>$page,'queTypeIds'=>$this->queTypeIds,'rows'=>$this->rows));
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				$data = curl_exec($ch);
 				$data = json_decode($data,true);
@@ -425,7 +429,7 @@ class AddtikuController extends Controller {
 			}
 		}
 		echo 'Spider Sucess!';
-		$this->checkChapter();
+		//$this->checkChapter();
 	}
 	
 	/**

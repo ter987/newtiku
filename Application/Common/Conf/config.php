@@ -34,6 +34,4 @@ return array(
 	'MEMCACHED_EXPIRE'		=> '0',
 	//cookie配置
 	'COOKIE_EXPIRE'			=> 604800,//7天
-	
-	'URL_MODEL'             =>  1,
 );

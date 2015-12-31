@@ -145,7 +145,7 @@ dia_log.prototype.check = function(){
 			}
 		});
 	});
-
+};
 
 	$(".collect").click(function(){
 		var tag = '';
@@ -184,7 +184,7 @@ dia_log.prototype.check = function(){
 		
 	});
 	
-};
+
 $(function(){
 	new dia_log();
 });
@@ -194,6 +194,17 @@ $('.btn2').click(function() {
 			{id:$('#tiku_id').val(),tag:$('.wh6').val()},
 			function(data){
 				$( "#sc_sj" ).dialog( "close" );
+			}
+	);
+});
+$('.sdfr2').click(function(){
+	$.getJSON(
+			'/tiku/ajaxdelcart',
+			{},
+			function(data){
+				if(data.status=='success'){
+					location.reload();
+				}
 			}
 	);
 });

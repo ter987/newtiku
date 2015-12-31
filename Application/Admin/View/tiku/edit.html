@@ -46,7 +46,8 @@
                     			$k = 0;
                     			foreach($options as $k=>$val){
                     		</php>
-                    			<tr><td width="10%"><php>echo $options_index[$k]</php></td><td width="70%" onkeyup="$(this).next().html($(this).children().val());"><textarea cols="100" name="options[]"> <php>echo $val</php> </textarea></td><td width="20%"><php>echo $val</php></td></tr>
+                    			<!-- <tr><td width="10%"><php>echo $options_index[$k]</php></td><td width="70%" onkeyup="$(this).next().html($(this).children().val());"><textarea cols="100" rows="5"  name="options[]"> <php>echo $val</php> </textarea><a>上标</a>&nbsp;&nbsp;<a>下标</a>&nbsp;&nbsp;<a>下划线</a>&nbsp;&nbsp;<a>斜体</a></td><td><php>echo $val</php></td></tr> -->
+                    			<tr><td width="10%"><php>echo $options_index[$k]</php></td><td width="70%"><textarea id="option_<php>echo $options_index[$k]</php>" name="options[]"><php>echo $val</php></textarea></td></tr>
                     		<php>
                     			}
                     		</php>
@@ -156,7 +157,7 @@
 				
 			</div>
 		</div>
-		<input type="hidden" name="status" value="1" id="status"/>
+		<input type="hidden" name="status" value="{$tiku_data.status}" id="status"/>
 	</form>
 </div>
 <script type="text/javascript" src="__PUBLIC__/lib/jquery/1.9.1/jquery.min.js"></script> 
@@ -170,6 +171,7 @@
 <script type="text/javascript" src="__PUBLIC__/lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script> 
 <script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script> 
 <script type="text/javascript" src="__PUBLIC__/js/H-ui.admin.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/lib/ckeditor/ckeditor.js"></script> 
 <script type="text/javascript">
 function article_save_submit(){
 	$('#status').val(1);
@@ -285,11 +287,15 @@ $(function(){
 
 	
 	
-	var ue = UE.getEditor('editor');
-	var ue = UE.getEditor('answer');
-	var ue = UE.getEditor('analysis');
-	var ue = UE.getEditor('content_old');
-	
+	var ue = UE.getEditor('editor',{'enterTag':''});
+	var ue = UE.getEditor('answer',{'enterTag':''});
+	var ue = UE.getEditor('analysis',{'enterTag':''});
+	var ue = UE.getEditor('content_old',{'enterTag':''});
+	CKEDITOR.config.height = 100;
+	CKEDITOR.replace( 'option_A');
+	CKEDITOR.replace( 'option_B' );
+	CKEDITOR.replace( 'option_C' );
+	CKEDITOR.replace( 'option_D' );
 });
 
 function mobanxuanze(){

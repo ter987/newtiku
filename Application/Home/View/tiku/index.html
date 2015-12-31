@@ -365,12 +365,12 @@
                     	}
                     	</php>
                     
-                     <div class="jcbtn1">纠错</div>
+                     <!-- <div class="jcbtn1">纠错</div> -->
                             <div class="jc_list_b">
                                 <div class="left mr10">
                                     <span class="jc_btn" id="{$vo.id}"  onclick="add_tiku({$vo.id},$(this))" style="cursor: pointer;">加入试卷</span>
                                     <a target="_blank" href="/tiku/detail/{$vo.id}.html"><span class="jc_btn">查看解析</span></a>
-                                    <span class="jc_btn">下载试题</span>
+                                    <!-- <span class="jc_btn">下载试题</span> -->
                                     <span class="jc_btn collect" id="c_{$vo.id}" name="{$vo.id}"  style="cursor: pointer;">收藏</span>
                                     <!-- <span class="jc_btn2">点赞</span>
                                     <span class="jc_btn2">分享</span> -->
@@ -418,53 +418,57 @@
     </div>
 </div>
 
-<script>
-	$('.tk_left').find('l').click(
-		function(){
-			var id = $(this).attr('id');
-			var href = window.location.href;
-		    var reg = /tiku\/(\w*)p(\d+)(\w*)(\/)/g;
-			
-			if(href.search(/\?p=\d+/)!=-1){
-				href = href.replace(/\?p=\d+/,'');
-			}
-			if(href.search(/r\d{1}/)!=-1){
-				href = href.replace(/r\d{1}/,'');
-			}
-		    if(href.search(reg)!=-1){
-		        var loc = href.replace(/p\d+/g,'p'+id);
 
-		    }else{
-		    	var str = '';
-		    	if(href.search(/tiku\/\w+/g)==-1){
-		    		str = '/';
-		    	}
-		        var loc = href.replace(/tiku\//g,'tiku/'+'p'+id+str);
-		    }
-		    window.location.href = loc;
+<script type="text/javascript">
+$('.tk_left').find('l').click(
+	function(){
+		var id = $(this).attr('id');
+		var href = window.location.href;
+	    var reg = /tiku\/(\w*)p(\d+)(\w*)(\/)/g;
+		
+		if(href.search(/\?p=\d+/)!=-1){
+			href = href.replace(/\?p=\d+/,'');
 		}
-	);
-	
-	
-	$(
-		function(){
+		if(href.search(/r\d{1}/)!=-1){
+			href = href.replace(/r\d{1}/,'');
+		}
+	    if(href.search(reg)!=-1){
+	        var loc = href.replace(/p\d+/g,'p'+id);
+
+	    }else{
+	    	var str = '';
+	    	if(href.search(/tiku\/\w+/g)==-1){
+	    		str = '/';
+	    	}
+	        var loc = href.replace(/tiku\//g,'tiku/'+'p'+id+str);
+	    }
+	    window.location.href = loc;
+	}
+);
+$(
+	function(){
+		var pointid = {$point_id};
+		if(pointid!='null'){
 			$('.tk_left').find("l[id={$point_id}]").attr('style','color: rgb(244, 60, 94);');
 			$('.tk_left').find("l[id={$point_id}]").parent().parent().parent().show();
 			$('.tk_left').find("l[id={$point_id}]").parent().parent().parent().parent().parent().show();
-			//alert({$tikus_in_cart});
-			$.each({$tikus_in_cart},function(index,dom){
-				//alert(dom.id);
-				$(".tk_tm_ul").find("span[id="+dom.id+"]").html('移出试卷');
-				$(".tk_tm_ul").find("span[id="+dom.id+"]").attr('class','jc_btn_check');
-			});
-			//alert({$tikus_in_collect});
-			$.each({$tikus_in_collect},function(index,dom){
-				$(".tk_tm_ul").find("span[id=c_"+dom.tiku_id+"]").html('取消收藏');
-				$(".tk_tm_ul").find("span[id=c_"+dom.tiku_id+"]").attr('class','jc_btn_check collect');
-			});
 		}
-	);
-
+		//alert({$tikus_in_cart});
+		var carts = {$tikus_in_cart};;
+		$.each(carts,function(index,dom){
+			$(".tk_tm_ul").find("span[id="+dom.id+"]").html('移出试卷');
+			$(".tk_tm_ul").find("span[id="+dom.id+"]").attr('class','jc_btn_check');
+		});
+		//alert({$tikus_in_collect});
+		<notempty name="user_id">
+		var collect = {$tikus_in_collect};
+		$.each(collect,function(index,dom){
+			$(".tk_tm_ul").find("span[id=c_"+dom.tiku_id+"]").html('取消收藏');
+			$(".tk_tm_ul").find("span[id=c_"+dom.tiku_id+"]").attr('class','jc_btn_check collect');
+		});
+		</notempty>
+	}
+);
 </script>
 
 <!-- 右侧 试卷选项-->

@@ -98,7 +98,7 @@ class JingpinController extends GlobalController {
 		}
 		$Modle = M('tiku_source');
 		$source_data = $Modle->field("tiku_source.*,province.province_name,source_type.type_name")->join("province on tiku_source.province_id = province.id")->join("source_type on source_type.id=tiku_source.source_type_id")->where("tiku_source.id=$id")->find();
-		echo $Modle->getLastSql();
+		//echo $Modle->getLastSql();
 		$this->updateClicks($id);
 		$this->assign('source_data',$source_data);
 		$tiku_datas  = $this->getTikus($id);

@@ -21,20 +21,26 @@ class TikusourceController extends GlobalController {
 		$this->assign('course_id',$course_id);
 		$this->assign('source_name',$source_name);
 		$where = '1=1';
-		
-		$jump_url = '/index.php?m=Admin&c='.CONTROLLER_NAME.'&a='.ACTION_NAME.'&';
+		if($_GET['p']){
+			$page = $_GET['p'];
+		}else{
+			$page = 1;
+		}
+		$jump_url = ACTION_NAME;
 		if($course_id){
 			$where = "tiku_source.course_id=$course_id ";
-			$jump_url .= 'course_id='.$course_id.'&';
+			$jump_url .= '/course_id/'.$course_id;
 		}
 		if($source_name){
 			$where .= " && tiku_source.source_name like '%".$source_name."%'";
-			$jump_url .= 'type_id='.$type_id.'&';
+			$jump_url .= '/source_name/'.$source_name;
 		}
 		if($_GET['p']){
-			$jump_url .= 'p='.$_GET['p'];
+			$jump_url .= '/p/'.$_GET['p'];
 		}	
+		$jump_url .= '.html';
 		$_SESSION['jump_url'] = $jump_url;
+		
 		//获取题库数据
 		$Model = M('tiku_source');
 		$count = $Model->where($where)->count();
@@ -73,9 +79,10 @@ class TikusourceController extends GlobalController {
 			//echo $Model->getLastSql();exit;
 			if($result){
 				//echo $pointModel->getLastSql();exit;
-				$this->_message('success','更新成功',$_SESSION['jump_url']);
+				//var_dump($_SESSION['jump_url']);exit;
+				$this->_message('success','更新成功',$_SESSION['jump_url'],1);
 			}else{
-				$this->_message('error','更新失败',$_SERVER['HTTP_REFERER']);
+				$this->_message('error','更新失败',$_SERVER['HTTP_REFERER'],1);
 			}
 		}else{
 			$source_id = $_GET['id'];

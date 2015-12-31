@@ -179,10 +179,10 @@ class Page{
         }
 
         //最后一页
-        $the_end = '';
-        if($this->totalPages > $this->rollPage && ($this->nowPage + $now_cool_page) < $this->totalPages){
-            $the_end = '<a class="end" href="' . $this->url($this->totalPages) . '">' . $this->config['last'] . '</a>';
-        }
+        // $the_end = '';
+        // if($this->totalPages > $this->rollPage && ($this->nowPage + $now_cool_page) < $this->totalPages){
+            // $the_end = '<a class="end" href="' . $this->url($this->totalPages) . '">' . $this->config['last'] . '</a>';
+        // }
 
         //数字连接
         $link_page = "";
