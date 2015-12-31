@@ -82,6 +82,7 @@ class TikuController extends GlobalController {
 	}
 	public function edit(){
 		if($_POST){
+			var_dump($_POST['options']);exit;
 			$data['id'] = $_POST['id'];
 			$data['difficulty_id'] = $_POST['difficulty_id'];
 			$data['content'] = I('post.content');

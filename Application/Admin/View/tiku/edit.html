@@ -171,7 +171,7 @@
 <script type="text/javascript" src="__PUBLIC__/lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script> 
 <script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script> 
 <script type="text/javascript" src="__PUBLIC__/js/H-ui.admin.js"></script> 
-<script type="text/javascript" src="__PUBLIC__/lib/ckeditor/ckeditor.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/lib/kindeditor/kindeditor.js"></script> 
 <script type="text/javascript">
 function article_save_submit(){
 	$('#status').val(1);
@@ -291,13 +291,15 @@ $(function(){
 	var ue = UE.getEditor('answer',{'enterTag':''});
 	var ue = UE.getEditor('analysis',{'enterTag':''});
 	var ue = UE.getEditor('content_old',{'enterTag':''});
-	CKEDITOR.config.height = 100;
-	CKEDITOR.replace( 'option_A');
-	CKEDITOR.replace( 'option_B' );
-	CKEDITOR.replace( 'option_C' );
-	CKEDITOR.replace( 'option_D' );
+	
 });
 
+KindEditor.ready(function(K) {
+    window.editor = K.create('#option_A');
+    window.editor = K.create('#option_B');
+    window.editor = K.create('#option_C');
+    window.editor = K.create('#option_D');
+});
 function mobanxuanze(){
 	
 }
