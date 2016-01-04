@@ -253,17 +253,19 @@
 			$('.tk_left').find("l[id={$chapter_id}]").attr('style','color: rgb(244, 60, 94);');
 			$('.tk_left').find("l[id={$chapter_id}]").parent().parent().parent().show();
 			$('.tk_left').find("l[id={$chapter_id}]").parent().parent().parent().parent().parent().show();
-			//alert({$tikus_in_cart});
-			$.each({$tikus_in_cart},function(index,dom){
-				//alert(dom.id);
+			var carts = {$tikus_in_cart};;
+			$.each(carts,function(index,dom){
 				$(".tk_tm_ul").find("span[id="+dom.id+"]").html('移出试卷');
 				$(".tk_tm_ul").find("span[id="+dom.id+"]").attr('class','jc_btn_check');
 			});
 			//alert({$tikus_in_collect});
-			$.each({$tikus_in_collect},function(index,dom){
+			<notempty name="user_id">
+			var collect = {$tikus_in_collect};
+			$.each(collect,function(index,dom){
 				$(".tk_tm_ul").find("span[id=c_"+dom.tiku_id+"]").html('取消收藏');
 				$(".tk_tm_ul").find("span[id=c_"+dom.tiku_id+"]").attr('class','jc_btn_check collect');
 			});
+			</notempty>
 		}
 	);
 

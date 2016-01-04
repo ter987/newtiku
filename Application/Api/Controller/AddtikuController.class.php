@@ -13,16 +13,16 @@ class AddtikuController extends Controller {
 	{   //'disciplineCode'=>'2','disciplineId'=>'21','disciplineType'=>'2','flag'=>'3'
 		$this->dir_path = 'Public/tikupics/';
 		$this->date = date('Ymd');
-		$this->course_id = 2;//数学3   物理1  化学2 历史4 语文5 生物6 地理7 英语8
+		$this->course_id = 7;//数学3   物理1  化学2 历史4 语文5 生物6 地理7 英语8
 		$this->source_name_default = '高中英语（未知）';
-		$this->cookies = 'jsessionid=5E744A6A7C3BDAEAAD166B4671F927F7';
-		$this->disciplineCode = 5;//物理4  数学2 化学5  历史8 语文1 生物6 地理9 英语03
-		$this->disciplineId = 24;//物理23  数学21  化学24  历史27 语文20 生物25 地理28  英语22
+		$this->cookies = 'jsessionid=B60B922B4A00B3EBC97982C1A470E1B0';
+		$this->disciplineCode = 9;//物理4  数学2 化学5  历史8 语文1 生物6 地理9 英语03
+		$this->disciplineId = 28;//物理23  数学21  化学24  历史27 语文20 生物25 地理28  英语22
 		$this->disciplineType =2;
 		//历史'13652,13653'  语文 '13635,1232453,13640,13641,13636,13642,3933440,2400602,13639,13637'
 		//生物 '13629,2400600,2400601'   地理  '13654,13656'   英语  '18170,13611,18174,13616,13613,13614,18176,18171,13617'
 		//物理 '13618,11112810,13622,13623,13621,11112811'  化学  '13625,13626,16300,13628'
-		$this->queTypeIds = '13625,13626,16300,13628';
+		$this->queTypeIds = '13654,13656';
 		$this->flag = 3;
 		$this->rows = 200;
 		
@@ -288,9 +288,9 @@ class AddtikuController extends Controller {
 	public function checkChapter(){
 		$tikuModel = M('tiku');
 		$matchingModel = M('matching');
-		$max = $tikuModel->count();
+		$max = $tikuModel->field("MAX(id) as id")->find();
 		//echo $max['id'];exit;
-		for($i=1;$i<=$max;$i++){
+		for($i=1;$i<=$max['id'];$i++){
 			$result = $tikuModel->where("id=$i")->find();
 			$_result = $matchingModel->where("spider_code=".$result['spider_code'])->find();
 			//echo $matchingModel->getLastSql();exit;

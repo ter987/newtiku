@@ -20,7 +20,26 @@
 		<div style="padding:20px;">
 			<p class="c_z"><b>来源：{$tiku_data.source_name|htmlspecialchars_decode}</b></p>
 			<p>{$tiku_data.content|htmlspecialchars_decode}</p>
-			
+			<p>
+				<php>
+                    		if($tiku_data['options']){
+                    			$options = json_decode($tiku_data['options']);
+                    			$options_index = array(0=>'A',1=>'B',2=>'C',3=>'D',4=>'E');
+                    	</php>
+                    	<p>
+                    		<php>
+                    			$k = 0;
+                    			foreach($options as $k=>$val){
+                    		</php>
+                    			<span style="float:left;line-height:18px;font-size:14px;padding-right:30px;" class="em2"><php>echo $options_index[$k]</php>.<php>echo $val</php></span>
+                    		<php>
+                    			}
+                    		</php>
+                    	</p>
+                    	<php>
+                    	}
+                    	</php>
+			</p>
 		</div>	
 	</div>
 	<div class="detail">	

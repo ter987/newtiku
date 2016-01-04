@@ -82,7 +82,8 @@ class TikuController extends GlobalController {
 	}
 	public function edit(){
 		if($_POST){
-			var_dump($_POST['options']);exit;
+			//var_dump($_POST['abc']);
+			//var_dump($_POST);exit;
 			$data['id'] = $_POST['id'];
 			$data['difficulty_id'] = $_POST['difficulty_id'];
 			$data['content'] = I('post.content');
@@ -92,7 +93,10 @@ class TikuController extends GlobalController {
 			$data['course_id'] = $_POST['course_id'];
 			$data['type_id'] = $_POST['type_id'];
 			$data['update_time'] = time();
-			$data['options'] = json_encode($_POST['options']);
+			if($data['type_id']==1 || $data['type_id']==6){
+				$data['options'] = json_encode($_POST['options']);
+			}
+			
 			$Model = M('tiku');
 			$result = $Model->save($data);
 			//echo $Model->getLastSql();exit;

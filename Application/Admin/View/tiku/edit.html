@@ -34,9 +34,10 @@
 		</div>
 
 					<php>
+						if($tiku_data['type_id']==1 || $tiku_data['type_id']==6){
                     		if($tiku_data['options']){
                     			$options = json_decode($tiku_data['options']);
-                    			$options_index = array(0=>'A',1=>'B',2=>'C',3=>'D',4=>'E');
+                    			$options_index = array(0=>'A',1=>'B',2=>'C',3=>'D');
                     	</php>
                     	<div class="row cl">
 						<label class="form-label col-2"><span class="c-red">*</span>选项：</label>
@@ -50,13 +51,42 @@
                     			<tr><td width="10%"><php>echo $options_index[$k]</php></td><td width="70%"><textarea id="option_<php>echo $options_index[$k]</php>" name="options[]"><php>echo $val</php></textarea></td></tr>
                     		<php>
                     			}
+                    			if($k==0){
+                    				foreach($options_index as $k=>$val){
+                    		</php>
+                    			<tr><td width="10%"><php>echo $val</php></td><td width="70%"><textarea id="option_<php>echo $val</php>" name="options[]"></textarea></td></tr>
+                    		<php>
+                    		}}
                     		</php>
 			                    	</table>
 							</div>
 						</div>
                     	<php>
                     	}
+                    	}else{
+                    		$options_index = array(0=>'A',1=>'B',2=>'C',3=>'D');
                     	</php>
+                    	<div class="row cl" style="display:none;" id="option_div">
+						<label class="form-label col-2"><span class="c-red">*</span>选项：</label>
+						<div class="formControls col-10">
+							<table>
+                    	<php>
+                    			$k = 0;
+                    			foreach($options_index as $val){
+                    		</php>
+                    			<!-- <tr><td width="10%"><php>echo $options_index[$k]</php></td><td width="70%" onkeyup="$(this).next().html($(this).children().val());"><textarea cols="100" rows="5"  name="options[]"> <php>echo $val</php> </textarea><a>上标</a>&nbsp;&nbsp;<a>下标</a>&nbsp;&nbsp;<a>下划线</a>&nbsp;&nbsp;<a>斜体</a></td><td><php>echo $val</php></td></tr> -->
+                    			<tr><td width="10%"><php>echo $val</php></td><td width="70%"><textarea id="option_<php>echo $val</php>" name="options[]"></textarea></td></tr>
+                    		<php>
+                    			}
+                    	
+                    		</php>
+			                    	</table>
+							</div>
+						</div>
+						<php>
+						}
+						</php>
+
         <div class="row cl">
 			<label class="form-label col-2">源题目：</label>
 			<div class="formControls col-10">
@@ -86,7 +116,7 @@
 				</span> </div>
 			<label class="form-label col-2"><span class="c-red">*</span>题型：</label>
 			<div class="formControls col-2"> <span class="select-box">
-				<select name="type_id" class="select" >
+				<select name="type_id" class="select" id="type_select">
 					<volist name="type_data" id="vo">
 					<option value="{$vo.id}" <eq name="tiku_data.type_id" value="$vo.id">selected=""</eq>>{$vo.type_name}</option>
 					</volist>
@@ -293,12 +323,19 @@ $(function(){
 	var ue = UE.getEditor('content_old',{'enterTag':''});
 	
 });
-
+$('#type_select').change(function(){
+	var id = $(this).val();
+	if(id==1 || id==6){
+		$('#option_div').show();
+	}else{
+		$('#option_div').hide();
+	}
+});
 KindEditor.ready(function(K) {
-    window.editor = K.create('#option_A');
-    window.editor = K.create('#option_B');
-    window.editor = K.create('#option_C');
-    window.editor = K.create('#option_D');
+    window.editor = K.create('#option_A',{width:'700px',afterBlur: function(){this.sync();}});
+    window.editor = K.create('#option_B',{width:'700px',afterBlur: function(){this.sync();}});
+    window.editor = K.create('#option_C',{width:'700px',afterBlur: function(){this.sync();}});
+    window.editor = K.create('#option_D',{width:'700px',afterBlur: function(){this.sync();}});
 });
 function mobanxuanze(){
 	
@@ -315,6 +352,7 @@ function select_course(id){
 		
 	);
 }
+
 </script>
 </body>
 </html>

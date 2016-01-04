@@ -13,9 +13,9 @@ $php_path = dirname(__FILE__) . '/';
 $php_url = dirname($_SERVER['PHP_SELF']) . '/';
 
 //文件保存目录路径
-$save_path = $php_path . '../attached/';
+$save_path = $php_path . '../../../../Public/tikupics/';
 //文件保存目录URL
-$save_url = $php_url . '../attached/';
+$save_url = '/Public/tikupics/';
 //定义允许上传的文件扩展名
 $ext_arr = array(
 	'image' => array('gif', 'jpg', 'jpeg', 'png', 'bmp'),
@@ -26,8 +26,8 @@ $ext_arr = array(
 //最大文件大小
 $max_size = 1000000;
 
-$save_path = realpath($save_path) . '/';
-
+$save_path = realpath($save_path).'/';
+//echo $save_path;exit;
 //PHP上传失败
 if (!empty($_FILES['imgFile']['error'])) {
 	switch($_FILES['imgFile']['error']){
@@ -102,16 +102,25 @@ if (empty($_FILES) === false) {
 		alert("上传文件扩展名是不允许的扩展名。\n只允许" . implode(",", $ext_arr[$dir_name]) . "格式。");
 	}
 	//创建文件夹
-	if ($dir_name !== '') {
-		$save_path .= $dir_name . "/";
-		$save_url .= $dir_name . "/";
-		if (!file_exists($save_path)) {
-			mkdir($save_path);
-		}
+	if (!file_exists($save_path)) {
+		mkdir($save_path);
 	}
+	
 	$ymd = date("Ymd");
 	$save_path .= $ymd . "/";
 	$save_url .= $ymd . "/";
+	if (!file_exists($save_path)) {
+		mkdir($save_path);
+	}
+	$hours = date("H");
+	$save_path .= $hours . "/";
+	$save_url .= $hours . "/";
+	if (!file_exists($save_path)) {
+		mkdir($save_path);
+	}
+	$minutes = date("i");
+	$save_path .= $minutes . "/";
+	$save_url .= $minutes . "/";
 	if (!file_exists($save_path)) {
 		mkdir($save_path);
 	}

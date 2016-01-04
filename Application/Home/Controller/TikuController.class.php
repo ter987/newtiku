@@ -69,7 +69,7 @@ class TikuController extends GlobalController {
 		$where = "tiku_source.course_id=$course_id ";
 		//$where['tiku_source.course_id'] = ':course_id';
 		$bind[':course_id'] = array($course_id,\PDO::PARAM_INT);
-		$join ="tiku_source on tiku_source.id=tiku.source_id";
+		$join ="tiku_source use index(course_id) on tiku_source.id=tiku.source_id";
 		if($type_id){
 			$where .= " && tiku.type_id=$type_id ";
 			//$where['tiku.type_id'] = ':type_id';
@@ -165,7 +165,7 @@ class TikuController extends GlobalController {
 			
 		}
 		$Modle = M('tiku');
-		$data = $Modle->field("tiku.id,tiku.analysis,tiku.answer,tiku.content,tiku_source.course_id,tiku_course.id,tiku_course.course_name,tiku_source.source_name,tiku_difficulty.section")
+		$data = $Modle->field("tiku.id,tiku.analysis,tiku.options,tiku.answer,tiku.content,tiku_source.course_id,tiku_course.id,tiku_course.course_name,tiku_source.source_name,tiku_difficulty.section")
 		->join("tiku_source ON tiku_source.id=tiku.source_id")
 		->join("left join tiku_difficulty ON tiku_difficulty.id=tiku.difficulty_id")
 		->join("tiku_course ON tiku_course.id=tiku_source.course_id")
@@ -183,6 +183,9 @@ class TikuController extends GlobalController {
 	}
 	public function ajaxSelectCourse(){
 		$course_id = I('get.id');
+		if(isset($_SESSION['course_id']) && $course_id != $_SESSION['course_id']){
+			unset($_SESSION['cart']);
+		}
 		$_SESSION['course_id'] = $course_id;
 		$this->ajaxReturn(array('id'=>$_SESSION['course_id']));
 	}
