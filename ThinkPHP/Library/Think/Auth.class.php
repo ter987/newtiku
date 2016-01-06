@@ -68,22 +68,12 @@ CREATE TABLE `think_auth_group_access` (
 
 class Auth{
 
-    //默认配置
-    protected $_config = array(
-        'AUTH_ON'           => true,                      // 认证开关
-        'AUTH_TYPE'         => 1,                         // 认证方式，1为实时认证；2为登录认证。
-        'AUTH_GROUP'        => 'auth_group',        // 用户组数据表名
-        'AUTH_GROUP_ACCESS' => 'auth_group_access', // 用户-用户组关系表
-        'AUTH_RULE'         => 'auth_rule',         // 权限规则表
-        'AUTH_USER'         => 'member'             // 用户信息表
-    );
-
     public function __construct() {
         $prefix = C('DB_PREFIX');
-        $this->_config['AUTH_GROUP'] = $prefix.$this->_config['AUTH_GROUP'];
-        $this->_config['AUTH_RULE'] = $prefix.$this->_config['AUTH_RULE'];
-        $this->_config['AUTH_USER'] = $prefix.$this->_config['AUTH_USER'];
-        $this->_config['AUTH_GROUP_ACCESS'] = $prefix.$this->_config['AUTH_GROUP_ACCESS'];
+        $this->_config['AUTH_GROUP'] = $prefix.C('AUTH_GROUP');
+        $this->_config['AUTH_RULE'] = $prefix.C('AUTH_RULE');
+        $this->_config['AUTH_USER'] = $prefix.C('AUTH_USER');
+        $this->_config['AUTH_GROUP_ACCESS'] = $prefix.C('AUTH_GROUP_ACCESS');
         if (C('AUTH_CONFIG')) {
             //可设置配置项 AUTH_CONFIG, 此配置项为数组。
             $this->_config = array_merge($this->_config, C('AUTH_CONFIG'));
@@ -99,7 +89,7 @@ class Auth{
       * @return boolean           通过验证返回true;失败返回false
      */
     public function check($name, $uid, $type=1, $mode='url', $relation='or') {
-        if (!$this->_config['AUTH_ON'])
+        if (!C('AUTH_ON'))
             return true;
         $authList = $this->getAuthList($uid,$type); //获取用户需要验证的所有有效规则列表
         if (is_string($name)) {
@@ -168,7 +158,7 @@ class Auth{
         if (isset($_authList[$uid.$t])) {
             return $_authList[$uid.$t];
         }
-        if( $this->_config['AUTH_TYPE']==2 && isset($_SESSION['_AUTH_LIST_'.$uid.$t])){
+        if( C('AUTH_TYPE')==2 && isset($_SESSION['_AUTH_LIST_'.$uid.$t])){
             return $_SESSION['_AUTH_LIST_'.$uid.$t];
         }
 
@@ -210,7 +200,7 @@ class Auth{
             }
         }
         $_authList[$uid.$t] = $authList;
-        if($this->_config['AUTH_TYPE']==2){
+        if(C('AUTH_TYPE')==2){
             //规则列表结果保存到session
             $_SESSION['_AUTH_LIST_'.$uid.$t]=$authList;
         }

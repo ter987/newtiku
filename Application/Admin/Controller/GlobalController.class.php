@@ -31,8 +31,7 @@ class GlobalController extends Controller{
 	public function checkAuth(){
 		$not_auth = array('admin/verifycode','admin/login','admin/logout','index/index','index/welcome');
 		if(!in_array(strtolower(CONTROLLER_NAME).'/'.strtolower(ACTION_NAME),$not_auth)){
-			import('Org/Util/Auth');
-			$auth = new \Org\Util\Auth();
+			$auth = new \Think\Auth();
 			if(!$auth->check(ucwords(MODULE_NAME).'/'.ucwords(CONTROLLER_NAME).'/'.ucwords(ACTION_NAME),$_SESSION['admin_id'])){
 		     	die('无操作权限');
 		    }
