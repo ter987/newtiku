@@ -17,7 +17,13 @@ $(function(){
 		$(this).removeClass("hover");
 	});
 	//
-	
+	$(".menu li").hover(function(){
+		$(".subnav1",this).css("display","block");
+		$(this).addClass("hover");
+	},function(){
+		$(".subnav1",this).css("display","none");
+		$(this).removeClass("hover");
+	});
 		//subnav
 	$(".sj_ul li").hover(function(){
 		$("dl",this).css("display","block");
@@ -69,7 +75,7 @@ function select_course(id){
                 </li>
                 <li class="mid">|</li>
                 <li><a href="">组卷</a>
-                <div class="subnav">
+                <div class="subnav1">
                 	<a href="/hand/">手工组卷</a>
                 	<a href="/smart/">智能组卷</a>
                 </div>

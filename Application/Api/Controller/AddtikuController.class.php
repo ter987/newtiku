@@ -290,7 +290,7 @@ class AddtikuController extends Controller {
 		$matchingModel = M('matching');
 		$max = $tikuModel->field("MAX(id) as id")->find();
 		//echo $max['id'];exit;
-		for($i=1;$i<=$max['id'];$i++){
+		for($i=$max['id'];$i>0;$i--){
 			$result = $tikuModel->where("id=$i")->find();
 			$_result = $matchingModel->where("spider_code=".$result['spider_code'])->find();
 			//echo $matchingModel->getLastSql();exit;

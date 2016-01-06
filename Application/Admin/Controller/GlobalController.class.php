@@ -8,7 +8,35 @@ class GlobalController extends Controller{
 	*/
 	function _initialize()
 	{
-
+		$this->checkLogin();
+		$this->checkAuth();
+	}
+	public function checkLogin(){
+		$not_auth = array('verifycode','login','logout');
+		if(!in_array(strtolower(ACTION_NAME),$not_auth)){
+			if(!isset($_SESSION['admin_id'])){
+				redirect('/index.php/admin/admin/login');
+			}else{
+				$Model = M('admin');
+				$Model = M('admin');
+				$data = $Model
+				->field("admin.*,admin_group.title")
+				->join('admin_group_access on admin_group_access.uid=admin.id')
+				->join('admin_group on admin_group_access.group_id=admin_group.id')
+				->where("admin.id=".$_SESSION['admin_id'])->find();
+				$this->assign('admin_info',$data);
+			}
+		}
+	}
+	public function checkAuth(){
+		$not_auth = array('admin/verifycode','admin/login','admin/logout','index/index','index/welcome');
+		if(!in_array(strtolower(CONTROLLER_NAME).'/'.strtolower(ACTION_NAME),$not_auth)){
+			import('Org/Util/Auth');
+			$auth = new \Org\Util\Auth();
+			if(!$auth->check(ucwords(MODULE_NAME).'/'.ucwords(CONTROLLER_NAME).'/'.ucwords(ACTION_NAME),$_SESSION['admin_id'])){
+		     	die('无操作权限');
+		    }
+		}
 	}
 	/**
 	 * 获取所有课程

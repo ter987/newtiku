@@ -17,7 +17,7 @@
 			<div class="reg_br" id="is_mail_type" style="display:none;">
 				<div class="reg_l">邮箱：</div>
 				<div class="reg_r">
-					<input id="email"  type="text" name="email"  ajaxurl="/member/ajaxcheckemail" nullmsg="邮箱不能为空！" errormsg="请输入合法的邮箱地址！" class="required email"/>
+					<input id="email"  type="text" name="email" datatype="e"   ajaxurl="/member/ajaxcheckemail"  nullmsg="邮箱不能为空！" errormsg="请输入合法的邮箱地址！" />
 				</div>
 				<div class="clear"></div>
 			</div>
@@ -31,7 +31,7 @@
 			<div class="reg_br" id="verify_code" >
 				<div class="reg_l">短信验证码：</div>
 				<div class="reg_r" style="width:120px;">
-					<input id="code" type="text" name="code" datatype="n4-4" nullmsg="验证码不能为空！" style="width:100px;" ajaxurl="/member/ajaxCheckPvCode"/>
+					<input id="code" type="text" name="code" datatype="n4-6" nullmsg="验证码不能为空！" style="width:100px;" ajaxurl="/member/ajaxCheckPvCode"/>
 				</div>
 				<button class="reg_rr" onclick="send_vcode($(this));" >获取验证码</button>
 				<div class="clear"></div>
@@ -61,7 +61,7 @@
 	$(
 		function(){
    		$("form").Validform(
-   			{tiptype:3}
+   			{tiptype:3,ignoreHidden:true}
    		);
     });
     $('#student').click(
@@ -84,18 +84,12 @@
     		$('#is_mail_type').show();
     		$('#is_tel_type').hide();
     		$('#verify_code').hide();
-    		$('#email').attr('datatype','e');
-    		$('#telphone').attr('datatype','');
-    		$('#code').attr('datatype','');
     		obj.html('使用手机注册？');
     	}else if($('#is_mail').val()==1){
     		$('#is_mail').val(0);
     		$('#is_mail_type').hide();
     		$('#is_tel_type').show();
     		$('#verify_code').show();
-    		$('#email').attr('datatype','');
-    		$('#telphone').attr('datatype','m');
-    		$('#code').attr('datatype','n6-6');
     		obj.html('使用邮箱注册？');
     	}
     }

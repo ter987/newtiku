@@ -10,6 +10,7 @@ class TikuController extends GlobalController {
 	 */
 	function _initialize()
 	{
+		parent::_initialize();
 		$i = 0;
 		$course_data = parent::getCourse();
 		$this->getAllTypes();
