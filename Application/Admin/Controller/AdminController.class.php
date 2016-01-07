@@ -217,6 +217,14 @@ class AdminController extends GlobalController {
 	}
 	public function login(){
 		if($_POST){
+			$verify_code = I('post.verify');
+			$Verify = new \Think\Verify();
+			if(!$Verify->check($verify_code)){
+				$error_msg = "验证码有误!";
+				$this->assign('error_msg',$error_msg);
+				$this->display();
+				return false;
+			}
 			$error_msg = '';
 			$user = I('post.user_name');
 			$password = I('post.password');
@@ -240,16 +248,12 @@ class AdminController extends GlobalController {
 				$this->display();
 				return false;
 			}
-			$verify_code = I('post.verify');
-			$Verify = new \Think\Verify();
-			if(!$Verify->check($verify_code)){
-				$error_msg = "验证码有误!";
-				$this->assign('error_msg',$error_msg);
-				$this->display();
-				return false;
-			}
+			
 
 			if($error_msg==''){
+				$data['last_login'] = time();
+				$data['login_ip'] = get_client_ip();
+				$Model->where("id=".$result['id'])->save($data);
 				$_SESSION['admin_id'] = $result['id'];
 				redirect('/index.php/admin');
 			}

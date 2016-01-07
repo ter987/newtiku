@@ -84,7 +84,7 @@ class MemberController extends GlobalController {
 			$data['nick_name'] = $nick_name;
 
 			$data['salt'] = substr(uniqid(),2,6);
-			$data['password'] = md5(md5($password.$data['salt']));;
+			$data['password'] = md5(md5($password.$data['salt']));
 			//var_dump($_POST);exit;
 			
 			if($user_id = $Model->add($data)){
