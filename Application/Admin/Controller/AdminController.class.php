@@ -8,6 +8,7 @@ class AdminController extends GlobalController {
 	function _initialize()
 	{
 		parent::_initialize();
+		
 	}
     public function index(){
 		$user_name = I('post.user_name');
@@ -44,6 +45,8 @@ class AdminController extends GlobalController {
 			$result_2 = $accessModel->data(array('uid'=>$result_1,'group_id'=>$group_id))->add();
 			if($result_1 && $result_2){
 				$Model->commit();
+				$System = A('System');
+				$System->logWrite($_SESSION['admin_id'],"添加管理员成功(ID:$result_1)");
 				$this->ajaxReturn(array('status'=>'y','info'=>'成功'));
 			}else{
 				$Model->rollback();
@@ -76,6 +79,8 @@ class AdminController extends GlobalController {
 			$result_2 = $accessModel->where("uid=".$result['id'])->data(array('group_id'=>$group_id,'update_time'=>time()))->save();
 			if($result_1 && $result_2){
 				$Model->commit();
+				$System = A('System');
+				$System->logWrite($_SESSION['admin_id'],"编辑管理员成功(ID:$id)");
 				$this->ajaxReturn(array('status'=>'y','info'=>'成功'));
 			}else{
 				$Model->rollback();
@@ -99,6 +104,8 @@ class AdminController extends GlobalController {
 		$result_2 = $accessModel->where("uid=$id")->delete();
 		if($result_1 && $result_2){
 			$Model->commit();
+			$System = A('System');
+			$System->logWrite($_SESSION['admin_id'],"删除管理员成功(ID:$id)");
 			$this->ajaxReturn(array('status'=>'success'));
 		}else{
 			$Model->rollback();
@@ -109,6 +116,8 @@ class AdminController extends GlobalController {
 		$id = I('get.id');
 		$Model = M('admin');
 		if($Model->where("id=$id")->save(array('status'=>0))){
+			$System = A('System');
+			$System->logWrite($_SESSION['admin_id'],"停用管理员成功(ID:$id)");
 			$this->ajaxReturn(array('status'=>'success'));
 		}else{
 			$this->ajaxReturn(array('status'=>'error'));
@@ -118,6 +127,8 @@ class AdminController extends GlobalController {
 		$id = I('get.id');
 		$Model = M('admin');
 		if($Model->where("id=$id")->save(array('status'=>1))){
+			$System = A('System');
+			$System->logWrite($_SESSION['admin_id'],"启用管理员成功(ID:$id)");
 			$this->ajaxReturn(array('status'=>'success'));
 		}else{
 			$this->ajaxReturn(array('status'=>'error'));
@@ -153,6 +164,8 @@ class AdminController extends GlobalController {
 		$id = I('get.id');
 		$Model = M('admin_group');
 		if($Model->where("id=$id")->delete()){
+			$System = A('System');
+			$System->logWrite($_SESSION['admin_id'],"删除角色成功(ID:$id)");
 			$this->ajaxReturn(array('status'=>'success'));
 		}else{
 			$this->ajaxReturn(array('status'=>'error'));
@@ -168,6 +181,8 @@ class AdminController extends GlobalController {
 			$id = I('post.id');
 			$Model = M('admin_group');
 			if($Model->where("id=$id")->save($data)){
+				$System = A('System');
+				$System->logWrite($_SESSION['admin_id'],"编辑角色成功(ID:$id)");
 				$this->ajaxReturn(array('status'=>'y','info'=>'成功'));
 			}else{
 				$this->ajaxReturn(array('status'=>'n','info'=>'失败'));
@@ -193,7 +208,9 @@ class AdminController extends GlobalController {
 			if($Model->where("title='".$data['title']."'")->find()){
 				$this->ajaxReturn(array('status'=>'n','info'=>'该角色已存在'));
 			}
-			if($Model->add($data)){
+			if($id = $Model->add($data)){
+				$System = A('System');
+				$System->logWrite($_SESSION['admin_id'],"添加角色成功(ID:$id)");
 				$this->ajaxReturn(array('status'=>'y','info'=>'成功'));
 			}else{
 				$this->ajaxReturn(array('status'=>'n','info'=>'失败'));
@@ -255,6 +272,8 @@ class AdminController extends GlobalController {
 				$data['login_ip'] = get_client_ip();
 				$Model->where("id=".$result['id'])->save($data);
 				$_SESSION['admin_id'] = $result['id'];
+				$System = A('System');
+				$System->logWrite($_SESSION['admin_id'],'登录成功');
 				redirect('/index.php/admin');
 			}
 		}else{

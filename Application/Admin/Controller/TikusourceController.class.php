@@ -79,8 +79,8 @@ class TikusourceController extends GlobalController {
 			$result = $Model->save($data);
 			//echo $Model->getLastSql();exit;
 			if($result){
-				//echo $pointModel->getLastSql();exit;
-				//var_dump($_SESSION['jump_url']);exit;
+				$System = A('System');
+				$System->logWrite($_SESSION['admin_id'],"编辑试卷成功(ID:".$data['id'].")");
 				$this->_message('success','更新成功',$_SESSION['jump_url'],1);
 			}else{
 				$this->_message('error','更新失败',$_SERVER['HTTP_REFERER'],1);
@@ -145,6 +145,8 @@ class TikusourceController extends GlobalController {
 		}
 		if($result && $result_2 && $result_3){
 			$Model->commit();
+			$System = A('System');
+			$System->logWrite($_SESSION['admin_id'],"删除试卷成功(ID:$id)");
 			$this->ajaxReturn(array('status'=>'success'));
 		}else{
 			$Model->rollback();
@@ -170,6 +172,8 @@ class TikusourceController extends GlobalController {
 		}
 		if($result && $result_2 && $result_3){
 			$Model->commit();
+			$System = A('System');
+			$System->logWrite($_SESSION['admin_id'],"批量删除试卷成功(ID:$ids)");
 			$this->_message('success','删除成功！',$_SESSION['jump_url']);
 		}else{
 			$Model->rollback();

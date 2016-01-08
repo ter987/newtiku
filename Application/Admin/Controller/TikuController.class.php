@@ -106,7 +106,8 @@ class TikuController extends GlobalController {
 				$pointModel = M('tiku_to_point');
 				$point_data['point_id'] = $_POST['point_id'];
 				$pointModel->data($point_data)->where("tiku_id=".$data['id'])->save();
-				//echo $pointModel->getLastSql();exit;
+				$System = A('System');
+				$System->logWrite($_SESSION['admin_id'],"编辑题库成功(ID:".$data['id'].")");
 				$this->_message('success','更新成功',$_SESSION['jump_url'],1);exit;
 			}else{
 				$this->_message('error','更新失败',$_SERVER['HTTP_REFERER'],1);exit;
@@ -233,6 +234,8 @@ class TikuController extends GlobalController {
 		$result_2 = $pointModel->where("tiku_id=$id")->delete();
 		if($result && $result_2){
 			$Model->commit();
+			$System = A('System');
+			$System->logWrite($_SESSION['admin_id'],"删除题库成功(ID:$result)");
 			$this->ajaxReturn(array('status'=>'success'));
 		}else{
 			$Model->rollback();
@@ -249,6 +252,8 @@ class TikuController extends GlobalController {
 		$result_2 = $pointModel->where("tiku_id IN ($ids)")->delete();
 		if($result && $result_2){
 			$Model->commit();
+			$System = A('System');
+			$System->logWrite($_SESSION['admin_id'],"批量删除题库成功(ID:$ids)");
 			$this->_message('success','删除成功！',$_SESSION['jump_url']);
 		}else{
 			$Model->rollback();
@@ -260,6 +265,8 @@ class TikuController extends GlobalController {
 		$Model = M('tiku');
 		$result = $Model->where("id IN ($ids)")->data(array('status'=>1))->save();
 		if($result){
+			$System = A('System');
+			$System->logWrite($_SESSION['admin_id'],"批量审核题库成功(ID:$ids)");
 			$this->_message('success','审核成功！',$_SESSION['jump_url']);
 		}
 	}

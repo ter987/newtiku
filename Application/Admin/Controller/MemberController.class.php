@@ -14,8 +14,6 @@ class MemberController extends GlobalController {
 		$time_start = strtotime(I('request.time_start'));
 		$time_end = strtotime(I('request.time_end'));
 		
-		$this->assign('course_id',$course_id);
-		$this->assign('source_name',$source_name);
 		$where = '1=1';
 		if($_GET['p']){
 			$page = $_GET['p'];
@@ -65,6 +63,8 @@ class MemberController extends GlobalController {
 			//$data['type'] = I('post.type');
 			$Model = M('User');
 			if($Model->where("id=$id")->save($data)){
+				$System = A('System');
+				$System->logWrite($_SESSION['admin_id'],"编辑会员成功(ID:$id)");
 				$this->ajaxReturn(array('status'=>'y'));
 			}else{
 				$this->ajaxReturn(array('status'=>'n'));
@@ -85,6 +85,8 @@ class MemberController extends GlobalController {
 			$data['salt'] = substr(uniqid(),2,6);
 			$data['password'] = md5(md5($password.$data['salt']));
 			if($Model->where("id=$id")->save($data)){
+				$System = A('System');
+				$System->logWrite($_SESSION['admin_id'],"修改会员密码成功(ID:$id)");
 				$this->ajaxReturn(array('status'=>'y'));
 			}else{
 				$this->ajaxReturn(array('status'=>'n'));
@@ -128,6 +130,8 @@ class MemberController extends GlobalController {
 		}
 		if($result_1 && $result_2 && $result_3 && $result_4 && $result_5 && $result_7 && $result_8){
 			$Model->commit();
+			$System = A('System');
+			$System->logWrite($_SESSION['admin_id'],"删除会员成功(ID:$id)");
 			$this->ajaxReturn(array('status'=>'y'));
 		}else{
 			$Model->rollback();
@@ -138,6 +142,8 @@ class MemberController extends GlobalController {
 		$id = I('get.id');
 		$Model = M('User');
 		if($Model->where("id=$id")->save(array('status'=>0))){
+			$System = A('System');
+			$System->logWrite($_SESSION['admin_id'],"停用会员成功(ID:$id)");
 			$this->ajaxReturn(array('status'=>'success'));
 		}else{
 			$this->ajaxReturn(array('status'=>'error'));
@@ -147,6 +153,8 @@ class MemberController extends GlobalController {
 		$id = I('get.id');
 		$Model = M('User');
 		if($Model->where("id=$id")->save(array('status'=>1))){
+			$System = A('System');
+			$System->logWrite($_SESSION['admin_id'],"启用会员成功(ID:$id)");
 			$this->ajaxReturn(array('status'=>'success'));
 		}else{
 			$this->ajaxReturn(array('status'=>'error'));
