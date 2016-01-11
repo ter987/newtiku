@@ -44,6 +44,20 @@ class SystemController extends GlobalController {
 		$this->assign('count',$count);
         $this->display();
 	}
+	public function report(){
+		$Model = M('admin');
+		$data = $Model->field("id,user_name")->where("id <> 2")->select();
+		$systemModel = M('system_log');
+		foreach($data as $key=>$val){
+			$data[$key]['yestoday_count'] = $systemModel->where("admin_id=".$val['id']." AND content LIKE '编辑题库%' AND FROM_UNIXTIME(update_time,'%Y-%m-%d')=DATE_ADD(CURDATE(),INTERVAL '-1' DAY)")->count();
+			$data[$key]['day_count'] = $systemModel->where("admin_id=".$val['id']." AND content LIKE '编辑题库%' AND FROM_UNIXTIME(update_time,'%Y-%m-%d')=CURDATE()")->count();
+			$data[$key]['month_count'] = $systemModel->where("admin_id=".$val['id']." AND content LIKE '编辑题库%' AND MONTHNAME(FROM_UNIXTIME(update_time))=MONTHNAME(NOW())")->count();
+			$data[$key]['week_count'] = $systemModel->where("admin_id=".$val['id']." AND content LIKE '编辑题库%' AND WEEK(FROM_UNIXTIME(update_time))=WEEK(NOW())")->count();
+			$data[$key]['lastweek_count'] = $systemModel->where("admin_id=".$val['id']." AND content LIKE '编辑题库%' AND WEEK(FROM_UNIXTIME(update_time))=WEEK(NOW())-1")->count();
+		}
+		$this->assign('data',$data);
+        $this->display();
+	}
 	public function logWrite($admin_id,$content){
 		$Model = M('system_log');
 		$data['admin_id'] = $admin_id;
