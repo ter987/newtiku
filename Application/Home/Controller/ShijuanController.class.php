@@ -19,7 +19,7 @@ class ShijuanController extends GlobalController {
     	if(empty($_SESSION['cart'])){
     		redirect('/');
     	}
-		if(empty($_SESSION['shijuan']['title'])){
+		//if(empty($_SESSION['shijuan']['title'])){
 	    	$shijuan_type = !empty($_SESSION['shijuan']['shijuan_banshi'])?$_SESSION['shijuan']['shijuan_banshi']:1;//默认的试卷类型：随堂练习
 	    	$shijuantypeModel = M('shijuan_banshi');
 			$shijuantype_data = $shijuantypeModel->where("id=$shijuan_type")->find();
@@ -28,63 +28,63 @@ class ShijuanController extends GlobalController {
 			$grade = $course_data['course_type']==1?'高中':'初中';
 	    	$_SESSION['shijuan']['title'] = $grade.$course_data['course_name'].$shijuantype_data['name'].'-'.date('Ymd');
 		
-		foreach ($_SESSION['cart'] as $key => $val) {
-			if(!in_array($val['type_name'],$arr)){
-				$arr[] = $val['type_name'];
-			}
-		
-		}
-		
-		foreach($arr as $k=>$v){
-			$count = 0;
-			foreach($_SESSION['cart'] as $key=>$val){
-				if(empty($new_arr[$k]['childs'])) $new_arr[$k]['childs']=array();
-				if($v==$val['type_name']){
-					$new_arr[$k]['type_name'] = $val['type_name'];
-					$new_arr[$k]['childs'] = array_merge($new_arr[$k]['childs'],array($val['id']));
+			foreach ($_SESSION['cart'] as $key => $val) {
+				if(!in_array($val['type_name'],$arr)){
+					$arr[] = $val['type_name'];
 				}
-				
+			
 			}
-		}
-		
-		//var_dump($new_arr);
-		//区分第一卷和第二卷
-		foreach($new_arr as $k=>$v){
-			if($v['type_name']=='单选题' || $v['type_name']=='多选题'){
-				$data[1][] = $new_arr[$k];
-			}else{
-				$data[2][] = $new_arr[$k];
-			}
-		}
-		//var_dump($data);
-		if(empty($data[1])) unset($_SESSION['shijuan'][1]);
-		if(empty($data[2])) unset($_SESSION['shijuan'][2]);
-
-		foreach($data as $key=>$val){
-			//if(empty($_SESSION['shijuan'][$key]['t_title'])){
-				$oc = array(1=>'一',2=>'二');
-				$_SESSION['shijuan'][$key]['t_title'] = '';//第N卷标题
-				if($key==1){
-					$_SESSION['shijuan'][$key]['t_title'] = '第I卷（选择题）';//第1卷标题
-				}else{
-					$_SESSION['shijuan'][$key]['t_title'] = '第II卷（非选择题）';//第2卷标题
-				}
-				$_SESSION['shijuan'][$key]['note'] = '';//第N卷注释
-				
+			
+			foreach($arr as $k=>$v){
 				$count = 0;
-				$shiti_count_per_juan = 0;
-				foreach($val as $k=>$v){
-					$count ++;
-					$shiti_count = count($v['childs']);
-					$_SESSION['shijuan'][$key]['shiti'][$count]['t_title'] = $v['type_name'].'(共'.$shiti_count.'小题)';
-					$_SESSION['shijuan'][$key]['shiti'][$count]['childs'] = $v['childs'];
-					$_SESSION['shijuan'][$key]['shiti'][$count]['count'] = $shiti_count;
-					$shiti_count_per_juan += $shiti_count;
+				foreach($_SESSION['cart'] as $key=>$val){
+					if(empty($new_arr[$k]['childs'])) $new_arr[$k]['childs']=array();
+					if($v==$val['type_name']){
+						$new_arr[$k]['type_name'] = $val['type_name'];
+						$new_arr[$k]['childs'] = array_merge($new_arr[$k]['childs'],array($val['id']));
+					}
+					
 				}
-				$_SESSION['shijuan'][$key]['note'] = '本试卷第'.$oc[$key].'部分共有'.$shiti_count_per_juan.'道试题。';//第N卷注释
-			//}
-		}
-		}
+			}
+			
+			//var_dump($new_arr);
+			//区分第一卷和第二卷
+			foreach($new_arr as $k=>$v){
+				if($v['type_name']=='单选题' || $v['type_name']=='多选题'){
+					$data[1][] = $new_arr[$k];
+				}else{
+					$data[2][] = $new_arr[$k];
+				}
+			}
+			//var_dump($data);
+			if(empty($data[1])) unset($_SESSION['shijuan'][1]);
+			if(empty($data[2])) unset($_SESSION['shijuan'][2]);
+	
+			foreach($data as $key=>$val){
+				//if(empty($_SESSION['shijuan'][$key]['t_title'])){
+					$oc = array(1=>'一',2=>'二');
+					$_SESSION['shijuan'][$key]['t_title'] = '';//第N卷标题
+					if($key==1){
+						$_SESSION['shijuan'][$key]['t_title'] = '第I卷（选择题）';//第1卷标题
+					}else{
+						$_SESSION['shijuan'][$key]['t_title'] = '第II卷（非选择题）';//第2卷标题
+					}
+					$_SESSION['shijuan'][$key]['note'] = '';//第N卷注释
+					
+					$count = 0;
+					$shiti_count_per_juan = 0;
+					foreach($val as $k=>$v){
+						$count ++;
+						$shiti_count = count($v['childs']);
+						$_SESSION['shijuan'][$key]['shiti'][$count]['t_title'] = $v['type_name'].'(共'.$shiti_count.'小题)';
+						$_SESSION['shijuan'][$key]['shiti'][$count]['childs'] = $v['childs'];
+						$_SESSION['shijuan'][$key]['shiti'][$count]['count'] = $shiti_count;
+						$shiti_count_per_juan += $shiti_count;
+					}
+					$_SESSION['shijuan'][$key]['note'] = '本试卷第'.$oc[$key].'部分共有'.$shiti_count_per_juan.'道试题。';//第N卷注释
+				//}
+			}
+		//}
 		$oa = array(1=>'一',2=>'二',3=>'三',4=>'四',5=>'五',6=>'六',7=>'七');
 		$last = 0;
 		$o = 1;
@@ -173,14 +173,24 @@ class ShijuanController extends GlobalController {
 		    //'marginTop' => '100',
 		);
 		$section = $phpWord->addSection();
+		$table = $section->addTable('myTable');
+		$table->addRow();
+		$textrun = $table->addcell(2500);
+		$textrun->addText('你好');
+		$textrun = $table->addcell(2500);
+		$textrun->addText('你好');
+		$table->addRow();
+		$textrun = $table->addcell(2500);
+		$textrun->addText('你好');
+		$textrun = $table->addcell(2500);
+		$textrun->addText('你好');
 		//exit;
-		$textrun = $section->createTextRun(array('widowControl'=>'true'));
-		$textrun->addText('已知函数已知函数');
-		$textrun->addImage('Public/tikupics/20151202/20/31/565ee4ac675a91449059500.gif');
-		$textrun->addText('Merry Chrismers',array('size'=>40));
-		$textrun->addImage('Public/tikupics/20151202/20/31/565ee4ac675a91449059500.gif');
-		$textrun->addText('沦肌浃髓还有谁还有谁');
-		//$textrun->addImage('Public/tikupics/20151202/20/31/565ee4ac675a91449059500.gif');
+		// $textrun = $section->createTextRun(array('widowControl'=>'true'));
+		// $textrun->addText('已知函数已知函数');
+		// $textrun->addImage('Public/tikupics/20151202/20/31/565ee4ac675a91449059500.gif');
+		// $textrun->addText('Merry Chrismers',array('size'=>40));
+		// $textrun->addImage('Public/tikupics/20151202/20/31/565ee4ac675a91449059500.gif');
+		// $textrun->addText('沦肌浃髓还有谁还有谁');mage('Public/tikupics/20151202/20/31/565ee4ac675a91449059500.gif');
 		$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
 		$objWriter->save('helloWorld.docx');
 		exit;
@@ -203,20 +213,28 @@ class ShijuanController extends GlobalController {
     	// }
 		Vendor('PhpWord.src.PhpWord.Autoloader');
 		\PhpOffice\PhpWord\Autoloader::register();
-		
+		Vendor('PhpOffice.PhpWord.Shared.Font');
+		$PHPWord_Shared_Font = new \PhpOffice\PhpWord\Shared\Font();
 		// Creating the new document...
 		$phpWord = new \PhpOffice\PhpWord\PhpWord();
 		// Every element you want to append to the word document is placed in a section. So you need a section:
+		$model_array = array(
+			'A4'=>array('width'=>'20.9','height'=>'29.6','colsnum'=>'1','orientation'=>'portrait'),
+			'A3'=>array('width'=>'29.6','height'=>'41.91','colsnum'=>'2','orientation'=>'landscape'),
+			'B5'=>array('width'=>'18.1','height'=>'25.6','colsnum'=>'1','orientation'=>'portrait'),
+			'B4'=>array('width'=>'24.9','height'=>'35.2','colsnum'=>'2','orientation'=>'landscape'),
+		);
 		$sectionStyle = array(
-		    'orientation' => 'landscape',
-		    'align' => 'center',
-		    'colsNum' => 1,
+		    'pageSizeW' => $PHPWord_Shared_Font->centimeterSizeToTwips($model_array[$_SESSION['shijuan_model']]['width']),
+		    'pageSizeH' => $PHPWord_Shared_Font->centimeterSizeToTwips($model_array[$_SESSION['shijuan_model']]['height']),
+		    'colsNum'	=> $model_array[$_SESSION['shijuan_model']]['colsnum'],
+		    'orientation'	=> $model_array[$_SESSION['shijuan_model']]['orientation']
 		);
 		$section = $phpWord->addSection($sectionStyle);
 		//$section->getStyle()->setPageNumberingStart(1);
-		$footer = $section->addFooter();
+		//$footer = $section->addFooter();
 		//$footer->addText('第1页');
-		$footer->addPreserveText('第{PAGE}页(共{NUMPAGES}页).');
+		//$footer->addPreserveText('第{PAGE}页(共{NUMPAGES}页).');
 		//$header = $section->addHeader();
 		//$header->addText('头部');
 		// You can directly style your text by giving the addText function an array:
@@ -227,12 +245,15 @@ class ShijuanController extends GlobalController {
 		$oa = array(1=>'一',2=>'二',3=>'三',4=>'四',5=>'五',6=>'六',7=>'七');
 		$last = 0;
 		$o = 1;
+		$answer_part = array();
 		if($_SESSION['shijuan'][1]){
 			$option_index = array(0=>'A',1=>'B',2=>'C',3=>'D',4=>'E');
 			$section->addText($_SESSION['shijuan'][1]['t_title'],array('size'=>13,'bold'=>true),array('align' => 'center'));
 			$section->addText($_SESSION['shijuan'][1]['note'],array('size'=>13));
 			foreach($_SESSION['shijuan'][1]['shiti'] as $k=>$v){
 				$childs = $this->_getTikuInfo($v['childs'],$o);
+				$answer_part = array_merge($answer_part,$childs);
+				//var_dump($answer_part);exit;
 				$last = $k;
 				$section->addText($oa[$k].'、'.$v['t_title'],array('size'=>13,'bold'=>true));
 				foreach($childs as $key=>$val){
@@ -261,38 +282,155 @@ class ShijuanController extends GlobalController {
 					}
 					if($val['options']){
 						$options = json_decode($val['options']);
-						
-						$table = $section->addTable('myTable');
-						$table->addRow();
-						foreach($options as $d=>$c){
-							$cell = $table->addCell(2500);
-							$textrun2 = $cell->addTextRun();
-							$option = trim($c);
-							$option = preg_replace('/(&nbsp;)*/','',$option);
-							$text_arr = preg_split('/<img[\s|\S]+>/U',$option);
-							preg_match_all('/src="[\s|\S]+"/U',$option,$matchs);
-							//var_dump($matchs);exit;
-							if($matchs){
-								$img_arr = preg_replace('/(src="\/)|"/U','',$matchs[0]);
-								$i=0;
-								$text_count = count($text_arr);
-								$img_count = count($img_arr);
-								while($i<$text_count){
-									//echo $text_arr[$i];exit;
-									$textrun2->addText($option_index[$d].'.'.$text_arr[$i],array('size'=>13));
-									if($i==$img_count) break;
-									$textrun2->addImage($img_arr[$i],array('positioning' => 'relative'));
-									$i++;
+						$option_len = 0;
+						foreach($options as $opt){
+							preg_match_all('/src="([\s|\S]+)"/U',$opt,$matchs);
+							$opt = preg_replace('/<img[\s|\S]+>/U','',$opt);
+							$option_len += strlen($opt)*10;
+							foreach($matchs[1] as $m1){
+								$info = getimagesize('http://'.$_SERVER['HTTP_HOST'].$m1);
+								if($info){
+									$option_len += $info[0];
 								}
-							}else{
-								$textrun2->addText($option_index[$d].'.'.$option,array('size'=>13));
 							}
-					}
+						}
+						$table = $section->addTable('myTable');
+						if($option_len>400 && $option_len<800){
+							$options = array_chunk($options,2);
+							foreach($options as $son){
+								$table->addRow();
+								foreach($son as $d=>$c){
+									$cell = $table->addCell(5000,array('valign'=>'center'));
+									$textrun2 = $cell->addTextRun();
+									$option = trim($c);
+									$option = preg_replace('/(&nbsp;)*/','',$option);
+									$text_arr = preg_split('/<img[\s|\S]+>/U',$option);
+									preg_match_all('/src="[\s|\S]+"/U',$option,$matchs);
+									if($matchs){
+										$img_arr = preg_replace('/(src="\/)|"/U','',$matchs[0]);
+										$i=0;
+										$text_count = count($text_arr);
+										$img_count = count($img_arr);
+										$textrun2->addText($option_index[$d].'.',array('size'=>13));
+										while($i<$text_count){
+											//echo $text_arr[$i];exit;
+											$textrun2->addText($text_arr[$i],array('size'=>13));
+											//if($i==$img_count) {$i++;break;}
+											$textrun2->addImage($img_arr[$i]);
+											$i++;
+										}
+									}else{
+										$textrun2->addText($option_index[$d].'.'.$option,array('size'=>13));
+									}
+								}
+							}
+						}else if($option_len>800){
+							foreach($options as $d=>$c){
+								$table->addRow();
+								$cell = $table->addCell(10000,array('valign'=>'center'));
+								$textrun2 = $cell->addTextRun();
+								$option = trim($c);
+								$option = preg_replace('/(&nbsp;)*/','',$option);
+								$text_arr = preg_split('/<img[\s|\S]+>/U',$option);
+								preg_match_all('/src="[\s|\S]+"/U',$option,$matchs);
+								if($matchs){
+									$img_arr = preg_replace('/(src="\/)|"/U','',$matchs[0]);
+									$i=0;
+									$text_count = count($text_arr);
+									$img_count = count($img_arr);
+									$textrun2->addText($option_index[$d].'.',array('size'=>13));
+									while($i<$text_count){
+										$textrun2->addText($text_arr[$i],array('size'=>13));
+										$textrun2->addImage($img_arr[$i]);
+										$i++;
+									}
+								}else{
+									$textrun2->addText($option_index[$d].'.'.$option,array('size'=>13));
+								}
+							}
+						}else{
+							$table->addRow();
+							foreach($options as $d=>$c){
+								$cell = $table->addCell(2500,array('valign'=>'center'));
+								$textrun2 = $cell->addTextRun();
+								$option = trim($c);
+								$option = preg_replace('/(&nbsp;)*/','',$option);
+								$text_arr = preg_split('/<img[\s|\S]+>/U',$option);
+								preg_match_all('/src="[\s|\S]+"/U',$option,$matchs);
+								if($matchs){
+									$img_arr = preg_replace('/(src="\/)|"/U','',$matchs[0]);
+									$i=0;
+									$text_count = count($text_arr);
+									$img_count = count($img_arr);
+									$textrun2->addText($option_index[$d].'.',array('size'=>13));
+									while($i<$text_count){
+										$textrun2->addText($text_arr[$i],array('size'=>13));
+										$textrun2->addImage($img_arr[$i]);
+										$i++;
+									}
+								}else{
+									$textrun2->addText($option_index[$d].'.'.$option,array('size'=>13));
+								}
+							}
+						}
+						
+						
 					//break;
 					
 					}
+					//解析跟在试题后面
+					if($_SESSION['answer_order']==1){
+						$textrun = $section->createTextRun(array('widowControl'=>'true'));
+						$textrun->addText('试题解析：',array('size'=>13));
+						$analysis = trim(strip_tags(htmlspecialchars_decode($val['analysis']),'<img>'));
+						$analysis = preg_replace('/(&nbsp;)*/','',$analysis);
+						$text_arr = preg_split('/<img[\s|\S]+>/U',$analysis);
+						preg_match_all('/src="[\s|\S]+"/U',$analysis,$matchs);
+						//var_dump($matchs);exit;
+						if($matchs){
+							$img_arr = preg_replace('/(src="\/)|"/U','',$matchs[0]);
+							$i=0;
+							$text_count = count($text_arr);
+							$img_count = count($img_arr);
+							//$textrun->addText($val['order_char'].'.',array('size'=>13));
+							while($i<$text_count){
+								//echo $text_arr[$i];exit;
+								$textrun->addText($text_arr[$i],array('size'=>13));
+								if($i==$img_count) break;
+								$textrun->addImage($img_arr[$i]);
+								$i++;
+							}
+							
+						}else{
+							$section->addText($analysis,array('size'=>13));
+						}
+						
+						$textrun = $section->createTextRun(array('widowControl'=>'true'));
+						$textrun->addText('答案：',array('size'=>13));
+						$answer = trim(strip_tags(htmlspecialchars_decode($val['answer']),'<img>'));
+						$answer = preg_replace('/(&nbsp;)*/','',$answer);
+						$text_arr = preg_split('/<img[\s|\S]+>/U',$answer);
+						preg_match_all('/src="[\s|\S]+"/U',$answer,$matchs);
+						//var_dump($matchs);exit;
+						if($matchs){
+							$img_arr = preg_replace('/(src="\/)|"/U','',$matchs[0]);
+							$i=0;
+							$text_count = count($text_arr);
+							$img_count = count($img_arr);
+							//$textrun->addText($val['order_char'].'.',array('size'=>13));
+							while($i<$text_count){
+								//echo $text_arr[$i];exit;
+								$textrun->addText($text_arr[$i],array('size'=>13));
+								if($i==$img_count) break;
+								$textrun->addImage($img_arr[$i]);
+								$i++;
+							}
+							
+						}else{
+							$section->addText($answer,array('size'=>13));
+						}
+					}
 				}
-				//$textrun->addImage('Public/tikupics/20151103/08/42/563803062838d1446511366.gif');
 			}
 		}
 		$section->addTextBreak();
@@ -301,6 +439,7 @@ class ShijuanController extends GlobalController {
 			$section->addText($_SESSION['shijuan'][2]['note'],array('size'=>13));
 			foreach($_SESSION['shijuan'][2]['shiti'] as $k=>$v){
 				$childs = $this->_getTikuInfo($v['childs'],$o);
+				$answer_part = array_merge($answer_part,$childs);
 				$last = $k;
 				$section->addText($oa[$k].'、'.$v['t_title'],array('size'=>13,'bold'=>true));
 				//break;
@@ -344,7 +483,116 @@ class ShijuanController extends GlobalController {
 					if(strpos($v['t_title'],'解答题')!==false){
 						$section->addTextBreak(10);
 					}
+					//解析跟在试题后面
+					if($_SESSION['answer_order']==1){
+						$textrun = $section->createTextRun(array('widowControl'=>'true'));
+						$textrun->addText('试题解析：',array('size'=>13));
+						$analysis = trim(strip_tags(htmlspecialchars_decode($val['analysis']),'<img>'));
+						$analysis = preg_replace('/(&nbsp;)*/','',$analysis);
+						$text_arr = preg_split('/<img[\s|\S]+>/U',$analysis);
+						preg_match_all('/src="[\s|\S]+"/U',$analysis,$matchs);
+						//var_dump($matchs);exit;
+						if($matchs){
+							$img_arr = preg_replace('/(src="\/)|"/U','',$matchs[0]);
+							$i=0;
+							$text_count = count($text_arr);
+							$img_count = count($img_arr);
+							//$textrun->addText($val['order_char'].'.',array('size'=>13));
+							while($i<$text_count){
+								//echo $text_arr[$i];exit;
+								$textrun->addText($text_arr[$i],array('size'=>13));
+								if($i==$img_count) break;
+								$textrun->addImage($img_arr[$i]);
+								$i++;
+							}
+							
+						}else{
+							$section->addText($analysis,array('size'=>13));
+						}
+						
+						$textrun = $section->createTextRun(array('widowControl'=>'true'));
+						$textrun->addText('答案：',array('size'=>13));
+						$answer = trim(strip_tags(htmlspecialchars_decode($val['answer']),'<img>'));
+						$answer = preg_replace('/(&nbsp;)*/','',$answer);
+						$text_arr = preg_split('/<img[\s|\S]+>/U',$answer);
+						preg_match_all('/src="[\s|\S]+"/U',$answer,$matchs);
+						//var_dump($matchs);exit;
+						if($matchs){
+							$img_arr = preg_replace('/(src="\/)|"/U','',$matchs[0]);
+							$i=0;
+							$text_count = count($text_arr);
+							$img_count = count($img_arr);
+							//$textrun->addText($val['order_char'].'.',array('size'=>13));
+							while($i<$text_count){
+								//echo $text_arr[$i];exit;
+								$textrun->addText($text_arr[$i],array('size'=>13));
+								if($i==$img_count) break;
+								$textrun->addImage($img_arr[$i]);
+								$i++;
+							}
+							
+						}else{
+							$section->addText($answer,array('size'=>13));
+						}
+					}
+				}
+			}
+		}
+		//解析跟试卷分离
+		if($_SESSION['answer_order']==2){
+			$section = $phpWord->addSection($sectionStyle);
+			$section->addText('答案部分',array( 'size'=>'15','bold'=>true),array('align' => 'center'));
+			$section->addTextBreak(2);
+			//var_dump($answer_part);exit;
+			foreach($answer_part as $val){
+				$textrun = $section->createTextRun(array('widowControl'=>'true'));
+				$textrun->addText($val['order_char'].'.试题解析：',array('size'=>13));
+				$analysis = trim(strip_tags(htmlspecialchars_decode($val['analysis']),'<img>'));
+				$analysis = preg_replace('/(&nbsp;)*/','',$analysis);
+				$text_arr = preg_split('/<img[\s|\S]+>/U',$analysis);
+				preg_match_all('/src="[\s|\S]+"/U',$analysis,$matchs);
+				//var_dump($matchs);exit;
+				if($matchs){
+					$img_arr = preg_replace('/(src="\/)|"/U','',$matchs[0]);
+					$i=0;
+					$text_count = count($text_arr);
+					$img_count = count($img_arr);
+					//$textrun->addText($val['order_char'].'.',array('size'=>13));
+					while($i<$text_count){
+						//echo $text_arr[$i];exit;
+						$textrun->addText($text_arr[$i],array('size'=>13));
+						if($i==$img_count) break;
+						$textrun->addImage($img_arr[$i]);
+						$i++;
+					}
 					
+				}else{
+					$section->addText($analysis,array('size'=>13));
+				}
+				
+				$textrun = $section->createTextRun(array('widowControl'=>'true'));
+				$textrun->addText('答案：',array('size'=>13));
+				$answer = trim(strip_tags(htmlspecialchars_decode($val['answer']),'<img>'));
+				$answer = preg_replace('/(&nbsp;)*/','',$answer);
+				$text_arr = preg_split('/<img[\s|\S]+>/U',$answer);
+				preg_match_all('/src="[\s|\S]+"/U',$answer,$matchs);
+				//var_dump($matchs);exit;
+				if($matchs){
+					$img_arr = preg_replace('/(src="\/)|"/U','',$matchs[0]);
+					$i=0;
+					$text_count = count($text_arr);
+					$img_count = count($img_arr);
+					//$textrun->addText($val['order_char'].'.',array('size'=>13));
+					while($i<$text_count){
+						//echo $text_arr[$i];exit;
+						$textrun->addText($text_arr[$i],array('size'=>13));
+						if($i==$img_count) break;
+						$textrun->addImage($img_arr[$i]);
+						$i++;
+					}
+					
+				}else{
+					$section->addText($answer,array('size'=>13));
 				}
 			}
 		}
@@ -364,6 +612,7 @@ class ShijuanController extends GlobalController {
         header('Expires: 0');
         $objWriter->save("php://output");
 	}
+	
 	public function ajaxSave(){
 		$Model = M('user_shijuan');
 		if(isset($_SESSION['shijuan']['id'])&&$Model->where("id=".$_SESSION['shijuan']['id'].' AND user_id='.$_SESSION['user_id'])->find()){//更新数据库
@@ -402,6 +651,9 @@ class ShijuanController extends GlobalController {
 	}
 	public function ajaxDownload(){
 		if(isset($_SESSION['shijuan']['id'])){
+			$_SESSION['doctype'] = !empty($_GET['doctype'])?$_GET['doctype']:'word2007';
+			$_SESSION['shijuan_model'] = !empty($_GET['shijuan_model'])?$_GET['shijuan_model']:'A4';
+			$_SESSION['answer_order'] = !empty($_GET['answer_order'])?$_GET['answer_order']:'2';
 			$this->ajaxReturn(array('status'=>'success'));
 		}else{
 			$this->ajaxSave();

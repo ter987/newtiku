@@ -13,19 +13,55 @@ class AddtikuController extends Controller {
 	{   //'disciplineCode'=>'2','disciplineId'=>'21','disciplineType'=>'2','flag'=>'3'
 		$this->dir_path = 'Public/tikupics/';
 		$this->date = date('Ymd');
-		$this->course_id = 7;//数学3   物理1  化学2 历史4 语文5 生物6 地理7 英语8
+		$this->course_id = 5;//数学3   物理1  化学2 历史4 语文5 生物6 地理7 英语8
 		$this->source_name_default = '高中英语（未知）';
-		$this->cookies = 'jsessionid=B60B922B4A00B3EBC97982C1A470E1B0';
-		$this->disciplineCode = 9;//物理4  数学2 化学5  历史8 语文1 生物6 地理9 英语03
-		$this->disciplineId = 28;//物理23  数学21  化学24  历史27 语文20 生物25 地理28  英语22
+		$this->cookies = 'jsessionid=F5F9F53752B5172242FBD62450E62F14';
+		$this->disciplineCode = 1;//物理4  数学2 化学5  历史8 语文1 生物6 地理9 英语03
+		$this->disciplineId = 20;//物理23  数学21  化学24  历史27 语文20 生物25 地理28  英语22
 		$this->disciplineType =2;
 		//历史'13652,13653'  语文 '13635,1232453,13640,13641,13636,13642,3933440,2400602,13639,13637'
 		//生物 '13629,2400600,2400601'   地理  '13654,13656'   英语  '18170,13611,18174,13616,13613,13614,18176,18171,13617'
-		//物理 '13618,11112810,13622,13623,13621,11112811'  化学  '13625,13626,16300,13628'
-		$this->queTypeIds = '13654,13656';
+		//物理 '13618,11112810,13622,13623,13621,11112811'  化学  '13625,13626,16300,13628' 数学 '13646,13647,13648'
+		$this->queTypeIds = '13635,1232453,13640,13641,13636,13642,3933440,2400602,13639,13637';
 		$this->flag = 3;
 		$this->rows = 200;
 		
+	}
+	/*
+	 * 过滤解析字段非法字符
+	 */ 
+	public function filterAnalysisChar(){
+		$tikuModel = M('tiku');
+		$max = $tikuModel->field("MAX(id) as id")->find();
+		//echo $max['id'];exit;
+		for($i=1;$i<=$max['id'];$i++){
+			$result = $tikuModel->where("id=$i")->find();
+			if($result){
+				$analysis = preg_replace('/．/','.',$result['analysis']);
+				$tikuModel->where("id=$i")->save(array('analysis'=>$analysis));
+			}
+		}
+		echo 'Filter Success!';
+	}
+	/*
+	 * 过滤答案中的非法字符
+	 */ 
+	public function filterAnswerChar(){
+		$tikuModel = M('tiku');
+		$max = $tikuModel->field("MAX(id) as id")->find();
+		//echo $max['id'];exit;
+		for($i=1;$i<=$max['id'];$i++){
+			$result = $tikuModel->where("id=$i")->find();
+			if($result){
+				preg_match_all('/A|B|C|D/', $result['answer'],$match);
+				if(!empty($match[0])){
+					if(count($match[0]==1)){
+						$tikuModel->where("id=$i")->save(array('answer'=>$match[0][0]));
+					}
+				}
+			}
+		}
+		echo 'Filter Answer Success!';
 	}
 	function flash(){
 		ob_start();
@@ -288,18 +324,23 @@ class AddtikuController extends Controller {
 	public function checkChapter(){
 		$tikuModel = M('tiku');
 		$matchingModel = M('matching');
+		$tikutochapterModel = M("tiku_to_chapter");
 		$max = $tikuModel->field("MAX(id) as id")->find();
 		//echo $max['id'];exit;
-		for($i=$max['id'];$i>0;$i--){
+		for($i=1;$i<=$max['id'];$i++){
 			$result = $tikuModel->where("id=$i")->find();
-			$_result = $matchingModel->where("spider_code=".$result['spider_code'])->find();
-			//echo $matchingModel->getLastSql();exit;
-			if($_result){
-				$data['chapter_id'] = $_result['chapter_id'];
-				$tikuModel->data($data)->where("id=".$result['id'])->save();
-				//echo $tikuModel->getLastSql();exit;
+			if($result){
+				$_result = $matchingModel->where("spider_code=".$result['spider_code'])->select();
+				//echo $matchingModel->getLastSql();exit;
+				foreach($_result as $val){
+					if(!$matchingModel->table("tiku_to_chapter")->where("tiku_id=".$result['id']." AND chapter_id=".$val['chapter_id'])->find()){
+						//echo $matchingModel->getLastSql();exit;
+						$data['chapter_id'] = $val['chapter_id'];
+						$data['tiku_id'] = $result['id'];
+						$tikutochapterModel->add($data);
+					}
+				}
 			}
-			
 		}
 		echo 'Check Chapter Success!';
 	}
@@ -396,6 +437,7 @@ class AddtikuController extends Controller {
 		$chapterModel = M('chapter');
 		$matchingModel = M('matching');
 		$chapter_data = $chapterModel->field("chapter.*")->join("books ON chapter.`book_id`=books.`id`")->join("version ON version.`id`=books.`version_id`")->where("version.`course_id`=$this->course_id AND chapter.`parent_id`<>0")->select();
+		//echo $chapterModel->getLastSql();exit;
 		//var_dump($chapter_data);exit;
 		foreach($chapter_data as $v){
 			$ch = curl_init();
@@ -418,7 +460,7 @@ class AddtikuController extends Controller {
 				$data = json_decode($data,true);
 				$tikus = $data['data']['questionList']['rows'];
 				foreach($tikus  as $val){
-					$result = $matchingModel->where("spider_code=".$val['questionId'])->find();
+					$result = $matchingModel->where("spider_code=".$val['questionId']." AND chapter_id=".$v['id'])->find();
 					if(!$result){
 						$matching_data['spider_code'] = $val['questionId'];
 						$matching_data['chapter_id'] = $v['id'];
@@ -426,6 +468,8 @@ class AddtikuController extends Controller {
 					}
 				}
 				$page++;
+				unset($data);
+				unset($tikus);
 			}
 		}
 		echo 'Spider Sucess!';

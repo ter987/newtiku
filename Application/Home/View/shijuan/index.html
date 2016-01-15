@@ -385,7 +385,7 @@
 					<div class="tit">
 						<span>格式</span>
 					</div>
-					<div class="fl">
+					<div class="fl" id="doc_type">
 						<!-- <label><input class="wp_hover" name="doctype" value="doc" checked type="radio"><span>word2003</span><font class="save_title_doc">{$shijuan.title}.doc</font>
 						<div class="wp_value" style="text-align:center;padding-top:5px;color:#f43c5e;font-size:12px;text-indent:94px">
 							为保证试卷显示正常，建议使用 Microsoft Office Word 打开下载的试卷
@@ -397,16 +397,16 @@
 						</label><!-- <label><input class="wp_display" name="doctype" value="pdf" type="radio"><span>pdf</span><font class="save_title_pdf">高中语文随堂练习-20151129_yitiku.docx_yitiku.pdf</font></label> -->
 					</div>
 					</li>
-					<li>
+					<li id="shijuan_model">
 						<div class="tit">
 							<span>模板</span>
 						</div>
-						<label class="A4"><input name="model" value="A4" checked type="radio"><span>A4纸竖排</span></label>
+						<label class="A4"><input name="model" value="A4" checked="" type="radio"><span>A4纸竖排</span></label>
 						<label class="A3"><input name="model" value="A3" type="radio"><span>A3纸横排</span></label>
 						<label class="A4"><input name="model" value="B5" type="radio"><span>B5纸竖排</span></label>
 						<label class="B4" style="margin:0px;"><input name="model" value="B4" type="radio"><span>B4纸横排</span></label>
 					</li>
-					<li>
+					<li id="answer_order">
 						<div class="tit">
 							<span>答案</span>
 						</div>
@@ -563,23 +563,15 @@ $('#download_shijuan').click(function(){
 		}
 	);
 	
-	
-	$.getJSON(
-		'/shijuan/ajaxDownload',
-		'',
-		function(data){
-			if(data.status=='success'){
-				$('#down_iframe').attr('src','/shijuan/createtoword');
-			}
-		}
-	);
-	
-	$('#down_sj').dialog("close");
+
 });
 $('#xiazaishijuan').click(function(){
+	var doctype = $('#doc_type').find("input:checked").val();
+	var shijuan_model = $('#shijuan_model').find("input:checked").val();
+	var answer_order = $('#answer_order').find("input:checked").val();
 	$.getJSON(
 		'/shijuan/ajaxDownload',
-		'',
+		{doctype:doctype,shijuan_model:shijuan_model,answer_order:answer_order},
 		function(data){
 			if(data.status=='success'){
 				$('#down_iframe').attr('src','/shijuan/createtoword');

@@ -63,18 +63,20 @@ class TongbuController extends GlobalController {
 		}else{
 			$chapter = $chapterModel->field("id")->where("book_id=$book_id AND parent_id<>0")->select();
 			//echo $chapterModel->getlastsql();
-			$chapter_count = count($chapter);
 			foreach($chapter as $key=>$val){
 				$chapter_ids .= $val['id']; 
-				if($key<$chapter_count-1) $chapter_ids .= ',';
+				$chapter_ids .= ',';
 			}
+			$chapter_ids = trim($chapter_ids,',');
 		}
-		$where .= " && tiku.chapter_id IN($chapter_ids)";
+		$where .= " && tiku_to_chapter.chapter_id IN($chapter_ids)";
 		//获取题库数据
 		$Model = M('tiku');
 		$count = S('tiku_count_'.$where);
 		if(!$count){
-			$result = $Model->field("COUNT(*) AS tp_count")->join("tiku_source on tiku.source_id=tiku_source.id")->where($where)->find();
+			$result = $Model->field("COUNT(*) AS tp_count")
+			->join("left join tiku_to_chapter on tiku.id=tiku_to_chapter.tiku_id")
+			->join("tiku_source on tiku.source_id=tiku_source.id")->where($where)->find();
 			//echo $Model->getLastSql();
 			$count = $result['tp_count'];
 			S('tiku_count_'.$where,$count,array('type'=>'file','expire'=>FILE_CACHE_TIME));
@@ -93,9 +95,10 @@ class TongbuController extends GlobalController {
 		//$tiku_data = S(md5($where."limit $Page->firstRow,$Page->listRows"));
 		//if(!$tiku_data){
 			$tiku_data = $Model->field("tiku.`id`,tiku.options,tiku.`content`,tiku.`clicks`,tiku_source.`source_name`,tiku.difficulty_id")
+			->join("left join tiku_to_chapter on tiku.id=tiku_to_chapter.tiku_id")
 			->join("tiku_source on tiku.source_id=tiku_source.id")
 			->where($where)->limit($Page->firstRow.','.$Page->listRows)->select();
-			S(md5($where."limit $Page->firstRow,$Page->listRows"),$tiku_data);
+			//S(md5($where."limit $Page->firstRow,$Page->listRows"),$tiku_data);
 		//}
 		//var_dump($tiku_data);
 		//echo $Model->getLastSql();
