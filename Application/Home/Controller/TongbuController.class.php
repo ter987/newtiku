@@ -94,14 +94,14 @@ class TongbuController extends GlobalController {
 		//S(array('type'=>'Memcache','host'=>C('MEMCACHED_HOST'),'port'=>C('MEMCACHED_POST'),'expire'=>C('MEMCACHED_EXPIRE')));
 		//$tiku_data = S(md5($where."limit $Page->firstRow,$Page->listRows"));
 		//if(!$tiku_data){
-			$tiku_data = $Model->field("tiku.`id`,tiku.options,tiku.`content`,tiku.`clicks`,tiku_source.`source_name`,tiku.difficulty_id")
+			$tiku_data = $Model->field("distinct tiku.`id`,tiku.options,tiku.`content`,tiku.`clicks`,tiku_source.`source_name`,tiku.difficulty_id")
 			->join("left join tiku_to_chapter on tiku.id=tiku_to_chapter.tiku_id")
 			->join("tiku_source on tiku.source_id=tiku_source.id")
 			->where($where)->limit($Page->firstRow.','.$Page->listRows)->select();
 			//S(md5($where."limit $Page->firstRow,$Page->listRows"),$tiku_data);
 		//}
 		//var_dump($tiku_data);
-		//echo $Model->getLastSql();
+		echo $Model->getLastSql();
 		$this->assign('tiku_data',$tiku_data);
 		$this->assign('version_id',$version_id);
 		$this->assign('book_id',$book_id);

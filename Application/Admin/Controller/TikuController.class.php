@@ -87,15 +87,15 @@ class TikuController extends GlobalController {
 			//var_dump($_POST);exit;
 			$data['id'] = $_POST['id'];
 			$data['difficulty_id'] = $_POST['difficulty_id'];
-			$data['content'] = I('post.content');
-			$data['answer'] = I('post.answer');
-			$data['analysis'] = I('post.analysis');
+			$data['content'] = trim(I('post.content'));
+			$data['answer'] = trim(I('post.answer'));
+			$data['analysis'] = trim(I('post.analysis'));
 			$data['status'] = $_POST['status'];
 			$data['course_id'] = $_POST['course_id'];
 			$data['type_id'] = $_POST['type_id'];
 			$data['update_time'] = time();
 			if($data['type_id']==1 || $data['type_id']==6){
-				$data['options'] = json_encode($_POST['options']);
+				$data['options'] = json_encode(trim($_POST['options']));
 			}
 			
 			$Model = M('tiku');

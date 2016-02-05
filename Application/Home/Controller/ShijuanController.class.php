@@ -27,7 +27,8 @@ class ShijuanController extends GlobalController {
 	    	$course_data = $courseModel->where("id=".$_SESSION['course_id'])->find();
 			$grade = $course_data['course_type']==1?'高中':'初中';
 	    	$_SESSION['shijuan']['title'] = $grade.$course_data['course_name'].$shijuantype_data['name'].'-'.date('Ymd');
-		
+			$_SESSION['shijuan']['pdftitle'] = $grade.$course_data['course_name'].$shijuantype_data['name'];
+			
 			foreach ($_SESSION['cart'] as $key => $val) {
 				if(!in_array($val['type_name'],$arr)){
 					$arr[] = $val['type_name'];
@@ -157,52 +158,221 @@ class ShijuanController extends GlobalController {
 	public function test(){
 		Vendor('PhpWord.src.PhpWord.Autoloader');
 		\PhpOffice\PhpWord\Autoloader::register();
-		
 		// Creating the new document...
 		$phpWord = new \PhpOffice\PhpWord\PhpWord();
-		
-		// Every element you want to append to the word document is placed in a section. So you need a section:
-		
-		$imageStyle = array(
-		   'positioning' => 'absolute',
-		    'posHorizontalRel' => 'inner-margin-area',
-		    'posVerticalRel' => 'inner-margin-area',
-		);
-		$sectionStyle = array(
-		    'align' => 'center',
-		    //'marginTop' => '100',
-		);
 		$section = $phpWord->addSection();
-		$table = $section->addTable('myTable');
-		$table->addRow();
-		$textrun = $table->addcell(2500);
-		$textrun->addText('你好');
-		$textrun = $table->addcell(2500);
-		$textrun->addText('你好');
-		$table->addRow();
-		$textrun = $table->addcell(2500);
-		$textrun->addText('你好');
-		$textrun = $table->addcell(2500);
-		$textrun->addText('你好');
-		//exit;
-		// $textrun = $section->createTextRun(array('widowControl'=>'true'));
-		// $textrun->addText('已知函数已知函数');
-		// $textrun->addImage('Public/tikupics/20151202/20/31/565ee4ac675a91449059500.gif');
-		// $textrun->addText('Merry Chrismers',array('size'=>40));
-		// $textrun->addImage('Public/tikupics/20151202/20/31/565ee4ac675a91449059500.gif');
-		// $textrun->addText('沦肌浃髓还有谁还有谁');mage('Public/tikupics/20151202/20/31/565ee4ac675a91449059500.gif');
+		
+		
+
+		//$section->getStyle()->setPageNumberingStart(1);
+		$footer = $section->addFooter();
+		$textbox = $footer->addTextBox(
+		    array(
+		        'width' => \PhpOffice\PhpWord\Shared\Drawing::centimetersToPixels(4.5),
+			    'height' => \PhpOffice\PhpWord\Shared\Drawing::centimetersToPixels(17.3),
+			    'positioning' => 'absolute',
+			    'posHorizontalRel' => 'page',
+			    'posVerticalRel' => 'page',
+			    'marginLeft' => \PhpOffice\PhpWord\Shared\Drawing::centimetersToPixels(15.3),
+			    'marginTop' => \PhpOffice\PhpWord\Shared\Drawing::centimetersToPixels(9.9),
+			    //'stroke' => 0,
+			   // 'innerMargin' => 0,
+			   // 'borderSize' => 1,
+			    //'borderColor' => '',
+			   // 'wrappingStyle' => \PhpOffice\PhpWord\Style\Image::WRAPPING_STYLE_SQUARE
+		    )
+		);
+		$fontStyle = array('positioning' => 'absolute',
+			    'posHorizontalRel' => 'page',
+			    'posVerticalRel' => 'page',
+			    'marginLeft' => \PhpOffice\PhpWord\Shared\Drawing::centimetersToPixels(15.3),
+			    'marginTop' => \PhpOffice\PhpWord\Shared\Drawing::centimetersToPixels(9.9),);
+		$phpWord->addFontStyle('fStyle', $fontStyle);
+		$textbox->addText('测试','fStyle');
+		//$textbox->addPreserveText('ceshi ');
 		$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
-		$objWriter->save('helloWorld.docx');
-		exit;
+		//$objWriter->save('helloWorld.doc');exit;
+		
 		//$objWriter->save(Yii::app()->params['exportToDir'].$filename.".docx");
         header("Content-Description: File Transfer");
-        header('Content-Disposition: attachment; filename="'.$_SESSION['shijuan']['title'].'.docx"');
+        header('Content-Disposition: attachment; filename=docment.docx');
         //header("Content-Type: application/docx");
         header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
         header('Content-Transfer-Encoding: binary');
         header("Cache-Control: public");
         header('Expires: 0');
         $objWriter->save("php://output");
+		exit;
+		//echo $_SERVER['DOCUMENT_ROOT'];
+		exec("wkhtmltopdf\bin\wkhtmltopdf.exe D:/xampp/htdocs/tiku/Public/attache/html/20160212.html  D:/xampp/htdocs/tiku/Public/attache/pdf/高中数学20160212.pdf",$return);
+		var_dump($return);
+		exit;
+		Vendor('tcpdf.tcpdf');
+		$pdf = new \tcpdf\TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'A4', true, 'UTF-8', false);
+		// set font
+		$pdf->SetFont('stsongstdlight', '', 8);
+		
+		// define some html content for testing
+		$txt = '<span style="vertical-align: middle;">已知全集，，则集合<img  width="43" height="28" align="middle"    src="/Public/tikupics/20151126/19/24/5656ebefadc581448537071.gif">你说地方</span>';
+		// add a page
+		$pdf->AddPage();
+		
+		
+		// write html text
+		$pdf->writeHTML($txt, true, false, true, false, '');
+		
+		//Close and output PDF document
+		$pdf->Output('example064.pdf', 'I');
+	}
+	public function addFont(){
+		Vendor('tcpdf.include.tcpdf_fonts');
+		$result = \tcpdf\TCPDF_FONTS::addTTFfont($_SERVER['DOCUMENT_ROOT'].'/ThinkPHP/Library/Vendor/tcpdf/fonts/DroidSansFallback.ttf', 'DroidSansFallback', '', 32);
+		var_dump($result);
+	}
+	public function createToPdf(){
+		Vendor('tcpdf.tcpdf');
+		$pdf = new \tcpdf\TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		//Vendor('tcpdf.include.tcpdf_fonts');
+		/*
+		 * ArialNarrowSpecialG1Bold
+		 */
+		$result = \tcpdf\TCPDF_FONTS::addTTFfont($_SERVER['DOCUMENT_ROOT'].'/ThinkPHP/Library/Vendor/tcpdf/fonts/cid0cs.ttf', 'cid0cs', '', 32);
+		$pdf->SetFont('cid0cs', '', 8);
+		// set header and footer fonts
+		$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+		$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+		
+		// set default monospaced font
+		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+		
+		// set margins
+		$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+		$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+		
+		// set auto page breaks
+		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+		$pdf->AddPage();
+		$txt = '<h1 style="text-align:center;">'.$_SESSION['shijuan']['pdftitle'].'</h1>';
+		$txt .= '<font style="font-size:13;text-align:center;">满分：'.$_SESSION['shijuan']['score'].'</font>';
+		$txt .= '<p style="font-size:13;text-align:center;">班级：<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>姓名：<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>考号：<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></p>';
+		
+		$oa = array(1=>'一',2=>'二',3=>'三',4=>'四',5=>'五',6=>'六',7=>'七');
+		$last = 0;
+		$o = 1;
+		$answer_part = array();
+		if($_SESSION['shijuan'][1]){
+			$option_index = array(0=>'A',1=>'B',2=>'C',3=>'D',4=>'E');
+			$txt .= '<strong style="font-size:13;text-align:center;">'.$_SESSION['shijuan'][1]['t_title'].'</strong>';
+			$txt .= '<p style="font-size:13;">'.$_SESSION['shijuan'][1]['note'].'</p>';
+			foreach($_SESSION['shijuan'][1]['shiti'] as $k=>$v){
+				$childs = $this->_getTikuInfo($v['childs'],$o);
+				$answer_part = array_merge($answer_part,$childs);
+				//var_dump($answer_part);exit;
+				$last = $k;
+				$txt .= '<strong style="font-size:13;">'.$oa[$k].'、'.$v['t_title'].'</strong>';
+				foreach($childs as $key=>$val){
+					$txt .= '<p style="font-size:13;">'.$val['order_char'].'.'.htmlspecialchars_decode($val['content']).'</p>';
+					if($val['options']){
+						$options = json_decode($val['options']);
+						$option_len = 0;
+						foreach($options as $opt){
+							preg_match_all('/src="([\s|\S]+)"/U',$opt,$matchs);
+							$opt = preg_replace('/<img[\s|\S]+>/U','',$opt);
+							$option_len += strlen($opt)*10;
+							foreach($matchs[1] as $m1){
+								$info = getimagesize('http://'.$_SERVER['HTTP_HOST'].$m1);
+								if($info){
+									$option_len += $info[0];
+								}
+							}
+						}
+						$txt .= '<p style="font-size:13;"><table>';
+						if($option_len>400 && $option_len<800){
+							$options = array_chunk($options,2);
+							foreach($options as $son){
+								$txt .= '<tr>';
+								foreach($son as $d=>$c){
+									$txt .= '<td width="300px;" >'.$option_index[$d].'.'.$c.'</td>';
+								}
+								$txt .= '</tr>';
+							}
+						}else if($option_len>800){
+							foreach($options as $d=>$c){
+								$txt .= '<tr><td width="800px;">'.$option_index[$d].'.'.$c.'</td></tr>';
+							}
+						}else{
+							$txt .= '<tr>';
+							foreach($options as $d=>$c){
+								$txt .= '<td width="100px;">'.$option_index[$d].'.'.$c.'</td>';
+							}
+							$txt .= '</tr>';
+						}
+						
+						$txt .= '</table></p>';
+					//break;
+					
+					}
+					//解析跟在试题后面
+					if($_SESSION['answer_order']==1){
+						$txt .= '<p style="font-size:11;">试题解析：';
+						$txt .= htmlspecialchars_decode($val['analysis']);
+						$txt .= '</p>';
+						
+						$txt .= '<p style="font-size:11;">答案：';
+						$txt .= htmlspecialchars_decode($val['answer']);
+						$txt .= '</p>';
+						
+					}
+				}
+			}
+		}
+		$txt .= '<br />';
+		if($_SESSION['shijuan'][2]){
+			$txt .= '<strong style="font-size:13;text-align:center;">'.$_SESSION['shijuan'][2]['t_title'].'</strong>';
+			$txt .= '<p style="font-size:13;">'.$_SESSION['shijuan'][2]['note'].'</p>';
+			foreach($_SESSION['shijuan'][2]['shiti'] as $k=>$v){
+				$childs = $this->_getTikuInfo($v['childs'],$o);
+				$answer_part = array_merge($answer_part,$childs);
+				$last = $k;
+				$txt .= '<strong style="font-size:13;">'.$oa[$k].'、'.$v['t_title'].'</strong>';
+				//break;
+				foreach($childs as $key=>$val){
+					$txt .= '<p style="font-size:13;">'.$val['order_char'].'.'.htmlspecialchars_decode($val['content']).'</p>';
+					//break;
+				}
+				if(strpos($v['t_title'],'解答题')!==false){
+					$txt .= '<br /><br /><br /><br /><br />';
+				}
+				//解析跟在试题后面
+				if($_SESSION['answer_order']==1){
+					$txt .= '<p style="font-size:11;">试题解析：';
+					$txt .= htmlspecialchars_decode($val['analysis']);
+					$txt .= '</p>';
+					
+					$txt .= '<p style="font-size:11;">答案：';
+					$txt .= htmlspecialchars_decode($val['answer']);
+					$txt .= '</p>';
+				}
+			}
+			
+		}
+		$pdf->writeHTML($txt, true, false, true, false, '');
+		$pdf->AddPage();
+		$txt = '';
+		//解析跟试卷分离
+		if($_SESSION['answer_order']==2){
+			$txt .= '<h1 style="text-align:center;">答案部分</h1>';
+			$txt .= '<br /><br />';
+			foreach($answer_part as $val){
+				$txt .= '<p style="font-size:13;">'.$val['order_char'].'.试题解析：'.htmlspecialchars_decode($val['analysis']).'</p>';
+				$txt .= '<p style="font-size:13;">答案：'.htmlspecialchars_decode($val['answer']).'</p>';
+			}
+		}
+		$pdf->writeHTML($txt, true, false, true, false, '');
+		
+		//Close and output PDF document
+		$pdf->Output('example064.pdf', 'I');
 	}
 	/**
 	 * 生成word文件
@@ -232,14 +402,14 @@ class ShijuanController extends GlobalController {
 		);
 		$section = $phpWord->addSection($sectionStyle);
 		//$section->getStyle()->setPageNumberingStart(1);
-		//$footer = $section->addFooter();
-		//$footer->addText('第1页');
+		$footer = $section->addFooter();
+		$footer->addTextboxes();
 		//$footer->addPreserveText('第{PAGE}页(共{NUMPAGES}页).');
 		//$header = $section->addHeader();
 		//$header->addText('头部');
 		// You can directly style your text by giving the addText function an array:
 		$section->addText($_SESSION['shijuan']['title'], array( 'size'=>'15','bold'=>true),array('align' => 'center'));
-		$section->addText('满分：', array( 'size'=>'13'),array('align' => 'center'));
+		$section->addText('满分：'.$_SESSION['shijuan']['score'], array( 'size'=>'13'),array('align' => 'center'));
 		$section->addText('班级：_________  姓名：_________  考号：_________', array( 'size'=>'13'),array('align' => 'center'));
 		$section->addTextBreak();//换行
 		$oa = array(1=>'一',2=>'二',3=>'三',4=>'四',5=>'五',6=>'六',7=>'七');
@@ -600,7 +770,7 @@ class ShijuanController extends GlobalController {
 		// At least write the document to webspace:
 		//$PHPWord_IOFactory = new \Vendor\PHPWord\PHPWord_IOFactory();
 		$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
-		//$objWriter->save('helloWorld.docx');
+		//$objWriter->save('helloWorld.doc');exit;
 		
 		//$objWriter->save(Yii::app()->params['exportToDir'].$filename.".docx");
         header("Content-Description: File Transfer");

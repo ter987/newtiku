@@ -13,16 +13,16 @@ class AddtikuController extends Controller {
 	{   //'disciplineCode'=>'2','disciplineId'=>'21','disciplineType'=>'2','flag'=>'3'
 		$this->dir_path = 'Public/tikupics/';
 		$this->date = date('Ymd');
-		$this->course_id = 5;//数学3   物理1  化学2 历史4 语文5 生物6 地理7 英语8
+		$this->course_id = 8;//数学3   物理1  化学2 历史4 语文5 生物6 地理7 英语8
 		$this->source_name_default = '高中英语（未知）';
-		$this->cookies = 'jsessionid=F5F9F53752B5172242FBD62450E62F14';
-		$this->disciplineCode = 1;//物理4  数学2 化学5  历史8 语文1 生物6 地理9 英语03
-		$this->disciplineId = 20;//物理23  数学21  化学24  历史27 语文20 生物25 地理28  英语22
+		$this->cookies = 'jsessionid=DFAF12C0C277CFA4FEF001EE3550B42A';
+		$this->disciplineCode = 03;//物理4  数学2 化学5  历史8 语文1 生物6 地理9 英语03
+		$this->disciplineId = 22;//物理23  数学21  化学24  历史27 语文20 生物25 地理28  英语22
 		$this->disciplineType =2;
 		//历史'13652,13653'  语文 '13635,1232453,13640,13641,13636,13642,3933440,2400602,13639,13637'
 		//生物 '13629,2400600,2400601'   地理  '13654,13656'   英语  '18170,13611,18174,13616,13613,13614,18176,18171,13617'
 		//物理 '13618,11112810,13622,13623,13621,11112811'  化学  '13625,13626,16300,13628' 数学 '13646,13647,13648'
-		$this->queTypeIds = '13635,1232453,13640,13641,13636,13642,3933440,2400602,13639,13637';
+		$this->queTypeIds = '18170,13611,18174,13616,13613,13614,18176,18171,13617';
 		$this->flag = 3;
 		$this->rows = 200;
 		
@@ -51,7 +51,7 @@ class AddtikuController extends Controller {
 		$max = $tikuModel->field("MAX(id) as id")->find();
 		//echo $max['id'];exit;
 		for($i=1;$i<=$max['id'];$i++){
-			$result = $tikuModel->where("id=$i")->find();
+			$result = $tikuModel->where("id=$i AND type_id=1")->find();
 			if($result){
 				preg_match_all('/A|B|C|D/', $result['answer'],$match);
 				if(!empty($match[0])){
@@ -74,8 +74,137 @@ class AddtikuController extends Controller {
 		$handle = fopen('in.swf', 'w+');
 		fwrite($handle, $data);
 	}
-    
-	
+	public function pipei_tiku(){
+		$Model = M('tiku');
+		for($id=1;$id<=1122000;$id++){
+			//$id = 258910;
+			$data = array();
+			$result = $Model->field('content_old,type_id,answer,analysis')->where("id=$id AND status=0")->find();
+			if(!$result) continue;
+			$analysis = $result['analysis'];
+			$answer = $result['answer'];
+			$type_id = $result['type_id'];
+			//var_dump($result);
+			//$content = strip_tags($result['content_old'],'remove','<div>');
+			$content = preg_replace('/<div[\s|\S]*>/U','',$result['content_old']);
+			$content = preg_replace('/<\/div>/U','',$content);
+			$content = preg_replace('/<!--[\s|\S]+-->/U','',$content);
+			$content = preg_replace('/\s{2,}/',' ',$content);
+			//var_dump($content);
+			$content = preg_replace('/_{4,}/','<span style="text-decoration: underline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>',$content);
+			if(strpos(substr($content,0,10),'<p')!==false){
+				$content= preg_replace('/<p[\s|\S]*>/U','',$content,1);
+				$content = preg_replace('/<\/p>/','',$content,1);
+			}
+			//echo $content;exit;
+			if($type_id==1){
+				$a=$b=$c=$d='';
+				$spider_error = 0;
+				$option_arr = array();
+				$str = strip_tags($content,'<img><sup><sub><strong><em><p>');
+				//$str= preg_replace('/\s*/','',$str);
+				//echo $content;exit;
+				$str = preg_replace('/\n/','',$str);
+				$result = preg_match('/A(．|\.|、){1}[^\n]+B(．|\.|、)/',$str,$match);
+		
+				if(!$result){ if(preg_match('/A(．|\.|、){1}[\s|\S]+\n/U',$str,$match)){}else{preg_match('/（A）[\s|\S]+（B）/U',$str,$match);$match[0] = preg_replace('/（A）|（B）/','',$match[0]);}}
+				//var_dump($match);exit;
+				
+				$a = trim(preg_replace('/A．|A\.|A、|B．|B\.|B、|&nbsp;/','',$match[0]));
+				$a = strip_tags($a,'<img><sup><sub><strong><em>');
+				//echo $a;exit;
+				$result = preg_match('/B(．|\.|、){1}[^\n]+C(．|\.|、)/',$str,$match);
+				if(!$result){ if(preg_match('/B(．|\.|、){1}[\s|\S]+\n/U',$str,$match)){}else{preg_match('/（B）[\s|\S]+（C）/U',$str,$match);$match[0] = preg_replace('/（B）|（C）/','',$match[0]);}}
+				//var_dump($match);exit;
+				
+				$b = trim(preg_replace('/B．|B\.|B、|C．|C\.|C、|&nbsp;/','',$match[0]));
+				$b = strip_tags($b,'<img><sup><sub><strong><em>');
+				$result = preg_match('/C(．|\.|、){1}[^\n]+D(．|\.|、)/',$str,$match);
+				if(!$result){ if(preg_match('/C(．|\.|、){1}[\s|\S]+\n/U',$str,$match)){}else{preg_match('/（C）[\s|\S]+（D）/U',$str,$match);$match[0] = preg_replace('/（C）|（D）/','',$match[0]);}}
+				
+				$c = trim(preg_replace('/C．|C\.|C、|D．|D\.|D、|&nbsp;/','',$match[0]));
+				$c = strip_tags($c,'<img><sup><sub><strong><em>');
+				$result = preg_match('/(&nbsp;)*\s*D(．|\.|、){1}[\s|\S]+(<\/p>){0,1}/',$str,$match);
+				if(!$result){ if(preg_match('/D(．|\.|、){1}[\s|\S]+(<\/p>){0,1}/',$str,$match)){}else{preg_match('/（D）[\s|\S]+(<\/p>){0,1}/',$str,$match);$match[0] = preg_replace('/（D）/','',$match[0]);}}
+				//exit($str);
+				//var_dump($match);exit;
+				$d = trim(preg_replace('/D．|D\.|D、|&nbsp;/i','',$match[0]));
+				$d = strip_tags($d,'<img><sup><sub><strong><em>');
+				$option_arr = array(0=>$a,1=>$b,2=>$c,3=>$d);
+				if(!empty($a) || !empty($b) || !empty($c) || !empty($d)){
+					$options = json_encode($option_arr);
+				}
+				
+				if(empty($a) || empty($b) || empty($c) || empty($d)){
+				 	$spider_error = 1;
+				}
+				
+				preg_match_all('/<p[\s|\S]*<\/p>/U',$content,$matchs);
+				$count = count($matchs[0]);
+				
+				if($count){
+					$i = 0;
+					while($i<$count){
+						if(preg_match('/[ABCD](．|\.|、){1}/',strip_tags($matchs[0][$i]),$m) || preg_match('/（[ABCD]）/',strip_tags($matchs[0][$i]),$m)){
+							$content = str_replace($matchs[0][$i],'',$content);
+						}else{
+							$spider_error = 0;
+						}
+						$i++;
+					}
+				}else{
+					$spider_error = 1;
+				}
+				preg_match_all('/<p class=MsoNormal[\s|\S]*<\/p>/U',$content,$matchs);
+				foreach($matchs[0] as $key=>$val){
+					$result = preg_replace('/(&nbsp;)| /','',strip_tags($val,'<img>'));
+					if($result ==''){
+						$content = str_replace($matchs[0][$key],'',$content);
+					}
+				}
+			}
+			//过滤答案
+			if($type_id==1){
+				$answer = preg_replace('/(&nbsp;)|(&amp;)|(nbsp;)|(&lt;p&gt;)|(&lt;\/p&gt;)|\s{2,}| /','',$answer);
+			}else{
+				$answer = htmlspecialchars_decode($answer);
+				$answer = preg_replace('/<div[\s|\S]*>/U','',$answer);
+				$answer = preg_replace('/<\/div>/U','',$answer);
+				$answer = preg_replace('/\s{2,}/',' ',$answer);
+				if(strpos(substr($answer,0,10),'<p')!==false){
+					$answer= preg_replace('/<p[\s|\S]*>/U','',$answer,1);
+					$answer = preg_replace('/<\/p>/','',$answer,1);
+				}
+				$answer = htmlspecialchars($answer);
+			}
+			//过滤解析
+			$analysis = htmlspecialchars_decode($analysis);
+			
+			$analysis = preg_replace('/<div[\s|\S]*>/U','',$analysis);
+			$analysis = preg_replace('/<\/div>/U','',$analysis);
+			
+			$analysis = preg_replace('/\s{2,}/',' ',$analysis);
+			if(strpos(substr($analysis,0,10),'<p')!==false){
+				$analysis= preg_replace('/<p[\s|\S]*>/U','',$analysis,1);
+				$analysis = preg_replace('/<\/p>/','',$analysis,1);
+			}
+			
+			$analysis = htmlspecialchars(trim($analysis));
+			$content = htmlspecialchars(trim($content));
+			
+			$answer = trim($answer);
+			$data['content'] = $content;
+			$data['answer'] = $answer;
+			$data['analysis'] = $analysis;
+			$data['spider_error'] = $spider_error;
+			$data['options'] = $options;
+			$Model->where("id=$id")->save($data);
+			unset($data);
+			unset($result);
+			sleep(1);
+		}
+		echo 'Success';
+	}
 	/**
 	 * 采集题库
 	 * 采集源：http://www.jtyhjy.com/sts/
@@ -280,9 +409,10 @@ class AddtikuController extends Controller {
 						// $content = preg_replace('/[\'|"]mso-spacerun:yes[\'|"]>(&nbsp;){3,}[\s|\S]*<\/span>/','"mso-spacerun:yes">'.$underline.'</span>',$content);
 					// }
 					
-					$content = strip_tags(trim($content),"<p><a><span><img>");
+					//$content = strip_tags(trim($content),"<p><a><span><img><table><tr><td><th><li><o:p>");
 					$content= preg_replace('/<p[\s|\S]*>/U','',$content,1);
 					$content = preg_replace('/<\/p>/','',$content,1);
+					$content = trim($content);
 					//过滤解析
 					$analysis = trim($val['analysisHtmlText']);
 					preg_match_all('/src=["|\'][\s|\S]+["|\']/U',$analysis,$a_m);
@@ -327,7 +457,7 @@ class AddtikuController extends Controller {
 		$tikutochapterModel = M("tiku_to_chapter");
 		$max = $tikuModel->field("MAX(id) as id")->find();
 		//echo $max['id'];exit;
-		for($i=1;$i<=$max['id'];$i++){
+		for($i=$max['id'];$i>0;$i--){
 			$result = $tikuModel->where("id=$i")->find();
 			if($result){
 				$_result = $matchingModel->where("spider_code=".$result['spider_code'])->select();

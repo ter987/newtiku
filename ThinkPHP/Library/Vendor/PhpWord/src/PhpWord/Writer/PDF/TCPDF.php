@@ -49,7 +49,7 @@ class TCPDF extends AbstractRenderer implements WriterInterface
         $orientation = 'P';
 
         // Create PDF
-        $pdf = new \TCPDF($orientation, 'pt', $paperSize);
+        $pdf = new \PhpOffice\PhpWord\Writer\PDF\TCPDF\TCPDF($orientation, 'pt', $paperSize);
         $pdf->setFontSubsetting(false);
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);
