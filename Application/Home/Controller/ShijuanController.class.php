@@ -165,34 +165,36 @@ class ShijuanController extends GlobalController {
 		
 
 		//$section->getStyle()->setPageNumberingStart(1);
-		$footer = $section->addFooter();
-		$textbox = $footer->addTextBox(
-		    array(
-		        'width' => \PhpOffice\PhpWord\Shared\Drawing::centimetersToPixels(4.5),
-			    'height' => \PhpOffice\PhpWord\Shared\Drawing::centimetersToPixels(17.3),
-			    'positioning' => 'absolute',
-			    'posHorizontalRel' => 'page',
-			    'posVerticalRel' => 'page',
-			    'marginLeft' => \PhpOffice\PhpWord\Shared\Drawing::centimetersToPixels(15.3),
-			    'marginTop' => \PhpOffice\PhpWord\Shared\Drawing::centimetersToPixels(9.9),
-			    //'stroke' => 0,
-			   // 'innerMargin' => 0,
-			   // 'borderSize' => 1,
-			    //'borderColor' => '',
-			   // 'wrappingStyle' => \PhpOffice\PhpWord\Style\Image::WRAPPING_STYLE_SQUARE
-		    )
-		);
-		$fontStyle = array('positioning' => 'absolute',
-			    'posHorizontalRel' => 'page',
-			    'posVerticalRel' => 'page',
-			    'marginLeft' => \PhpOffice\PhpWord\Shared\Drawing::centimetersToPixels(15.3),
-			    'marginTop' => \PhpOffice\PhpWord\Shared\Drawing::centimetersToPixels(9.9),);
-		$phpWord->addFontStyle('fStyle', $fontStyle);
-		$textbox->addText('测试','fStyle');
+		//$footer = $section->addFooter();
+		// $textbox = $section->addTextBox(
+		    // array(
+		        // 'width' => \PhpOffice\PhpWord\Shared\Drawing::centimetersToPixels(4.5),
+			    // 'height' => \PhpOffice\PhpWord\Shared\Drawing::centimetersToPixels(17.3),
+			    // //'positioning' => 'absolute',
+			    // //'posHorizontalRel' => 'page',
+			    // //'posVerticalRel' => 'page',
+			    // //'marginLeft' => \PhpOffice\PhpWord\Shared\Drawing::centimetersToPixels(15.3),
+			    // //'marginTop' => \PhpOffice\PhpWord\Shared\Drawing::centimetersToPixels(19.9),
+			    // //'stroke' => 0,
+			   // // 'innerMargin' => 0,
+			   // // 'borderSize' => 1,
+			    // //'borderColor' => '',
+			   // // 'wrappingStyle' => \PhpOffice\PhpWord\Style\Image::WRAPPING_STYLE_SQUARE
+		    // )
+		// );
+		$fontStyle = array(
+					'-webkit-transformss' => 'rotate(-90deg)',
+					'-moz-transform' => 'rotate(-90deg)',
+					'-o-transform' => 'rotate(90deg)'
+			    );
+		//$phpWord->addParagraphStyle('fStyle', $fontStyle);
+		//$phpWord->addFontStyle('fStyle', $fontStyle);
+		$textrun = $section->addTextRun();
+		$textrun->addText('I am bold', array('bold' => true));
 		//$textbox->addPreserveText('ceshi ');
 		$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
-		//$objWriter->save('helloWorld.doc');exit;
-		
+		$objWriter->save('helloWorld.doc');exit;
+		exit;
 		//$objWriter->save(Yii::app()->params['exportToDir'].$filename.".docx");
         header("Content-Description: File Transfer");
         header('Content-Disposition: attachment; filename=docment.docx');

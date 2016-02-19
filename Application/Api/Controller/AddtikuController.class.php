@@ -76,7 +76,7 @@ class AddtikuController extends Controller {
 	}
 	public function pipei_tiku(){
 		$Model = M('tiku');
-		for($id=1;$id<=1122000;$id++){
+		for($id=250000;$id<=974901;$id++){//974901
 			//$id = 258910;
 			$data = array();
 			$result = $Model->field('content_old,type_id,answer,analysis')->where("id=$id AND status=0")->find();
@@ -201,7 +201,7 @@ class AddtikuController extends Controller {
 			$Model->where("id=$id")->save($data);
 			unset($data);
 			unset($result);
-			sleep(1);
+			usleep(1000);
 		}
 		echo 'Success';
 	}
