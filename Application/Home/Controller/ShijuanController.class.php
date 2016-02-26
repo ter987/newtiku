@@ -165,23 +165,23 @@ class ShijuanController extends GlobalController {
 		
 
 		//$section->getStyle()->setPageNumberingStart(1);
-		//$footer = $section->addFooter();
-		// $textbox = $section->addTextBox(
-		    // array(
-		        // 'width' => \PhpOffice\PhpWord\Shared\Drawing::centimetersToPixels(4.5),
-			    // 'height' => \PhpOffice\PhpWord\Shared\Drawing::centimetersToPixels(17.3),
-			    // //'positioning' => 'absolute',
-			    // //'posHorizontalRel' => 'page',
-			    // //'posVerticalRel' => 'page',
-			    // //'marginLeft' => \PhpOffice\PhpWord\Shared\Drawing::centimetersToPixels(15.3),
-			    // //'marginTop' => \PhpOffice\PhpWord\Shared\Drawing::centimetersToPixels(19.9),
-			    // //'stroke' => 0,
-			   // // 'innerMargin' => 0,
-			   // // 'borderSize' => 1,
-			    // //'borderColor' => '',
-			   // // 'wrappingStyle' => \PhpOffice\PhpWord\Style\Image::WRAPPING_STYLE_SQUARE
-		    // )
-		// );
+		$footer = $section->addFooter();
+		 $textbox = $section->addTextBox(
+		    array(
+		        'width' => \PhpOffice\PhpWord\Shared\Drawing::centimetersToPixels(4.5),
+			    'height' => \PhpOffice\PhpWord\Shared\Drawing::centimetersToPixels(17.3),
+			    'positioning' => 'absolute',
+			    'posHorizontalRel' => 'page',
+			    'posVerticalRel' => 'page',
+			    'marginLeft' => \PhpOffice\PhpWord\Shared\Drawing::centimetersToPixels(15.3),
+			    'marginTop' => \PhpOffice\PhpWord\Shared\Drawing::centimetersToPixels(19.9),
+			    // 'stroke' => 0,
+			   // 'innerMargin' => 0,
+			   // 'borderSize' => 1,
+			    // 'borderColor' => '',
+			   // 'wrappingStyle' => \PhpOffice\PhpWord\Style\Image::WRAPPING_STYLE_SQUARE
+		    )
+		);
 		$fontStyle = array(
 					'-webkit-transformss' => 'rotate(-90deg)',
 					'-moz-transform' => 'rotate(-90deg)',
@@ -189,8 +189,11 @@ class ShijuanController extends GlobalController {
 			    );
 		//$phpWord->addParagraphStyle('fStyle', $fontStyle);
 		//$phpWord->addFontStyle('fStyle', $fontStyle);
-		$textrun = $section->addTextRun();
-		$textrun->addText('I am bold', array('bold' => true));
+		//$textrun = $section->addTextRun();
+		$textbox->addText('I am bolds', array('bold' => true,'color'=>'AACC00','italic'=>true));
+		$textbox->addText('I am not bold', array('color'=>'AACC00','italic'=>true));
+		$section->addText('My name is Lily');
+		$section->addText('He is a boy');
 		//$textbox->addPreserveText('ceshi ');
 		$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
 		$objWriter->save('helloWorld.doc');exit;
