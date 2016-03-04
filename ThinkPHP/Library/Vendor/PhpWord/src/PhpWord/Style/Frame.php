@@ -42,7 +42,16 @@ class Frame extends AbstractStyle
      */
     const POS_ABSOLUTE = 'absolute';
     const POS_RELATIVE = 'relative';
-
+	
+	/**
+     * Add by Eric
+	 * 2016-3-2
+     *
+     * @const string
+     */
+    const LFLOW_HORIZONTAL = 'horizontal';
+    const LFLOW_VERTICAL = 'vertical';
+	const LAYOUT_FLOW_ALT = 'bottom-to-top';
     /**
      * Horizontal/vertical value
      *
@@ -135,6 +144,9 @@ class Frame extends AbstractStyle
      * @var string
      */
     private $pos;
+	//Add by Eric  2016-3-2
+	private $lFlow;
+	private $flowAlt;
 
     /**
      * Horizontal position
@@ -346,7 +358,36 @@ class Frame extends AbstractStyle
 
         return $this;
     }
+	/*********Add by Eric 2016/3/2**********/
+	public function getLFlow()
+    {
+        return $this->lFlow;
+    }
+    public function setLFlow($value)
+    {
+        $enum = array(
+            self::LFLOW_HORIZONTAL,
+            self::LFLOW_VERTICAL,
+        );
+        $this->lFlow = $this->setEnumVal($value, $enum, $this->lFlow);
 
+        return $this;
+    }
+	public function getFlowAlt()
+    {
+        return $this->flowAlt;
+    }
+    public function setFlowAlt($value)
+    {//echo $value;exit;
+        $enum = array(
+            self::LAYOUT_FLOW_ALT,
+        );
+        $this->flowAlt = $this->setEnumVal($value, $enum, $this->flowAlt);
+
+        return $this;
+    }
+	
+	/****************Add end*******************/
     /**
      * Get horizontal position
      *

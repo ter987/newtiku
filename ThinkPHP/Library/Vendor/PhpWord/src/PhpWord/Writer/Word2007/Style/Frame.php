@@ -57,6 +57,9 @@ class Frame extends AbstractStyle
             'vPos'      => 'mso-position-vertical',
             'hPosRelTo' => 'mso-position-horizontal-relative',
             'vPosRelTo' => 'mso-position-vertical-relative',
+            //Add by Eric 2016-3-2
+            'lFlow' => 'layout-flow',
+            'flowAlt' => 'mso-layout-flow-alt',
         );
         $posStyles = $this->getStyles($style, $properties);
 

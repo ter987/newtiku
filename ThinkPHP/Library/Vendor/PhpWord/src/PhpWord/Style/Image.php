@@ -166,7 +166,44 @@ class Image extends Frame
 
         return $this;
     }
+	/**
+	 * Add By Eric
+	 * 2016-3-2
+	 */
+	public function getLayoutFlow()
+    {
+        return $this->getLFlow();
+    }
 
+    /**
+     * Add By Eric
+	 * 2016-3-2
+     */
+    public function setLayoutFlow($layoutFlow)
+    {//echo $layoutFlow;exit;
+        $this->setLFlow($layoutFlow);
+
+        return $this;
+    }
+	/**
+	 * Add By Eric
+	 * 2016-3-2
+	 */
+	public function getLayoutFlowAlt()
+    {
+        return $this->getFlowAlt();
+    }
+
+    /**
+     * Add By Eric
+	 * 2016-3-2
+     */
+    public function setLayoutFlowAlt($layoutFlowAlt)
+    {//echo $layoutFlowAlt;exit;
+        $this->setFlowAlt($layoutFlowAlt);
+
+        return $this;
+    }
     /**
      * Get horizontal alignment
      *
